@@ -1,0 +1,158 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>BIO_read</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>BIO_read_ex, BIO_write_ex, BIO_read, BIO_write,
+BIO_gets, BIO_get_line, BIO_puts
+- BIO I/O functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/bio.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">BIO_read_ex</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*data</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">dlen</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">*readbytes</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_write_ex</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">void</span> <span class="variable">*data</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">dlen</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">*written</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">BIO_read</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*data</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">dlen</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_gets</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">,</span> <span class="variable">char</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">size</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_get_line</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">,</span> <span class="variable">char</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">size</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_write</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">void</span> <span class="variable">*data</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">dlen</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_puts</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*buf</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>BIO_read_ex()</code> attempts to read <em>dlen</em> bytes from BIO <em>b</em> and places the data
+in <em>data</em>. If any bytes were successfully read then the number of bytes read is
+stored in <em>*readbytes</em>.</p>
+<p><code>BIO_write_ex()</code> attempts to write <em>dlen</em> bytes from <em>data</em> to BIO <em>b</em>.
+If successful then the number of bytes written is stored in <em>*written</em>
+unless <em>written</em> is NULL.</p>
+<p><code>BIO_read()</code> attempts to read <em>len</em> bytes from BIO <em>b</em> and places
+the data in <em>buf</em>.</p>
+<p><code>BIO_gets()</code> performs the BIOs &quot;gets&quot; operation and places the data
+in <em>buf</em>. Usually this operation will attempt to read a line of data
+from the BIO of maximum length <em>size-1</em>. There are exceptions to this,
+however; for example, <code>BIO_gets()</code> on a digest BIO will calculate and
+return the digest and other BIOs may not support <code>BIO_gets()</code> at all.
+The returned string is always NUL-terminated and the '\n' is preserved
+if present in the input data.
+On binary input there may be NUL characters within the string;
+in this case the return value (if nonnegative) may give an incorrect length.</p>
+<p><code>BIO_get_line()</code> attempts to read from BIO <em>b</em> a line of data up to the next '\n'
+or the maximum length <em>size-1</em> is reached and places the data in <em>buf</em>.
+The returned string is always NUL-terminated and the '\n' is preserved
+if present in the input data.
+On binary input there may be NUL characters within the string;
+in this case the return value (if nonnegative) gives the actual length read.
+For implementing this, unfortunately the data needs to be read byte-by-byte.</p>
+<p><code>BIO_write()</code> attempts to write <em>len</em> bytes from <em>buf</em> to BIO <em>b</em>.</p>
+<p><code>BIO_puts()</code> attempts to write a NUL-terminated string <em>buf</em> to BIO <em>b</em>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>BIO_read_ex()</code> returns 1 if data was successfully read, and 0 otherwise.</p>
+<p><code>BIO_write_ex()</code> returns 1 if no error was encountered writing data, 0 otherwise.
+Requesting to write 0 bytes is not considered an error.</p>
+<p><code>BIO_write()</code> returns -2 if the &quot;write&quot; operation is not implemented by the BIO
+or -1 on other errors.
+Otherwise it returns the number of bytes written.
+This may be 0 if the BIO <em>b</em> is NULL or <em>dlen &lt;= 0</em>.</p>
+<p><code>BIO_gets()</code> returns -2 if the &quot;gets&quot; operation is not implemented by the BIO
+or -1 on other errors.
+Otherwise it typically returns the amount of data read,
+but depending on the implementation it may return only the length up to
+the first NUL character contained in the data read.
+In any case the trailing NUL that is added after the data read
+is not included in the length returned.</p>
+<p>All other functions return either the amount of data successfully read or
+written (if the return value is positive) or that no data was successfully
+read or written if the result is 0 or -1. If the return value is -2 then
+the operation is not implemented in the specific BIO type.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>A 0 or -1 return is not necessarily an indication of an error. In
+particular when the source/sink is nonblocking or of a certain type
+it may merely be an indication that no data is currently available and that
+the application should retry the operation later.</p>
+<p>One technique sometimes used with blocking sockets is to use a system call
+(such as <code>select()</code>, <code>poll()</code> or equivalent) to determine when data is available
+and then call <code>read()</code> to read the data. The equivalent with BIOs (that is call
+<code>select()</code> on the underlying I/O structure and then call <code>BIO_read()</code> to
+read the data) should <strong>not</strong> be used because a single call to <code>BIO_read()</code>
+can cause several reads (and writes in the case of SSL BIOs) on the underlying
+I/O structure and may block as a result. Instead <code>select()</code> (or equivalent)
+should be combined with non blocking I/O so successive reads will request
+a retry instead of blocking.</p>
+<p>See <em>BIO_should_retry(3)</em> for details of how to
+determine the cause of a retry and other I/O issues.</p>
+<p>If the &quot;gets&quot; method is not supported by a BIO then <code>BIO_get_line()</code> can be used.
+It is also possible to make <code>BIO_gets()</code> usable even if the &quot;gets&quot; method is not
+supported by adding a buffering BIO <em>BIO_f_buffer(3)</em> to the chain.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>BIO_should_retry(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><code>BIO_gets()</code> on 1.1.0 and older when called on <code>BIO_fd()</code> based BIO did not
+keep the '\n' at the end of the line in the buffer.</p>
+<p><code>BIO_get_line()</code> was added in OpenSSL 3.0.</p>
+<p><code>BIO_write_ex()</code> returns 1 if the size of the data to write is 0 and the
+<em>written</em> parameter of the function can be NULL since OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2000-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

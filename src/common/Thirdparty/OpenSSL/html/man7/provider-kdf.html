@@ -1,0 +1,419 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>provider-kdf</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#context_management_functions">Context Management Functions</a></li>
+		<li><a href="#encryption_decryption_functions">Encryption/Decryption Functions</a></li>
+		<li><a href="#kdf_parameters">KDF Parameters</a></li>
+	</ul>
+
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>provider-kdf - The KDF library &lt;-&gt; provider functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/core_dispatch.h&gt;</span>
+ <span class="comment">#include &lt;openssl/core_names.h&gt;</span>
+</pre>
+<pre>
+ /*
+  * None of these are actual functions, but are displayed like this for
+  * the function signatures for functions that are offered as function
+  * pointers in OSSL_DISPATCH arrays.
+  */</pre>
+<pre>
+ <span class="regex">/* Context management */</span>
+ <span class="variable">void</span> <span class="variable">*OSSL_FUNC_kdf_newctx</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">OSSL_FUNC_kdf_freectx</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*kctx</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">*OSSL_FUNC_kdf_dupctx</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*src</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* Encryption/decryption</span> <span class="operator">*/</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_kdf_reset</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*kctx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_kdf_derive</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*kctx</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*key</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">keylen</span><span class="operator">,</span>
+                          <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* KDF parameter descriptors */</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*OSSL_FUNC_kdf_gettable_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*OSSL_FUNC_kdf_gettable_ctx_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*kcxt</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*OSSL_FUNC_kdf_settable_ctx_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*kcxt</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* KDF parameters */</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_kdf_get_params</span><span class="operator">(</span><span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_kdf_get_ctx_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*kctx</span><span class="operator">,</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_kdf_set_ctx_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*kctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This documentation is primarily aimed at provider authors. See <em>provider(7)</em>
+for further information.</p>
+<p>The KDF operation enables providers to implement KDF algorithms and make
+them available to applications via the API functions <em>EVP_KDF_CTX_reset(3)</em>,
+and <em>EVP_KDF_derive(3)</em>.</p>
+<p>All &quot;functions&quot; mentioned here are passed as function pointers between
+<em class="file">libcrypto</em> and the provider in <em>OSSL_DISPATCH(3)</em> arrays via
+<em>OSSL_ALGORITHM(3)</em> arrays that are returned by the provider's
+<code>provider_query_operation()</code> function
+(see <em>provider-base(7)/Provider Functions</em>).</p>
+<p>All these &quot;functions&quot; have a corresponding function type definition
+named <strong>OSSL_FUNC_{name}_fn</strong>, and a helper function to retrieve the
+function pointer from an <em>OSSL_DISPATCH(3)</em> element named
+<strong>OSSL_FUNC_{name}</strong>.
+For example, the &quot;function&quot; <code>OSSL_FUNC_kdf_newctx()</code> has these:</p>
+<pre>
+ <span class="variable">typedef</span> <span class="variable">void</span> <span class="operator">*(</span><span class="variable">OSSL_FUNC_kdf_newctx_fn</span><span class="operator">)(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="variable">static</span> <span class="variable">ossl_inline</span> <span class="variable">OSSL_FUNC_kdf_newctx_fn</span>
+     <span class="variable">OSSL_FUNC_kdf_newctx</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="variable">*opf</span><span class="operator">);</span>
+</pre>
+<p><em>OSSL_DISPATCH(3)</em> array entries are identified by numbers that are provided as
+macros in <em>openssl-core_dispatch.h(7)</em>, as follows:</p>
+<pre>
+ OSSL_FUNC_kdf_newctx               OSSL_FUNC_KDF_NEWCTX
+ OSSL_FUNC_kdf_freectx              OSSL_FUNC_KDF_FREECTX
+ OSSL_FUNC_kdf_dupctx               OSSL_FUNC_KDF_DUPCTX</pre>
+<pre>
+ OSSL_FUNC_kdf_reset                OSSL_FUNC_KDF_RESET
+ OSSL_FUNC_kdf_derive               OSSL_FUNC_KDF_DERIVE</pre>
+<pre>
+ OSSL_FUNC_kdf_get_params           OSSL_FUNC_KDF_GET_PARAMS
+ OSSL_FUNC_kdf_get_ctx_params       OSSL_FUNC_KDF_GET_CTX_PARAMS
+ OSSL_FUNC_kdf_set_ctx_params       OSSL_FUNC_KDF_SET_CTX_PARAMS</pre>
+<pre>
+ OSSL_FUNC_kdf_gettable_params      OSSL_FUNC_KDF_GETTABLE_PARAMS
+ OSSL_FUNC_kdf_gettable_ctx_params  OSSL_FUNC_KDF_GETTABLE_CTX_PARAMS
+ OSSL_FUNC_kdf_settable_ctx_params  OSSL_FUNC_KDF_SETTABLE_CTX_PARAMS</pre>
+<p>A KDF algorithm implementation may not implement all of these functions.
+In order to be a consistent set of functions, at least the following functions
+must be implemented: <code>OSSL_FUNC_kdf_newctx()</code>, <code>OSSL_FUNC_kdf_freectx()</code>,
+<code>OSSL_FUNC_kdf_set_ctx_params()</code>, <code>OSSL_FUNC_kdf_derive()</code>.
+All other functions are optional.</p>
+<p>
+</p>
+<h2><a name="context_management_functions">Context Management Functions</a></h2>
+<p><code>OSSL_FUNC_kdf_newctx()</code> should create and return a pointer to a provider side
+structure for holding context information during a KDF operation.
+A pointer to this context will be passed back in a number of the other KDF
+operation function calls.
+The parameter <em>provctx</em> is the provider context generated during provider
+initialisation (see <em>provider(7)</em>).</p>
+<p><code>OSSL_FUNC_kdf_freectx()</code> is passed a pointer to the provider side KDF context in
+the <em>kctx</em> parameter.
+If it receives NULL as <em>kctx</em> value, it should not do anything other than
+return.
+This function should free any resources associated with that context.</p>
+<p><code>OSSL_FUNC_kdf_dupctx()</code> should duplicate the provider side KDF context in the
+<em>kctx</em> parameter and return the duplicate copy.</p>
+<p>
+</p>
+<h2><a name="encryption_decryption_functions">Encryption/Decryption Functions</a></h2>
+<p><code>OSSL_FUNC_kdf_reset()</code> initialises a KDF operation given a provider
+side KDF context in the <em>kctx</em> parameter.</p>
+<p><code>OSSL_FUNC_kdf_derive()</code> performs the KDF operation after processing the
+<em>params</em> as per <code>OSSL_FUNC_kdf_set_ctx_params()</code>.
+The <em>kctx</em> parameter contains a pointer to the provider side context.
+The resulting key of the desired <em>keylen</em> should be written to <em>key</em>.
+If the algorithm does not support the requested <em>keylen</em> the function must
+return error.</p>
+<p>
+</p>
+<h2><a name="kdf_parameters">KDF Parameters</a></h2>
+<p>See <em>OSSL_PARAM(3)</em> for further details on the parameters structure used by
+these functions.</p>
+<p><code>OSSL_FUNC_kdf_get_params()</code> gets details of parameter values associated with the
+provider algorithm and stores them in <em>params</em>.</p>
+<p><code>OSSL_FUNC_kdf_set_ctx_params()</code> sets KDF parameters associated with the given
+provider side KDF context <em>kctx</em> to <em>params</em>.
+Any parameter settings are additional to any that were previously set.
+Passing NULL for <em>params</em> should return true.</p>
+<p><code>OSSL_FUNC_kdf_get_ctx_params()</code> retrieves gettable parameter values associated
+with the given provider side KDF context <em>kctx</em> and stores them in <em>params</em>.
+Passing NULL for <em>params</em> should return true.</p>
+<p><code>OSSL_FUNC_kdf_gettable_params()</code>, <code>OSSL_FUNC_kdf_gettable_ctx_params()</code>,
+and <code>OSSL_FUNC_kdf_settable_ctx_params()</code> all return constant <em>OSSL_PARAM(3)</em>
+arrays as descriptors of the parameters that <code>OSSL_FUNC_kdf_get_params()</code>,
+<code>OSSL_FUNC_kdf_get_ctx_params()</code>, and <code>OSSL_FUNC_kdf_set_ctx_params()</code>
+can handle, respectively.  <code>OSSL_FUNC_kdf_gettable_ctx_params()</code> and
+<code>OSSL_FUNC_kdf_settable_ctx_params()</code> will return the parameters associated
+with the provider side context <em>kctx</em> in its current state if it is
+not NULL.  Otherwise, they return the parameters associated with the
+provider side algorithm <em>provctx</em>.</p>
+<p>Parameters currently recognised by built-in KDFs are as follows. Not all
+parameters are relevant to, or are understood by all KDFs:</p>
+<dl>
+<dt><strong><a name="size_ossl_kdf_param_size_unsigned_integer" class="item">&quot;size&quot; (<strong>OSSL_KDF_PARAM_SIZE</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>Gets the output size from the associated KDF ctx.
+If the algorithm produces a variable amount of output, SIZE_MAX should be
+returned.
+If the input parameters required to calculate the fixed output size have not yet
+been supplied, 0 should be returned indicating an error.</p>
+</dd>
+<dt><strong><a name="key_ossl_kdf_param_key_octet_string" class="item">&quot;key&quot; (<strong>OSSL_KDF_PARAM_KEY</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the key in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="secret_ossl_kdf_param_secret_octet_string" class="item">&quot;secret&quot; (<strong>OSSL_KDF_PARAM_SECRET</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the secret in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="pass_ossl_kdf_param_password_octet_string" class="item">&quot;pass&quot; (<strong>OSSL_KDF_PARAM_PASSWORD</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the password in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="cipher_ossl_kdf_param_cipher_utf8_string" class="item">&quot;cipher&quot; (<strong>OSSL_KDF_PARAM_CIPHER</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dt><strong><a name="digest_ossl_kdf_param_digest_utf8_string" class="item">&quot;digest&quot; (<strong>OSSL_KDF_PARAM_DIGEST</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dt><strong><a name="mac_ossl_kdf_param_mac_utf8_string" class="item">&quot;mac&quot; (<strong>OSSL_KDF_PARAM_MAC</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the name of the underlying cipher, digest or MAC to be used.
+It must name a suitable algorithm for the KDF that's being used.</p>
+</dd>
+<dt><strong><a name="maclen_ossl_kdf_param_mac_size_octet_string" class="item">&quot;maclen&quot; (<strong>OSSL_KDF_PARAM_MAC_SIZE</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the length of the MAC in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="properties_ossl_kdf_param_properties_utf8_string" class="item">&quot;properties&quot; (<strong>OSSL_KDF_PARAM_PROPERTIES</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the properties to be queried when trying to fetch the underlying algorithm.
+This must be given together with the algorithm naming parameter to be
+considered valid.</p>
+</dd>
+<dt><strong><a name="iter_ossl_kdf_param_iter_unsigned_integer" class="item">&quot;iter&quot; (<strong>OSSL_KDF_PARAM_ITER</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the number of iterations in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="mode_ossl_kdf_param_mode_utf8_string" class="item">&quot;mode&quot; (<strong>OSSL_KDF_PARAM_MODE</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the mode in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="pkcs5_ossl_kdf_param_pkcs5_integer" class="item">&quot;pkcs5&quot; (<strong>OSSL_KDF_PARAM_PKCS5</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>Enables or disables the SP800-132 compliance checks.
+A mode of 0 enables the compliance checks.</p>
+<p>The checks performed are:</p>
+<dl>
+<dt><strong><a name="the_iteration_count_is_at_least_1000" class="item">- the iteration count is at least 1000.</a></strong></dt>
+
+<dt><strong><a name="the_salt_length_is_at_least_128_bits" class="item">- the salt length is at least 128 bits.</a></strong></dt>
+
+<dt><strong><a name="the_derived_key_length_is_at_least_112_bits" class="item">- the derived key length is at least 112 bits.</a></strong></dt>
+
+</dl>
+</dd>
+<dt><strong><a name="ukm_ossl_kdf_param_ukm_octet_string" class="item">&quot;ukm&quot; (<strong>OSSL_KDF_PARAM_UKM</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets an optional random string that is provided by the sender called
+&quot;partyAInfo&quot;.  In CMS this is the user keying material.</p>
+</dd>
+<dt><strong><a name="cekalg_ossl_kdf_param_cek_alg_utf8_string" class="item">&quot;cekalg&quot; (<strong>OSSL_KDF_PARAM_CEK_ALG</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the CEK wrapping algorithm name in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="n_ossl_kdf_param_scrypt_n_unsigned_integer" class="item">&quot;n&quot; (<strong>OSSL_KDF_PARAM_SCRYPT_N</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the scrypt work factor parameter N in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="r_ossl_kdf_param_scrypt_r_unsigned_integer" class="item">&quot;r&quot; (<strong>OSSL_KDF_PARAM_SCRYPT_R</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the scrypt work factor parameter r in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="p_ossl_kdf_param_scrypt_p_unsigned_integer" class="item">&quot;p&quot; (<strong>OSSL_KDF_PARAM_SCRYPT_P</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the scrypt work factor parameter p in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="maxmem_bytes_ossl_kdf_param_scrypt_maxmem_unsigned_integer" class="item">&quot;maxmem_bytes&quot; (<strong>OSSL_KDF_PARAM_SCRYPT_MAXMEM</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the scrypt work factor parameter maxmem in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="prefix_ossl_kdf_param_prefix_octet_string" class="item">&quot;prefix&quot; (<strong>OSSL_KDF_PARAM_PREFIX</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the prefix string using by the TLS 1.3 version of HKDF in the
+associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="label_ossl_kdf_param_label_octet_string" class="item">&quot;label&quot; (<strong>OSSL_KDF_PARAM_LABEL</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the label string using by the TLS 1.3 version of HKDF in the
+associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="data_ossl_kdf_param_data_octet_string" class="item">&quot;data&quot; (<strong>OSSL_KDF_PARAM_DATA</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the context string using by the TLS 1.3 version of HKDF in the
+associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="info_ossl_kdf_param_info_octet_string" class="item">&quot;info&quot; (<strong>OSSL_KDF_PARAM_INFO</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the optional shared info in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="seed_ossl_kdf_param_seed_octet_string" class="item">&quot;seed&quot; (<strong>OSSL_KDF_PARAM_SEED</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the IV in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="xcghash_ossl_kdf_param_sshkdf_xcghash_octet_string" class="item">&quot;xcghash&quot; (<strong>OSSL_KDF_PARAM_SSHKDF_XCGHASH</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the xcghash in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="session_id_ossl_kdf_param_sshkdf_session_id_octet_string" class="item">&quot;session_id&quot; (<strong>OSSL_KDF_PARAM_SSHKDF_SESSION_ID</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the session ID in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="type_ossl_kdf_param_sshkdf_type_utf8_string" class="item">&quot;type&quot; (<strong>OSSL_KDF_PARAM_SSHKDF_TYPE</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the SSH KDF type parameter in the associated KDF ctx.
+There are six supported types:</p>
+<dl>
+<dt><strong><a name="evp_kdf_sshkdf_type_initial_iv_cli_to_srv" class="item">EVP_KDF_SSHKDF_TYPE_INITIAL_IV_CLI_TO_SRV</a></strong></dt>
+
+<dd>
+<p>The Initial IV from client to server.
+A single char of value 65 (ASCII char 'A').</p>
+</dd>
+<dt><strong><a name="evp_kdf_sshkdf_type_initial_iv_srv_to_cli" class="item">EVP_KDF_SSHKDF_TYPE_INITIAL_IV_SRV_TO_CLI</a></strong></dt>
+
+<dd>
+<p>The Initial IV from server to client
+A single char of value 66 (ASCII char 'B').</p>
+</dd>
+<dt><strong><a name="evp_kdf_sshkdf_type_encryption_key_cli_to_srv" class="item">EVP_KDF_SSHKDF_TYPE_ENCRYPTION_KEY_CLI_TO_SRV</a></strong></dt>
+
+<dd>
+<p>The Encryption Key from client to server
+A single char of value 67 (ASCII char 'C').</p>
+</dd>
+<dt><strong><a name="evp_kdf_sshkdf_type_encryption_key_srv_to_cli" class="item">EVP_KDF_SSHKDF_TYPE_ENCRYPTION_KEY_SRV_TO_CLI</a></strong></dt>
+
+<dd>
+<p>The Encryption Key from server to client
+A single char of value 68 (ASCII char 'D').</p>
+</dd>
+<dt><strong><a name="evp_kdf_sshkdf_type_integrity_key_cli_to_srv" class="item">EVP_KDF_SSHKDF_TYPE_INTEGRITY_KEY_CLI_TO_SRV</a></strong></dt>
+
+<dd>
+<p>The Integrity Key from client to server
+A single char of value 69 (ASCII char 'E').</p>
+</dd>
+<dt><strong><a name="evp_kdf_sshkdf_type_integrity_key_srv_to_cli" class="item">EVP_KDF_SSHKDF_TYPE_INTEGRITY_KEY_SRV_TO_CLI</a></strong></dt>
+
+<dd>
+<p>The Integrity Key from client to server
+A single char of value 70 (ASCII char 'F').</p>
+</dd>
+</dl>
+</dd>
+<dt><strong><a name="constant_ossl_kdf_param_constant_octet_string" class="item">&quot;constant&quot; (<strong>OSSL_KDF_PARAM_CONSTANT</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the constant value in the associated KDF ctx.</p>
+</dd>
+<dt><strong><a name="id_ossl_kdf_param_pkcs12_id_integer" class="item">&quot;id&quot; (<strong>OSSL_KDF_PARAM_PKCS12_ID</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the intended usage of the output bits in the associated KDF ctx.
+It is defined as per <a href="http://www.ietf.org/rfc/rfc7292.txt" class="rfc">RFC 7292</a> section B.3.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>OSSL_FUNC_kdf_newctx()</code> and <code>OSSL_FUNC_kdf_dupctx()</code> should return the newly created
+provider side KDF context, or NULL on failure.</p>
+<p><code>OSSL_FUNC_kdf_derive()</code>, <code>OSSL_FUNC_kdf_get_params()</code>,
+<code>OSSL_FUNC_kdf_get_ctx_params()</code> and <code>OSSL_FUNC_kdf_set_ctx_params()</code> should return 1 for
+success or 0 on error.</p>
+<p><code>OSSL_FUNC_kdf_gettable_params()</code>, <code>OSSL_FUNC_kdf_gettable_ctx_params()</code> and
+<code>OSSL_FUNC_kdf_settable_ctx_params()</code> should return a constant <em>OSSL_PARAM(3)</em>
+array, or NULL if none is offered.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The KDF life-cycle is described in <em>life_cycle-kdf(7)</em>.  Providers should
+ensure that the various transitions listed there are supported.  At some point
+the EVP layer will begin enforcing the listed transitions.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>provider(7)</em>, <em>life_cycle-kdf(7)</em>, <em>EVP_KDF(3)</em>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>The provider KDF interface was introduced in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2020-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

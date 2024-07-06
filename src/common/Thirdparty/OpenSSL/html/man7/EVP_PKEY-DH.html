@@ -1,0 +1,375 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_PKEY-DH</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#dh_and_dhx_domain_parameters">DH and DHX domain parameters</a></li>
+		<li><a href="#dh_and_dhx_additional_parameters">DH and DHX additional parameters</a></li>
+		<li><a href="#dh_additional_domain_parameters">DH additional domain parameters</a></li>
+		<li><a href="#dh_and_dhx_domain_parameter___key_generation_parameters">DH and DHX domain parameter / key generation parameters</a></li>
+		<li><a href="#dh_key_validation">DH key validation</a></li>
+	</ul>
+
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#conforming_to">CONFORMING TO</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_PKEY-DH, EVP_PKEY-DHX, EVP_KEYMGMT-DH, EVP_KEYMGMT-DHX
+- EVP_PKEY DH and DHX keytype and algorithm support</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>For <strong>DH</strong> FFC key agreement, two classes of domain parameters can be used:
+&quot;safe&quot; domain parameters that are associated with approved named safe-prime
+groups, and a class of &quot;FIPS186-type&quot; domain parameters. FIPS186-type domain
+parameters should only be used for backward compatibility with existing
+applications that cannot be upgraded to use the approved safe-prime groups.</p>
+<p>See <em>EVP_PKEY-FFC(7)</em> for more information about FFC keys.</p>
+<p>The <strong>DH</strong> key type uses PKCS#3 format which saves <em>p</em> and <em>g</em>, but not the
+<em>q</em> value.
+The <strong>DHX</strong> key type uses X9.42 format which saves the value of <em>q</em> and this
+must be used for FIPS186-4. If key validation is required, users should be aware
+of the nuances associated with FIPS186-4 style parameters as discussed in
+<a href="#dh_key_validation">DH key validation</a>.</p>
+<p>
+</p>
+<h2><a name="dh_and_dhx_domain_parameters">DH and DHX domain parameters</a></h2>
+<p>In addition to the common FCC parameters that all FFC keytypes should support
+(see <em>EVP_PKEY-FFC(7)/FFC parameters</em>) the <strong>DHX</strong> and <strong>DH</strong> keytype
+implementations support the following:</p>
+<dl>
+<dt><strong><a name="group_ossl_pkey_param_group_name_utf8_string" class="item">&quot;group&quot; (<strong>OSSL_PKEY_PARAM_GROUP_NAME</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets or gets a string that associates a <strong>DH</strong> or <strong>DHX</strong> named safe prime group
+with known values for <em>p</em>, <em>q</em> and <em>g</em>.</p>
+<p>The following values can be used by the OpenSSL's default and FIPS providers:
+&quot;ffdhe2048&quot;, &quot;ffdhe3072&quot;, &quot;ffdhe4096&quot;, &quot;ffdhe6144&quot;, &quot;ffdhe8192&quot;,
+&quot;modp_2048&quot;, &quot;modp_3072&quot;, &quot;modp_4096&quot;, &quot;modp_6144&quot;, &quot;modp_8192&quot;.</p>
+<p>The following additional values can also be used by OpenSSL's default provider:
+&quot;modp_1536&quot;, &quot;dh_1024_160&quot;, &quot;dh_2048_224&quot;, &quot;dh_2048_256&quot;.</p>
+<p>DH/DHX named groups can be easily validated since the parameters are well known.
+For protocols that only transfer <em>p</em> and <em>g</em> the value of <em>q</em> can also be
+retrieved.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="dh_and_dhx_additional_parameters">DH and DHX additional parameters</a></h2>
+<dl>
+<dt><strong><a name="encoded_pub_key_ossl_pkey_param_encoded_public_key_octet_string" class="item">&quot;encoded-pub-key&quot; (<strong>OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Used for getting and setting the encoding of the DH public key used in a key
+exchange message for the TLS protocol.
+See EVP_PKEY_set1_encoded_public_key() and EVP_PKEY_get1_encoded_public_key().</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="dh_additional_domain_parameters">DH additional domain parameters</a></h2>
+<dl>
+<dt><strong><a name="safeprime_generator_ossl_pkey_param_dh_generator_integer" class="item">&quot;safeprime-generator&quot; (<strong>OSSL_PKEY_PARAM_DH_GENERATOR</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>Used for DH generation of safe primes using the old safe prime generator code.
+The default value is 2.
+It is recommended to use a named safe prime group instead, if domain parameter
+validation is required.</p>
+<p>Randomly generated safe primes are not allowed by FIPS, so setting this value
+for the OpenSSL FIPS provider will instead choose a named safe prime group
+based on the size of <em>p</em>.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="dh_and_dhx_domain_parameter___key_generation_parameters">DH and DHX domain parameter / key generation parameters</a></h2>
+<p>In addition to the common FFC key generation parameters that all FFC key types
+should support (see <em>EVP_PKEY-FFC(7)/FFC key generation parameters</em>) the
+<strong>DH</strong> and <strong>DHX</strong> keytype implementation supports the following:</p>
+<dl>
+<dt><strong><a name="type_ossl_pkey_param_ffc_type_utf8_string" class="item">&quot;type&quot; (<strong>OSSL_PKEY_PARAM_FFC_TYPE</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the type of parameter generation. For <strong>DH</strong> valid values are:</p>
+<dl>
+<dt><strong><a name="fips186_4" class="item">&quot;fips186_4&quot;</a></strong></dt>
+
+<dt><strong><a name="default" class="item">&quot;default&quot;</a></strong></dt>
+
+<dt><strong><a name="fips186_2" class="item">&quot;fips186_2&quot;</a></strong></dt>
+
+<dd>
+<p>These are described in <em>EVP_PKEY-FFC(7)/FFC key generation parameters</em></p>
+</dd>
+<dt><strong><a name="group" class="item">&quot;group&quot;</a></strong></dt>
+
+<dd>
+<p>This specifies that a named safe prime name will be chosen using the &quot;pbits&quot;
+type.</p>
+</dd>
+<dt><strong><a name="generator" class="item">&quot;generator&quot;</a></strong></dt>
+
+<dd>
+<p>A safe prime generator. See the &quot;safeprime-generator&quot; type above.
+This is only valid for <strong>DH</strong> keys.</p>
+</dd>
+</dl>
+</dd>
+<dt><strong><a name="pbits_ossl_pkey_param_ffc_pbits_unsigned_integer" class="item">&quot;pbits&quot; (<strong>OSSL_PKEY_PARAM_FFC_PBITS</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the size (in bits) of the prime 'p'.</p>
+<p>For &quot;fips186_4&quot; this must be 2048.
+For &quot;fips186_2&quot; this must be 1024.
+For &quot;group&quot; this can be any one of 2048, 3072, 4096, 6144 or 8192.</p>
+</dd>
+<dt><strong><a name="priv_len_ossl_pkey_param_dh_priv_len_integer" class="item">&quot;priv_len&quot; (<strong>OSSL_PKEY_PARAM_DH_PRIV_LEN</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>An optional value to set the maximum length of the generated private key.
+The default value used if this is not set is the maximum value of
+BN_num_bits(<em>q</em>)). The minimum value that this can be set to is 2 * s.
+Where s is the security strength of the key which has values of
+112, 128, 152, 176 and 200 for key sizes of 2048, 3072, 4096, 6144 and 8192.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="dh_key_validation">DH key validation</a></h2>
+<p>For <strong>DHX</strong> that is not a named group the FIPS186-4 standard specifies that the
+values used for FFC parameter generation are also required for parameter
+validation. This means that optional FFC domain parameter values for
+<em>seed</em>, <em>pcounter</em> and <em>gindex</em> or <em>hindex</em> may need to be stored for
+validation purposes.
+For <strong>DHX</strong> the <em>seed</em> and <em>pcounter</em> can be stored in ASN1 data
+(but the <em>gindex</em> or <em>hindex</em> cannot be stored). It is recommended to use a
+named safe prime group instead.</p>
+<p>For DH keys, <em>EVP_PKEY_param_check(3)</em> behaves in the following way:
+The OpenSSL FIPS provider tests if the parameters are either an approved safe
+prime group OR that the FFC parameters conform to FIPS186-4 as defined in
+SP800-56Ar3 <em>Assurances of Domain-Parameter Validity</em>.
+The OpenSSL default provider uses simpler checks that allows there to be no <em>q</em>
+value for backwards compatibility.</p>
+<p>For DH keys, <em>EVP_PKEY_param_check_quick(3)</em> is equivalent to
+<em>EVP_PKEY_param_check(3)</em>.</p>
+<p>For DH keys, <em>EVP_PKEY_public_check(3)</em> conforms to
+SP800-56Ar3 <em>FFC Full Public-Key Validation</em>.</p>
+<p>For DH keys, <em>EVP_PKEY_public_check_quick(3)</em> conforms to
+SP800-56Ar3 <em>FFC Partial Public-Key Validation</em> when the
+DH key is an approved named safe prime group, otherwise it is the same as
+<em>EVP_PKEY_public_check(3)</em>.</p>
+<p>For DH Keys, <em>EVP_PKEY_private_check(3)</em> tests that the private key is in the
+correct range according to SP800-56Ar3. The OpenSSL FIPS provider requires the
+value of <em>q</em> to be set (note that this is set for named safe prime groups).
+For backwards compatibility the OpenSSL default provider only requires <em>p</em> to
+be set.</p>
+<p>For DH keys, <em>EVP_PKEY_pairwise_check(3)</em> conforms to
+SP800-56Ar3 <em>Owner Assurance of Pair-wise Consistency</em>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>An <strong>EVP_PKEY</strong> context can be obtained by calling:</p>
+<pre>
+    <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*pctx</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_CTX_new_from_name</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"DH"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+</pre>
+<p>A <strong>DH</strong> key can be generated with a named safe prime group by calling:</p>
+<pre>
+    <span class="keyword">int</span> <span class="variable">priv_len</span> <span class="operator">=</span> <span class="number">2</span> <span class="operator">*</span> <span class="number">112</span><span class="operator">;</span>
+    <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[</span><span class="number">3</span><span class="operator">]</span><span class="operator">;</span>
+    <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+    <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*pctx</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_CTX_new_from_name</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"DH"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">0</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_utf8_string</span><span class="operator">(</span><span class="string">"group"</span><span class="operator">,</span> <span class="string">"ffdhe2048"</span><span class="operator">,</span> <span class="number">0</span><span class="operator">);</span>
+    <span class="regex">/* "priv_len" is optional */</span>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">1</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_int</span><span class="operator">(</span><span class="string">"priv_len"</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">priv_len</span><span class="operator">);</span>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">2</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_end</span><span class="operator">();</span>
+</pre>
+<pre>
+    <span class="variable">EVP_PKEY_keygen_init</span><span class="operator">(</span><span class="variable">pctx</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_CTX_set_params</span><span class="operator">(</span><span class="variable">pctx</span><span class="operator">,</span> <span class="variable">params</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_generate</span><span class="operator">(</span><span class="variable">pctx</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">pkey</span><span class="operator">);</span>
+    <span class="operator">...</span>
+    <span class="variable">EVP_PKEY_free</span><span class="operator">(</span><span class="variable">pkey</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_CTX_free</span><span class="operator">(</span><span class="variable">pctx</span><span class="operator">);</span>
+</pre>
+<p><strong>DHX</strong> domain parameters can be generated according to <strong>FIPS186-4</strong> by calling:</p>
+<pre>
+    <span class="keyword">int</span> <span class="variable">gindex</span> <span class="operator">=</span> <span class="number">2</span><span class="operator">;</span>
+    <span class="variable">unsigned</span> <span class="keyword">int</span> <span class="variable">pbits</span> <span class="operator">=</span> <span class="number">2048</span><span class="operator">;</span>
+    <span class="variable">unsigned</span> <span class="keyword">int</span> <span class="variable">qbits</span> <span class="operator">=</span> <span class="number">256</span><span class="operator">;</span>
+    <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[</span><span class="number">6</span><span class="operator">]</span><span class="operator">;</span>
+    <span class="variable">EVP_PKEY</span> <span class="variable">*param_key</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+    <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*pctx</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+    <span class="variable">pctx</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_CTX_new_from_name</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"DHX"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_paramgen_init</span><span class="operator">(</span><span class="variable">pctx</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">0</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_uint</span><span class="operator">(</span><span class="string">"pbits"</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">pbits</span><span class="operator">);</span>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">1</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_uint</span><span class="operator">(</span><span class="string">"qbits"</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">qbits</span><span class="operator">);</span>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">2</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_int</span><span class="operator">(</span><span class="string">"gindex"</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">gindex</span><span class="operator">);</span>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">3</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_utf8_string</span><span class="operator">(</span><span class="string">"type"</span><span class="operator">,</span> <span class="string">"fips186_4"</span><span class="operator">,</span> <span class="number">0</span><span class="operator">);</span>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">4</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_utf8_string</span><span class="operator">(</span><span class="string">"digest"</span><span class="operator">,</span> <span class="string">"SHA256"</span><span class="operator">,</span> <span class="number">0</span><span class="operator">);</span>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">5</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_end</span><span class="operator">();</span>
+    <span class="variable">EVP_PKEY_CTX_set_params</span><span class="operator">(</span><span class="variable">pctx</span><span class="operator">,</span> <span class="variable">params</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">EVP_PKEY_generate</span><span class="operator">(</span><span class="variable">pctx</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">param_key</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">EVP_PKEY_print_params</span><span class="operator">(</span><span class="variable">bio_out</span><span class="operator">,</span> <span class="variable">param_key</span><span class="operator">,</span> <span class="number">0</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+    <span class="operator">...</span>
+    <span class="variable">EVP_PKEY_free</span><span class="operator">(</span><span class="variable">param_key</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_CTX_free</span><span class="operator">(</span><span class="variable">pctx</span><span class="operator">);</span>
+</pre>
+<p>A <strong>DH</strong> key can be generated using domain parameters by calling:</p>
+<pre>
+    <span class="variable">EVP_PKEY</span> <span class="variable">*key</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+    <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*gctx</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_CTX_new_from_pkey</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="variable">param_key</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">EVP_PKEY_keygen_init</span><span class="operator">(</span><span class="variable">gctx</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_generate</span><span class="operator">(</span><span class="variable">gctx</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">key</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_print_private</span><span class="operator">(</span><span class="variable">bio_out</span><span class="operator">,</span> <span class="variable">key</span><span class="operator">,</span> <span class="number">0</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+    <span class="operator">...</span>
+    <span class="variable">EVP_PKEY_free</span><span class="operator">(</span><span class="variable">key</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_CTX_free</span><span class="operator">(</span><span class="variable">gctx</span><span class="operator">);</span>
+</pre>
+<p>To validate <strong>FIPS186-4</strong> <strong>DHX</strong> domain parameters decoded from <strong>PEM</strong> or
+<strong>DER</strong> data, additional values used during generation may be required to
+be set into the key.</p>
+<p><code>EVP_PKEY_todata()</code>, <code>OSSL_PARAM_merge()</code>, and <code>EVP_PKEY_fromdata()</code> are useful
+to add these parameters to the original key or domain parameters before
+the actual validation. In production code the return values should be checked.</p>
+<pre>
+    <span class="variable">EVP_PKEY</span> <span class="variable">*received_domp</span> <span class="operator">=</span> <span class="operator">...;</span> <span class="regex">/* parameters received and decoded */</span>
+    <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*seed</span> <span class="operator">=</span> <span class="operator">...;</span>     <span class="regex">/* and additional parameters received */</span>
+    <span class="variable">size_t</span> <span class="variable">seedlen</span> <span class="operator">=</span> <span class="operator">...;</span>          <span class="regex">/* by other means, required */</span>
+    <span class="keyword">int</span> <span class="variable">gindex</span> <span class="operator">=</span> <span class="operator">...;</span>              <span class="regex">/* for the validation */</span>
+    <span class="keyword">int</span> <span class="variable">pcounter</span> <span class="operator">=</span> <span class="operator">...;</span>
+    <span class="keyword">int</span> <span class="variable">hindex</span> <span class="operator">=</span> <span class="operator">...;</span>
+    <span class="variable">OSSL_PARAM</span> <span class="variable">extra_params</span><span class="operator">[</span><span class="number">4</span><span class="operator">]</span><span class="operator">;</span>
+    <span class="variable">OSSL_PARAM</span> <span class="variable">*domain_params</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+    <span class="variable">OSSL_PARAM</span> <span class="variable">*merged_params</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+    <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">,</span> <span class="variable">*validate_ctx</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+    <span class="variable">EVP_PKEY</span> <span class="variable">*complete_domp</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+    <span class="variable">EVP_PKEY_todata</span><span class="operator">(</span><span class="variable">received_domp</span><span class="operator">,</span> <span class="variable">OSSL_KEYMGMT_SELECT_DOMAIN_PARAMETERS</span><span class="operator">,</span>
+                    <span class="operator">&amp;</span><span class="variable">domain_params</span><span class="operator">);</span>
+    <span class="variable">extra_params</span><span class="operator">[</span><span class="number">0</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_octet_string</span><span class="operator">(</span><span class="string">"seed"</span><span class="operator">,</span> <span class="variable">seed</span><span class="operator">,</span> <span class="variable">seedlen</span><span class="operator">);</span>
+    <span class="regex">/*
+     * NOTE: For unverifiable g use "hindex" instead of "gindex"
+     * extra_params[1] = OSSL_PARAM_construct_int("hindex", &amp;hindex);
+     */</span>
+    <span class="variable">extra_params</span><span class="operator">[</span><span class="number">1</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_int</span><span class="operator">(</span><span class="string">"gindex"</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">gindex</span><span class="operator">);</span>
+    <span class="variable">extra_params</span><span class="operator">[</span><span class="number">2</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_int</span><span class="operator">(</span><span class="string">"pcounter"</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">pcounter</span><span class="operator">);</span>
+    <span class="variable">extra_params</span><span class="operator">[</span><span class="number">3</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_end</span><span class="operator">();</span>
+    <span class="variable">merged_params</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_merge</span><span class="operator">(</span><span class="variable">domain_params</span><span class="operator">,</span> <span class="variable">extra_params</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">ctx</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_CTX_new_from_name</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"DHX"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_fromdata_init</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_fromdata</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">complete_domp</span><span class="operator">,</span> <span class="variable">OSSL_KEYMGMT_SELECT_ALL</span><span class="operator">,</span>
+                      <span class="variable">merged_params</span><span class="operator">);</span>
+</pre>
+<pre>
+    validate_ctx = EVP_PKEY_CTX_new_from_pkey(NULL, complete_domp, NULL);
+    if (EVP_PKEY_param_check(validate_ctx) &gt; 0)
+        /* validation_passed(); */
+    else
+        /* validation_failed(); */</pre>
+<pre>
+    <span class="variable">OSSL_PARAM_free</span><span class="operator">(</span><span class="variable">domain_params</span><span class="operator">);</span>
+    <span class="variable">OSSL_PARAM_free</span><span class="operator">(</span><span class="variable">merged_params</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_CTX_free</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_CTX_free</span><span class="operator">(</span><span class="variable">validate_ctx</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_free</span><span class="operator">(</span><span class="variable">complete_domp</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="conforming_to">CONFORMING TO</a></h1>
+<dl>
+<dt><strong><a name="7919" class="item">RFC 7919 (TLS ffdhe named safe prime groups)</a></strong></dt>
+
+<dt><strong><a name="3526" class="item">RFC 3526 (IKE modp named safe prime groups)</a></strong></dt>
+
+<dt><strong><a name="5114" class="item">RFC 5114 (Additional DH named groups for dh_1024_160&quot;, &quot;dh_2048_224&quot;
+          and &quot;dh_2048_256&quot;).</a></strong></dt>
+
+</dl>
+<p>The following sections of SP800-56Ar3:</p>
+<ol>
+<li><strong><a name="5_1_1_ffc_domain_parameter_selection_generation" class="item">5.1.1 FFC Domain Parameter Selection/Generation</a></strong>
+
+</dd>
+<dt><strong><a name="appendix_d_ffc_safe_prime_groups" class="item">Appendix D: FFC Safe-prime Groups</a></strong></dt>
+
+</li>
+</ol>
+<p>The following sections of FIPS186-4:</p>
+<dl>
+<dt><strong><a name="a_1_1_2_generation_of_probable_primes_p_and_q_using_an_approved_hash_function" class="item">A.1.1.2 Generation of Probable Primes p and q Using an Approved Hash Function.</a></strong></dt>
+
+<dt><strong><a name="a_2_3_generation_of_canonical_generator_g" class="item">A.2.3 Generation of canonical generator g.</a></strong></dt>
+
+<dt><strong><a name="a_2_1_unverifiable_generation_of_the_generator_g" class="item">A.2.1 Unverifiable Generation of the Generator g.</a></strong></dt>
+
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_PKEY-FFC(7)</em>,
+<em>EVP_KEYEXCH-DH(7)</em>
+<em>EVP_PKEY(3)</em>,
+<em>provider-keymgmt(7)</em>,
+<em>EVP_KEYMGMT(3)</em>,
+<a href="#default">OSSL_PROVIDER-default(7)</a>,
+<em>OSSL_PROVIDER-FIPS(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2020-2022 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

@@ -1,0 +1,339 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_PKEY_fromdata</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#selections">Selections</a></li>
+	</ul>
+
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<ul>
+
+		<li><a href="#creating_an_rsa_keypair_using_raw_key_data">Creating an RSA keypair using raw key data</a></li>
+		<li><a href="#creating_an_ecc_keypair_using_raw_key_data">Creating an ECC keypair using raw key data</a></li>
+		<li><a href="#finding_out_params_for_an_unknown_key_type">Finding out params for an unknown key type</a></li>
+	</ul>
+
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_PKEY_fromdata_init, EVP_PKEY_fromdata, EVP_PKEY_fromdata_settable
+- functions to create keys and key parameters from user data</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_fromdata_init</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_fromdata</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">EVP_PKEY</span> <span class="operator">**</span><span class="variable">ppkey</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">selection</span><span class="operator">,</span>
+                       <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*EVP_PKEY_fromdata_settable</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">selection</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The functions described here are used to create new keys from user
+provided key data, such as <em>n</em>, <em>e</em> and <em>d</em> for a minimal RSA
+keypair.</p>
+<p>These functions use an <strong>EVP_PKEY_CTX</strong> context, which should primarily
+be created with <em>EVP_PKEY_CTX_new_from_name(3)</em> or
+<em>EVP_PKEY_CTX_new_id(3)</em>.</p>
+<p>The exact key data that the user can pass depends on the key type.
+These are passed as an <em>OSSL_PARAM(3)</em> array.</p>
+<p><code>EVP_PKEY_fromdata_init()</code> initializes a public key algorithm context
+for creating a key or key parameters from user data.</p>
+<p><code>EVP_PKEY_fromdata()</code> creates the structure to store a key or key parameters,
+given data from <em>params</em>, <em>selection</em> and a context that's been initialized
+with <code>EVP_PKEY_fromdata_init()</code>.  The result is written to <em>*ppkey</em>.
+<em>selection</em> is described in <a href="#selections">Selections</a>.
+The parameters that can be used for various types of key are as described by the
+diverse &quot;Common parameters&quot; sections of the
+<em><strong>EVP_PKEY-RSA</strong>(7)</em>,
+<em><strong>EVP_PKEY-DSA</strong>(7)</em>,
+<em><strong>EVP_PKEY-DH</strong>(7)</em>,
+<em><strong>EVP_PKEY-EC</strong>(7)</em>,
+<em><strong>EVP_PKEY-ED448</strong>(7)</em>,
+<em><strong>EVP_PKEY-X25519</strong>(7)</em>,
+<em><strong>EVP_PKEY-X448</strong>(7)</em>,
+and <em><strong>EVP_PKEY-ED25519</strong>(7)</em> pages.</p>
+<p><code>EVP_PKEY_fromdata_settable()</code> gets a constant <em>OSSL_PARAM(3)</em> array that describes
+the settable parameters that can be used with <code>EVP_PKEY_fromdata()</code>.
+<em>selection</em> is described in <a href="#selections">Selections</a>.</p>
+<p>Parameters in the <em>params</em> array that are not among the settable parameters
+for the given <em>selection</em> are ignored.</p>
+<p>
+</p>
+<h2><a name="selections">Selections</a></h2>
+<p>The following constants can be used for <em>selection</em>:</p>
+<dl>
+<dt><strong><a name="evp_pkey_key_parameters" class="item"><strong>EVP_PKEY_KEY_PARAMETERS</strong></a></strong></dt>
+
+<dd>
+<p>Only key parameters will be selected.</p>
+</dd>
+<dt><strong><a name="evp_pkey_public_key" class="item"><strong>EVP_PKEY_PUBLIC_KEY</strong></a></strong></dt>
+
+<dd>
+<p>Only public key components will be selected. This includes optional key
+parameters.</p>
+</dd>
+<dt><strong><a name="evp_pkey_keypair" class="item"><strong>EVP_PKEY_KEYPAIR</strong></a></strong></dt>
+
+<dd>
+<p>Any keypair components will be selected. This includes the private key,
+public key and key parameters.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>These functions only work with key management methods coming from a provider.
+This is the mirror function to <em>EVP_PKEY_todata(3)</em>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>EVP_PKEY_fromdata_init()</code> and <code>EVP_PKEY_fromdata()</code> return 1 for success and 0 or
+a negative value for failure.  In particular a return value of -2 indicates the
+operation is not supported by the public key algorithm.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>These examples are very terse for the sake of staying on topic, which
+is the <code>EVP_PKEY_fromdata()</code> set of functions.  In real applications,
+BIGNUMs would be handled and converted to byte arrays with
+BN_bn2nativepad(), but that's off topic here.</p>
+<p>
+</p>
+<h2><a name="creating_an_rsa_keypair_using_raw_key_data">Creating an RSA keypair using raw key data</a></h2>
+<pre>
+ <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+</pre>
+<pre>
+ <span class="regex">/*
+  * These are extremely small to make this example simple.  A real
+  * and secure application will not use such small numbers.  A real
+  * and secure application is expected to use BIGNUMs, and to build
+  * this array dynamically.
+  */</span>
+ <span class="variable">unsigned</span> <span class="variable">long</span> <span class="variable">rsa_n</span> <span class="operator">=</span> <span class="number">0xbc747fc5</span><span class="operator">;</span>
+ <span class="variable">unsigned</span> <span class="variable">long</span> <span class="variable">rsa_e</span> <span class="operator">=</span> <span class="number">0x10001</span><span class="operator">;</span>
+ <span class="variable">unsigned</span> <span class="variable">long</span> <span class="variable">rsa_d</span> <span class="operator">=</span> <span class="number">0x7b133399</span><span class="operator">;</span>
+ <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span> <span class="operator">=</span> <span class="operator">{</span>
+     <span class="variable">OSSL_PARAM_ulong</span><span class="operator">(</span><span class="string">"n"</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">rsa_n</span><span class="operator">),</span>
+     <span class="variable">OSSL_PARAM_ulong</span><span class="operator">(</span><span class="string">"e"</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">rsa_e</span><span class="operator">),</span>
+     <span class="variable">OSSL_PARAM_ulong</span><span class="operator">(</span><span class="string">"d"</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">rsa_d</span><span class="operator">),</span>
+     <span class="variable">OSSL_PARAM_END</span>
+ <span class="operator">}</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">main</span><span class="operator">()</span>
+ <span class="operator">{</span>
+     <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_CTX_new_from_name</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"RSA"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+     <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+     <span class="keyword">if</span> <span class="operator">(</span><span class="variable">ctx</span> <span class="operator">==</span> <span class="variable">NULL</span>
+         <span class="operator">||</span> <span class="variable">EVP_PKEY_fromdata_init</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">)</span> <span class="operator">&lt;=</span> <span class="number">0</span>
+         <span class="operator">||</span> <span class="variable">EVP_PKEY_fromdata</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">pkey</span><span class="operator">,</span> <span class="variable">EVP_PKEY_KEYPAIR</span><span class="operator">,</span> <span class="variable">params</span><span class="operator">)</span> <span class="operator">&lt;=</span> <span class="number">0</span><span class="operator">)</span>
+         <span class="keyword">exit</span><span class="operator">(</span><span class="number">1</span><span class="operator">);</span>
+</pre>
+<pre>
+     /* Do what you want with |pkey| */
+ }</pre>
+<p>
+</p>
+<h2><a name="creating_an_ecc_keypair_using_raw_key_data">Creating an ECC keypair using raw key data</a></h2>
+<pre>
+ <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+ <span class="comment">#include &lt;openssl/param_build.h&gt;</span>
+ <span class="comment">#include &lt;openssl/ec.h&gt;</span>
+</pre>
+<pre>
+ <span class="regex">/*
+  * Fixed data to represent the private and public key.
+  */</span>
+ <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">priv_data</span><span class="operator">[]</span> <span class="operator">=</span> <span class="operator">{</span>
+     <span class="number">0xb9</span><span class="operator">,</span> <span class="number">0x2f</span><span class="operator">,</span> <span class="number">0x3c</span><span class="operator">,</span> <span class="number">0xe6</span><span class="operator">,</span> <span class="number">0x2f</span><span class="operator">,</span> <span class="number">0xfb</span><span class="operator">,</span> <span class="number">0x45</span><span class="operator">,</span> <span class="number">0x68</span><span class="operator">,</span>
+     <span class="number">0x39</span><span class="operator">,</span> <span class="number">0x96</span><span class="operator">,</span> <span class="number">0xf0</span><span class="operator">,</span> <span class="number">0x2a</span><span class="operator">,</span> <span class="number">0xaf</span><span class="operator">,</span> <span class="number">0x6c</span><span class="operator">,</span> <span class="number">0xda</span><span class="operator">,</span> <span class="number">0xf2</span><span class="operator">,</span>
+     <span class="number">0x89</span><span class="operator">,</span> <span class="number">0x8a</span><span class="operator">,</span> <span class="number">0x27</span><span class="operator">,</span> <span class="number">0xbf</span><span class="operator">,</span> <span class="number">0x39</span><span class="operator">,</span> <span class="number">0x9b</span><span class="operator">,</span> <span class="number">0x7e</span><span class="operator">,</span> <span class="number">0x54</span><span class="operator">,</span>
+     <span class="number">0x21</span><span class="operator">,</span> <span class="number">0xc2</span><span class="operator">,</span> <span class="number">0xa1</span><span class="operator">,</span> <span class="number">0xe5</span><span class="operator">,</span> <span class="number">0x36</span><span class="operator">,</span> <span class="number">0x12</span><span class="operator">,</span> <span class="number">0x48</span><span class="operator">,</span> <span class="number">0x5d</span>
+ <span class="operator">}</span><span class="operator">;</span>
+ <span class="regex">/* UNCOMPRESSED FORMAT */</span>
+ <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">pub_data</span><span class="operator">[]</span> <span class="operator">=</span> <span class="operator">{</span>
+     <span class="variable">POINT_CONVERSION_UNCOMPRESSED</span><span class="operator">,</span>
+     <span class="number">0xcf</span><span class="operator">,</span> <span class="number">0x20</span><span class="operator">,</span> <span class="number">0xfb</span><span class="operator">,</span> <span class="number">0x9a</span><span class="operator">,</span> <span class="number">0x1d</span><span class="operator">,</span> <span class="number">0x11</span><span class="operator">,</span> <span class="number">0x6c</span><span class="operator">,</span> <span class="number">0x5e</span><span class="operator">,</span>
+     <span class="number">0x9f</span><span class="operator">,</span> <span class="number">0xec</span><span class="operator">,</span> <span class="number">0x38</span><span class="operator">,</span> <span class="number">0x87</span><span class="operator">,</span> <span class="number">0x6c</span><span class="operator">,</span> <span class="number">0x1d</span><span class="operator">,</span> <span class="number">0x2f</span><span class="operator">,</span> <span class="number">0x58</span><span class="operator">,</span>
+     <span class="number">0x47</span><span class="operator">,</span> <span class="number">0xab</span><span class="operator">,</span> <span class="number">0xa3</span><span class="operator">,</span> <span class="number">0x9b</span><span class="operator">,</span> <span class="number">0x79</span><span class="operator">,</span> <span class="number">0x23</span><span class="operator">,</span> <span class="number">0xe6</span><span class="operator">,</span> <span class="number">0xeb</span><span class="operator">,</span>
+     <span class="number">0x94</span><span class="operator">,</span> <span class="number">0x6f</span><span class="operator">,</span> <span class="number">0x97</span><span class="operator">,</span> <span class="number">0xdb</span><span class="operator">,</span> <span class="number">0xa3</span><span class="operator">,</span> <span class="number">0x7d</span><span class="operator">,</span> <span class="number">0xbd</span><span class="operator">,</span> <span class="number">0xe5</span><span class="operator">,</span>
+     <span class="number">0x26</span><span class="operator">,</span> <span class="number">0xca</span><span class="operator">,</span> <span class="number">0x07</span><span class="operator">,</span> <span class="number">0x17</span><span class="operator">,</span> <span class="number">0x8d</span><span class="operator">,</span> <span class="number">0x26</span><span class="operator">,</span> <span class="number">0x75</span><span class="operator">,</span> <span class="number">0xff</span><span class="operator">,</span>
+     <span class="number">0xcb</span><span class="operator">,</span> <span class="number">0x8e</span><span class="operator">,</span> <span class="number">0xb6</span><span class="operator">,</span> <span class="number">0x84</span><span class="operator">,</span> <span class="number">0xd0</span><span class="operator">,</span> <span class="number">0x24</span><span class="operator">,</span> <span class="number">0x02</span><span class="operator">,</span> <span class="number">0x25</span><span class="operator">,</span>
+     <span class="number">0x8f</span><span class="operator">,</span> <span class="number">0xb9</span><span class="operator">,</span> <span class="number">0x33</span><span class="operator">,</span> <span class="number">0x6e</span><span class="operator">,</span> <span class="number">0xcf</span><span class="operator">,</span> <span class="number">0x12</span><span class="operator">,</span> <span class="number">0x16</span><span class="operator">,</span> <span class="number">0x2f</span><span class="operator">,</span>
+     <span class="number">0x5c</span><span class="operator">,</span> <span class="number">0xcd</span><span class="operator">,</span> <span class="number">0x86</span><span class="operator">,</span> <span class="number">0x71</span><span class="operator">,</span> <span class="number">0xa8</span><span class="operator">,</span> <span class="number">0xbf</span><span class="operator">,</span> <span class="number">0x1a</span><span class="operator">,</span> <span class="number">0x47</span>
+ <span class="operator">}</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">main</span><span class="operator">()</span>
+ <span class="operator">{</span>
+     <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">;</span>
+     <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+     <span class="variable">BIGNUM</span> <span class="variable">*priv</span><span class="operator">;</span>
+     <span class="variable">OSSL_PARAM_BLD</span> <span class="variable">*param_bld</span><span class="operator">;</span>
+     <span class="variable">OSSL_PARAM</span> <span class="variable">*params</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+     <span class="keyword">int</span> <span class="variable">exitcode</span> <span class="operator">=</span> <span class="number">0</span><span class="operator">;</span>
+</pre>
+<pre>
+     <span class="variable">priv</span> <span class="operator">=</span> <span class="variable">BN_bin2bn</span><span class="operator">(</span><span class="variable">priv_data</span><span class="operator">,</span> <span class="variable">sizeof</span><span class="operator">(</span><span class="variable">priv_data</span><span class="operator">),</span> <span class="variable">NULL</span><span class="operator">);</span>
+</pre>
+<pre>
+     <span class="variable">param_bld</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_BLD_new</span><span class="operator">();</span>
+     <span class="keyword">if</span> <span class="operator">(</span><span class="variable">priv</span> <span class="operator">!=</span> <span class="variable">NULL</span> <span class="operator">&amp;&amp;</span> <span class="variable">param_bld</span> <span class="operator">!=</span> <span class="variable">NULL</span>
+         <span class="operator">&amp;&amp;</span> <span class="variable">OSSL_PARAM_BLD_push_utf8_string</span><span class="operator">(</span><span class="variable">param_bld</span><span class="operator">,</span> <span class="string">"group"</span><span class="operator">,</span>
+                                            <span class="string">"prime256v1"</span><span class="operator">,</span> <span class="number">0</span><span class="operator">)</span>
+         <span class="operator">&amp;&amp;</span> <span class="variable">OSSL_PARAM_BLD_push_BN</span><span class="operator">(</span><span class="variable">param_bld</span><span class="operator">,</span> <span class="string">"priv"</span><span class="operator">,</span> <span class="variable">priv</span><span class="operator">)</span>
+         <span class="operator">&amp;&amp;</span> <span class="variable">OSSL_PARAM_BLD_push_octet_string</span><span class="operator">(</span><span class="variable">param_bld</span><span class="operator">,</span> <span class="string">"pub"</span><span class="operator">,</span>
+                                             <span class="variable">pub_data</span><span class="operator">,</span> <span class="variable">sizeof</span><span class="operator">(</span><span class="variable">pub_data</span><span class="operator">)))</span>
+         <span class="variable">params</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_BLD_to_param</span><span class="operator">(</span><span class="variable">param_bld</span><span class="operator">);</span>
+</pre>
+<pre>
+     <span class="variable">ctx</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_CTX_new_from_name</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"EC"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+     <span class="keyword">if</span> <span class="operator">(</span><span class="variable">ctx</span> <span class="operator">==</span> <span class="variable">NULL</span>
+         <span class="operator">||</span> <span class="variable">params</span> <span class="operator">==</span> <span class="variable">NULL</span>
+         <span class="operator">||</span> <span class="variable">EVP_PKEY_fromdata_init</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">)</span> <span class="operator">&lt;=</span> <span class="number">0</span>
+         <span class="operator">||</span> <span class="variable">EVP_PKEY_fromdata</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">pkey</span><span class="operator">,</span> <span class="variable">EVP_PKEY_KEYPAIR</span><span class="operator">,</span> <span class="variable">params</span><span class="operator">)</span> <span class="operator">&lt;=</span> <span class="number">0</span><span class="operator">)</span> <span class="operator">{</span>
+         <span class="variable">exitcode</span> <span class="operator">=</span> <span class="number">1</span><span class="operator">;</span>
+     <span class="operator">}</span> <span class="keyword">else</span> <span class="operator">{</span>
+         <span class="regex">/* Do what you want with |pkey| */</span>
+     <span class="operator">}</span>
+</pre>
+<pre>
+     <span class="variable">EVP_PKEY_free</span><span class="operator">(</span><span class="variable">pkey</span><span class="operator">);</span>
+     <span class="variable">EVP_PKEY_CTX_free</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">);</span>
+     <span class="variable">OSSL_PARAM_free</span><span class="operator">(</span><span class="variable">params</span><span class="operator">);</span>
+     <span class="variable">OSSL_PARAM_BLD_free</span><span class="operator">(</span><span class="variable">param_bld</span><span class="operator">);</span>
+     <span class="variable">BN_free</span><span class="operator">(</span><span class="variable">priv</span><span class="operator">);</span>
+</pre>
+<pre>
+     <span class="keyword">exit</span><span class="operator">(</span><span class="variable">exitcode</span><span class="operator">);</span>
+      <span class="operator">}</span>
+</pre>
+<p>
+</p>
+<h2><a name="finding_out_params_for_an_unknown_key_type">Finding out params for an unknown key type</a></h2>
+<pre>
+ <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+ <span class="comment">#include &lt;openssl/core.h&gt;</span>
+</pre>
+<pre>
+ <span class="regex">/* Program expects a key type as first argument */</span>
+ <span class="keyword">int</span> <span class="variable">main</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">argc</span><span class="operator">,</span> <span class="variable">char</span> <span class="variable">*argv</span><span class="operator">[]</span><span class="operator">)</span>
+ <span class="operator">{</span>
+     <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_CTX_new_from_name</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="variable">argv</span><span class="operator">[</span><span class="number">1</span><span class="operator">]</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+     <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*settable_params</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+     <span class="keyword">if</span> <span class="operator">(</span><span class="variable">ctx</span> <span class="operator">==</span> <span class="variable">NULL</span><span class="operator">)</span>
+        <span class="keyword">exit</span><span class="operator">(</span><span class="number">1</span><span class="operator">);</span>
+         <span class="variable">settable_params</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_fromdata_settable</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="variable">EVP_PKEY_KEYPAIR</span><span class="operator">);</span>
+         <span class="keyword">if</span> <span class="operator">(</span><span class="variable">settable_params</span> <span class="operator">==</span> <span class="variable">NULL</span><span class="operator">)</span>
+         <span class="keyword">exit</span><span class="operator">(</span><span class="number">1</span><span class="operator">);</span>
+</pre>
+<pre>
+     <span class="keyword">for</span> <span class="operator">(;</span> <span class="variable">settable_params</span><span class="operator">-&gt;</span><span class="variable">key</span> <span class="operator">!=</span> <span class="variable">NULL</span><span class="operator">;</span> <span class="variable">settable_params</span><span class="operator">++)</span> <span class="operator">{</span>
+         <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*datatype</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+         <span class="variable">switch</span> <span class="operator">(</span><span class="variable">settable_params</span><span class="operator">-&gt;</span><span class="variable">data_type</span><span class="operator">)</span> <span class="operator">{</span>
+         <span class="variable">case</span> <span class="variable">OSSL_PARAM_INTEGER</span><span class="operator">:</span>
+             <span class="variable">datatype</span> <span class="operator">=</span> <span class="string">"integer"</span><span class="operator">;</span>
+             <span class="keyword">break</span><span class="operator">;</span>
+         <span class="variable">case</span> <span class="variable">OSSL_PARAM_UNSIGNED_INTEGER</span><span class="operator">:</span>
+             <span class="variable">datatype</span> <span class="operator">=</span> <span class="string">"unsigned integer"</span><span class="operator">;</span>
+             <span class="keyword">break</span><span class="operator">;</span>
+         <span class="variable">case</span> <span class="variable">OSSL_PARAM_UTF8_STRING</span><span class="operator">:</span>
+             <span class="variable">datatype</span> <span class="operator">=</span> <span class="string">"printable string (utf-8 encoding expected)"</span><span class="operator">;</span>
+             <span class="keyword">break</span><span class="operator">;</span>
+         <span class="variable">case</span> <span class="variable">OSSL_PARAM_UTF8_PTR</span><span class="operator">:</span>
+             <span class="variable">datatype</span> <span class="operator">=</span> <span class="string">"printable string pointer (utf-8 encoding expected)"</span><span class="operator">;</span>
+             <span class="keyword">break</span><span class="operator">;</span>
+         <span class="variable">case</span> <span class="variable">OSSL_PARAM_OCTET_STRING</span><span class="operator">:</span>
+             <span class="variable">datatype</span> <span class="operator">=</span> <span class="string">"octet string"</span><span class="operator">;</span>
+             <span class="keyword">break</span><span class="operator">;</span>
+         <span class="variable">case</span> <span class="variable">OSSL_PARAM_OCTET_PTR</span><span class="operator">:</span>
+             <span class="variable">datatype</span> <span class="operator">=</span> <span class="string">"octet string pointer"</span><span class="operator">;</span>
+             <span class="keyword">break</span><span class="operator">;</span>
+         <span class="operator">}</span>
+         <span class="keyword">printf</span><span class="operator">(</span><span class="string">"%s : %s "</span><span class="operator">,</span> <span class="variable">settable_params</span><span class="operator">-&gt;</span><span class="variable">key</span><span class="operator">,</span> <span class="variable">datatype</span><span class="operator">);</span>
+         <span class="keyword">if</span> <span class="operator">(</span><span class="variable">settable_params</span><span class="operator">-&gt;</span><span class="variable">data_size</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">)</span>
+             <span class="keyword">printf</span><span class="operator">(</span><span class="string">"(unlimited size)\n"</span><span class="operator">);</span>
+         <span class="keyword">else</span>
+             <span class="keyword">printf</span><span class="operator">(</span><span class="string">"(maximum size %zu)\n"</span><span class="operator">,</span> <span class="variable">settable_params</span><span class="operator">-&gt;</span><span class="variable">data_size</span><span class="operator">);</span>
+              <span class="operator">}</span>
+          <span class="operator">}</span>
+</pre>
+<p>The descriptor <em>OSSL_PARAM(3)</em> returned by
+<code>EVP_PKEY_fromdata_settable()</code> may also be used programmatically, for
+example with <em>OSSL_PARAM_allocate_from_text(3)</em>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_PKEY_CTX_new(3)</em>, <em>provider(7)</em>, <em>EVP_PKEY_gettable_params(3)</em>,
+<em>OSSL_PARAM(3)</em>, <em>EVP_PKEY_todata(3)</em>,
+<em>EVP_PKEY-RSA(7)</em>, <em>EVP_PKEY-DSA(7)</em>, <em>EVP_PKEY-DH(7)</em>, <em>EVP_PKEY-EC(7)</em>,
+<em>EVP_PKEY-ED448(7)</em>, <em>EVP_PKEY-X25519(7)</em>, <em>EVP_PKEY-X448(7)</em>,
+<em>EVP_PKEY-ED25519(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>These functions were added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2019-2022 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

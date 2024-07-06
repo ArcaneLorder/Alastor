@@ -1,0 +1,104 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>RAND_set_DRBG_type</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>RAND_set_DRBG_type,
+RAND_set_seed_source_type
+- specify the global random number generator types</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/rand.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">RAND_set_DRBG_type</span><span class="operator">(</span><span class="variable">OSSL_LIB_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*drbg</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*propq</span><span class="operator">,</span>
+                        <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*cipher</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*digest</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">RAND_set_seed_source_type</span><span class="operator">(</span><span class="variable">OSSL_LIB_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*seed</span><span class="operator">,</span>
+                               <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*propq</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>RAND_set_DRBG_type()</code> specifies the random bit generator that will be
+used within the library context <em>ctx</em>.  A generator of name <em>drbg</em>
+with properties <em>propq</em> will be fetched.  It will be instantiated with
+either <em>cipher</em> or <em>digest</em> as its underlying cryptographic algorithm.
+This specifies the type that will be used for the primary, public and
+private random instances.</p>
+<p><code>RAND_set_seed_source_type()</code> specifies the seed source that will be used
+within the library context <em>ctx</em>.  The seed source of name <em>seed</em>
+with properties <em>propq</em> will be fetched and used to seed the primary
+random big generator.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>These function return 1 on success and 0 on failure.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>These functions must be called before the random bit generators are first
+created in the library context.  They will return an error if the call
+is made too late.</p>
+<p>The default DRBG is &quot;CTR-DRBG&quot; using the &quot;AES-256-CTR&quot; cipher.</p>
+<p>The default seed source is &quot;SEED-SRC&quot;.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_RAND(3)</em>,
+<em>RAND_get0_primary(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>These functions were added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

@@ -1,0 +1,693 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_PKEY_CTX_ctrl</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#rsa_parameters">RSA parameters</a></li>
+		<li><a href="#dsa_parameters">DSA parameters</a></li>
+		<li><a href="#dh_parameters">DH parameters</a></li>
+		<li><a href="#dh_key_derivation_function_parameters">DH key derivation function parameters</a></li>
+		<li><a href="#ec_parameters">EC parameters</a></li>
+		<li><a href="#ecdh_parameters">ECDH parameters</a></li>
+		<li><a href="#ecdh_key_derivation_function_parameters">ECDH key derivation function parameters</a></li>
+		<li><a href="#other_parameters">Other parameters</a></li>
+	</ul>
+
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_PKEY_CTX_ctrl,
+EVP_PKEY_CTX_ctrl_str,
+EVP_PKEY_CTX_ctrl_uint64,
+EVP_PKEY_CTX_md,
+EVP_PKEY_CTX_set_signature_md,
+EVP_PKEY_CTX_get_signature_md,
+EVP_PKEY_CTX_set_mac_key,
+EVP_PKEY_CTX_set_group_name,
+EVP_PKEY_CTX_get_group_name,
+EVP_PKEY_CTX_set_rsa_padding,
+EVP_PKEY_CTX_get_rsa_padding,
+EVP_PKEY_CTX_set_rsa_pss_saltlen,
+EVP_PKEY_CTX_get_rsa_pss_saltlen,
+EVP_PKEY_CTX_set_rsa_keygen_bits,
+EVP_PKEY_CTX_set_rsa_keygen_pubexp,
+EVP_PKEY_CTX_set1_rsa_keygen_pubexp,
+EVP_PKEY_CTX_set_rsa_keygen_primes,
+EVP_PKEY_CTX_set_rsa_mgf1_md_name,
+EVP_PKEY_CTX_set_rsa_mgf1_md,
+EVP_PKEY_CTX_get_rsa_mgf1_md,
+EVP_PKEY_CTX_get_rsa_mgf1_md_name,
+EVP_PKEY_CTX_set_rsa_oaep_md_name,
+EVP_PKEY_CTX_set_rsa_oaep_md,
+EVP_PKEY_CTX_get_rsa_oaep_md,
+EVP_PKEY_CTX_get_rsa_oaep_md_name,
+EVP_PKEY_CTX_set0_rsa_oaep_label,
+EVP_PKEY_CTX_get0_rsa_oaep_label,
+EVP_PKEY_CTX_set_dsa_paramgen_bits,
+EVP_PKEY_CTX_set_dsa_paramgen_q_bits,
+EVP_PKEY_CTX_set_dsa_paramgen_md,
+EVP_PKEY_CTX_set_dsa_paramgen_md_props,
+EVP_PKEY_CTX_set_dsa_paramgen_gindex,
+EVP_PKEY_CTX_set_dsa_paramgen_type,
+EVP_PKEY_CTX_set_dsa_paramgen_seed,
+EVP_PKEY_CTX_set_dh_paramgen_prime_len,
+EVP_PKEY_CTX_set_dh_paramgen_subprime_len,
+EVP_PKEY_CTX_set_dh_paramgen_generator,
+EVP_PKEY_CTX_set_dh_paramgen_type,
+EVP_PKEY_CTX_set_dh_paramgen_gindex,
+EVP_PKEY_CTX_set_dh_paramgen_seed,
+EVP_PKEY_CTX_set_dh_rfc5114,
+EVP_PKEY_CTX_set_dhx_rfc5114,
+EVP_PKEY_CTX_set_dh_pad,
+EVP_PKEY_CTX_set_dh_nid,
+EVP_PKEY_CTX_set_dh_kdf_type,
+EVP_PKEY_CTX_get_dh_kdf_type,
+EVP_PKEY_CTX_set0_dh_kdf_oid,
+EVP_PKEY_CTX_get0_dh_kdf_oid,
+EVP_PKEY_CTX_set_dh_kdf_md,
+EVP_PKEY_CTX_get_dh_kdf_md,
+EVP_PKEY_CTX_set_dh_kdf_outlen,
+EVP_PKEY_CTX_get_dh_kdf_outlen,
+EVP_PKEY_CTX_set0_dh_kdf_ukm,
+EVP_PKEY_CTX_get0_dh_kdf_ukm,
+EVP_PKEY_CTX_set_ec_paramgen_curve_nid,
+EVP_PKEY_CTX_set_ec_param_enc,
+EVP_PKEY_CTX_set_ecdh_cofactor_mode,
+EVP_PKEY_CTX_get_ecdh_cofactor_mode,
+EVP_PKEY_CTX_set_ecdh_kdf_type,
+EVP_PKEY_CTX_get_ecdh_kdf_type,
+EVP_PKEY_CTX_set_ecdh_kdf_md,
+EVP_PKEY_CTX_get_ecdh_kdf_md,
+EVP_PKEY_CTX_set_ecdh_kdf_outlen,
+EVP_PKEY_CTX_get_ecdh_kdf_outlen,
+EVP_PKEY_CTX_set0_ecdh_kdf_ukm,
+EVP_PKEY_CTX_get0_ecdh_kdf_ukm,
+EVP_PKEY_CTX_set1_id, EVP_PKEY_CTX_get1_id, EVP_PKEY_CTX_get1_id_len,
+EVP_PKEY_CTX_set_kem_op
+- algorithm specific control operations</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_ctrl</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">keytype</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">optype</span><span class="operator">,</span>
+                       <span class="keyword">int</span> <span class="variable">cmd</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">p1</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*p2</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_ctrl_uint64</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">keytype</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">optype</span><span class="operator">,</span>
+                              <span class="keyword">int</span> <span class="variable">cmd</span><span class="operator">,</span> <span class="variable">uint64_t</span> <span class="variable">value</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_ctrl_str</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*type</span><span class="operator">,</span>
+                           <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*value</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_md</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">optype</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">cmd</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*md</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_signature_md</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_MD</span> <span class="variable">*md</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_signature_md</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_MD</span> <span class="operator">**</span><span class="variable">pmd</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_mac_key</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*key</span><span class="operator">,</span>
+                              <span class="keyword">int</span> <span class="variable">len</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_group_name</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*name</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_group_name</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">char</span> <span class="variable">*name</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">namelen</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_kem_op</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*op</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="comment">#include &lt;openssl/rsa.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_rsa_padding</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">pad</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_rsa_padding</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*pad</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_rsa_pss_saltlen</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">saltlen</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_rsa_pss_saltlen</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*saltlen</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_rsa_keygen_bits</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">mbits</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set1_rsa_keygen_pubexp</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">BIGNUM</span> <span class="variable">*pubexp</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_rsa_keygen_primes</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">primes</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_rsa_mgf1_md_name</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*mdname</span><span class="operator">,</span>
+                                     <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*mdprops</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_rsa_mgf1_md</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_MD</span> <span class="variable">*md</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_rsa_mgf1_md</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_MD</span> <span class="operator">**</span><span class="variable">md</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_rsa_mgf1_md_name</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">char</span> <span class="variable">*name</span><span class="operator">,</span>
+                                       <span class="variable">size_t</span> <span class="variable">namelen</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_rsa_oaep_md_name</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*mdname</span><span class="operator">,</span>
+                                       <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*mdprops</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_rsa_oaep_md</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_MD</span> <span class="variable">*md</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_rsa_oaep_md</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_MD</span> <span class="operator">**</span><span class="variable">md</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_rsa_oaep_md_name</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">char</span> <span class="variable">*name</span><span class="operator">,</span>
+                                       <span class="variable">size_t</span> <span class="variable">namelen</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set0_rsa_oaep_label</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*label</span><span class="operator">,</span>
+                                      <span class="keyword">int</span> <span class="variable">len</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get0_rsa_oaep_label</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">label</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="comment">#include &lt;openssl/dsa.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dsa_paramgen_bits</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">nbits</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dsa_paramgen_q_bits</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">qbits</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dsa_paramgen_md</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_MD</span> <span class="variable">*md</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dsa_paramgen_md_props</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span>
+                                            <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*md_name</span><span class="operator">,</span>
+                                            <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*md_properties</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dsa_paramgen_type</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*name</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dsa_paramgen_gindex</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">gindex</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dsa_paramgen_seed</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span>
+                                        <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*seed</span><span class="operator">,</span>
+                                        <span class="variable">size_t</span> <span class="variable">seedlen</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="comment">#include &lt;openssl/dh.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dh_paramgen_prime_len</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">len</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dh_paramgen_subprime_len</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">len</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dh_paramgen_generator</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">gen</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dh_paramgen_type</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">type</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dh_pad</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">pad</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dh_nid</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">nid</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dh_rfc5114</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">rfc5114</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dhx_rfc5114</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">rfc5114</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dh_paramgen_gindex</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">gindex</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dh_paramgen_seed</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span>
+                                        <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*seed</span><span class="operator">,</span>
+                                        <span class="variable">size_t</span> <span class="variable">seedlen</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dh_kdf_type</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">kdf</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_dh_kdf_type</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set0_dh_kdf_oid</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">ASN1_OBJECT</span> <span class="variable">*oid</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get0_dh_kdf_oid</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">ASN1_OBJECT</span> <span class="operator">**</span><span class="variable">oid</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dh_kdf_md</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_MD</span> <span class="variable">*md</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_dh_kdf_md</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_MD</span> <span class="operator">**</span><span class="variable">md</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_dh_kdf_outlen</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">len</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_dh_kdf_outlen</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*len</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set0_dh_kdf_ukm</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*ukm</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">len</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="comment">#include &lt;openssl/ec.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_ec_paramgen_curve_nid</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">nid</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_ec_param_enc</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">param_enc</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_ecdh_cofactor_mode</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">cofactor_mode</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_ecdh_cofactor_mode</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_ecdh_kdf_type</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">kdf</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_ecdh_kdf_type</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_ecdh_kdf_md</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_MD</span> <span class="variable">*md</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_ecdh_kdf_md</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_MD</span> <span class="operator">**</span><span class="variable">md</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_ecdh_kdf_outlen</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">len</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_ecdh_kdf_outlen</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*len</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set0_ecdh_kdf_ukm</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*ukm</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">len</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set1_id</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*id</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">id_len</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get1_id</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*id</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get1_id_len</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">*id_len</span><span class="operator">);</span>
+</pre>
+<p>The following functions have been deprecated since OpenSSL 3.0, and can be
+hidden entirely by defining <strong>OPENSSL_API_COMPAT</strong> with a suitable version value,
+see <em>openssl_user_macros(7)</em>:</p>
+<pre>
+ <span class="comment">#include &lt;openssl/rsa.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_set_rsa_keygen_pubexp</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">BIGNUM</span> <span class="variable">*pubexp</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="comment">#include &lt;openssl/dh.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get0_dh_kdf_ukm</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ukm</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="comment">#include &lt;openssl/ec.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get0_ecdh_kdf_ukm</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ukm</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>EVP_PKEY_CTX_ctrl()</code> sends a control operation to the context <em>ctx</em>. The key
+type used must match <em>keytype</em> if it is not -1. The parameter <em>optype</em> is a
+mask indicating which operations the control can be applied to.
+The control command is indicated in <em>cmd</em> and any additional arguments in
+<em>p1</em> and <em>p2</em>.</p>
+<p>For <em>cmd</em> = <strong>EVP_PKEY_CTRL_SET_MAC_KEY</strong>, <em>p1</em> is the length of the MAC key,
+and <em>p2</em> is the MAC key. This is used by Poly1305, SipHash, HMAC and CMAC.</p>
+<p>Applications will not normally call <code>EVP_PKEY_CTX_ctrl()</code> directly but will
+instead call one of the algorithm specific functions below.</p>
+<p>EVP_PKEY_CTX_ctrl_uint64() is a wrapper that directly passes a
+uint64 value as <em>p2</em> to <code>EVP_PKEY_CTX_ctrl()</code>.</p>
+<p><code>EVP_PKEY_CTX_ctrl_str()</code> allows an application to send an algorithm
+specific control operation to a context <em>ctx</em> in string form. This is
+intended to be used for options specified on the command line or in text
+files. The commands supported are documented in the openssl utility
+command line pages for the option <em>-pkeyopt</em> which is supported by the
+<em>pkeyutl</em>, <em>genpkey</em> and <em>req</em> commands.</p>
+<p><code>EVP_PKEY_CTX_md()</code> sends a message digest control operation to the context
+<em>ctx</em>. The message digest is specified by its name <em>md</em>.</p>
+<p><code>EVP_PKEY_CTX_set_signature_md()</code> sets the message digest type used
+in a signature. It can be used in the RSA, DSA and ECDSA algorithms.</p>
+<p>EVP_PKEY_CTX_get_signature_md()gets the message digest type used
+in a signature. It can be used in the RSA, DSA and ECDSA algorithms.</p>
+<p>Key generation typically involves setting up parameters to be used and
+generating the private and public key data. Some algorithm implementations
+allow private key data to be set explicitly using <code>EVP_PKEY_CTX_set_mac_key()</code>.
+In this case key generation is simply the process of setting up the
+parameters for the key and then setting the raw key data to the value explicitly.
+Normally applications would call <em>EVP_PKEY_new_raw_private_key(3)</em> or similar
+functions instead.</p>
+<p><code>EVP_PKEY_CTX_set_mac_key()</code> can be used with any of the algorithms supported by
+the <em>EVP_PKEY_new_raw_private_key(3)</em> function.</p>
+<p><code>EVP_PKEY_CTX_set_group_name()</code> sets the group name to <em>name</em> for parameter and
+key generation. For example for EC keys this will set the curve name and for
+DH keys it will set the name of the finite field group.</p>
+<p><code>EVP_PKEY_CTX_get_group_name()</code> finds the group name that's currently
+set with <em>ctx</em>, and writes it to the location that <em>name</em> points at, as long
+as its size <em>namelen</em> is large enough to store that name, including a
+terminating NUL byte.</p>
+<p>
+</p>
+<h2><a name="rsa_parameters">RSA parameters</a></h2>
+<p><code>EVP_PKEY_CTX_set_rsa_padding()</code> sets the RSA padding mode for <em>ctx</em>.
+The <em>pad</em> parameter can take the value <strong>RSA_PKCS1_PADDING</strong> for PKCS#1
+padding, <strong>RSA_NO_PADDING</strong> for
+no padding, <strong>RSA_PKCS1_OAEP_PADDING</strong> for OAEP padding (encrypt and
+decrypt only), <strong>RSA_X931_PADDING</strong> for X9.31 padding (signature operations
+only), <strong>RSA_PKCS1_PSS_PADDING</strong> (sign and verify only) and
+<strong>RSA_PKCS1_WITH_TLS_PADDING</strong> for TLS RSA ClientKeyExchange message padding
+(decryption only).</p>
+<p>Two RSA padding modes behave differently if <code>EVP_PKEY_CTX_set_signature_md()</code>
+is used. If this function is called for PKCS#1 padding the plaintext buffer is
+an actual digest value and is encapsulated in a DigestInfo structure according
+to PKCS#1 when signing and this structure is expected (and stripped off) when
+verifying. If this control is not used with RSA and PKCS#1 padding then the
+supplied data is used directly and not encapsulated. In the case of X9.31
+padding for RSA the algorithm identifier byte is added or checked and removed
+if this control is called. If it is not called then the first byte of the plaintext
+buffer is expected to be the algorithm identifier byte.</p>
+<p><code>EVP_PKEY_CTX_get_rsa_padding()</code> gets the RSA padding mode for <em>ctx</em>.</p>
+<p><code>EVP_PKEY_CTX_set_rsa_pss_saltlen()</code> sets the RSA PSS salt length to <em>saltlen</em>.
+As its name implies it is only supported for PSS padding. If this function is
+not called then the maximum salt length is used when signing and auto detection
+when verifying. Three special values are supported:</p>
+<dl>
+<dt><strong><a name="rsa_pss_saltlen_digest" class="item"><strong>RSA_PSS_SALTLEN_DIGEST</strong></a></strong></dt>
+
+<dd>
+<p>sets the salt length to the digest length.</p>
+</dd>
+<dt><strong><a name="rsa_pss_saltlen_max" class="item"><strong>RSA_PSS_SALTLEN_MAX</strong></a></strong></dt>
+
+<dd>
+<p>sets the salt length to the maximum permissible value.</p>
+</dd>
+<dt><strong><a name="rsa_pss_saltlen_auto" class="item"><strong>RSA_PSS_SALTLEN_AUTO</strong></a></strong></dt>
+
+<dd>
+<p>causes the salt length to be automatically determined based on the
+<strong>PSS</strong> block structure when verifying.  When signing, it has the same
+meaning as <strong>RSA_PSS_SALTLEN_MAX</strong>.</p>
+</dd>
+</dl>
+<p><code>EVP_PKEY_CTX_get_rsa_pss_saltlen()</code> gets the RSA PSS salt length for <em>ctx</em>.
+The padding mode must already have been set to <strong>RSA_PKCS1_PSS_PADDING</strong>.</p>
+<p><code>EVP_PKEY_CTX_set_rsa_keygen_bits()</code> sets the RSA key length for
+RSA key generation to <em>bits</em>. If not specified 2048 bits is used.</p>
+<p>EVP_PKEY_CTX_set1_rsa_keygen_pubexp() sets the public exponent value for RSA key
+generation to the value stored in <em>pubexp</em>. Currently it should be an odd
+integer. In accordance with the OpenSSL naming convention, the <em>pubexp</em> pointer
+must be freed independently of the EVP_PKEY_CTX (ie, it is internally copied).
+If not specified 65537 is used.</p>
+<p><code>EVP_PKEY_CTX_set_rsa_keygen_pubexp()</code> does the same as
+EVP_PKEY_CTX_set1_rsa_keygen_pubexp() except that there is no internal copy and
+therefore <em>pubexp</em> should not be modified or freed after the call.</p>
+<p><code>EVP_PKEY_CTX_set_rsa_keygen_primes()</code> sets the number of primes for
+RSA key generation to <em>primes</em>. If not specified 2 is used.</p>
+<p>EVP_PKEY_CTX_set_rsa_mgf1_md_name() sets the MGF1 digest for RSA
+padding schemes to the digest named <em>mdname</em>. If the RSA algorithm
+implementation for the selected provider supports it then the digest will be
+fetched using the properties <em>mdprops</em>. If not explicitly set the signing
+digest is used. The padding mode must have been set to <strong>RSA_PKCS1_OAEP_PADDING</strong>
+or <strong>RSA_PKCS1_PSS_PADDING</strong>.</p>
+<p>EVP_PKEY_CTX_set_rsa_mgf1_md() does the same as
+EVP_PKEY_CTX_set_rsa_mgf1_md_name() except that the name of the digest is
+inferred from the supplied <em>md</em> and it is not possible to specify any
+properties.</p>
+<p>EVP_PKEY_CTX_get_rsa_mgf1_md_name() gets the name of the MGF1
+digest algorithm for <em>ctx</em>. If not explicitly set the signing digest is used.
+The padding mode must have been set to <strong>RSA_PKCS1_OAEP_PADDING</strong> or
+<strong>RSA_PKCS1_PSS_PADDING</strong>.</p>
+<p>EVP_PKEY_CTX_get_rsa_mgf1_md() does the same as
+EVP_PKEY_CTX_get_rsa_mgf1_md_name() except that it returns a pointer to an
+EVP_MD object instead. Note that only known, built-in EVP_MD objects will be
+returned. The EVP_MD object may be NULL if the digest is not one of these (such
+as a digest only implemented in a third party provider).</p>
+<p><code>EVP_PKEY_CTX_set_rsa_oaep_md_name()</code> sets the message digest type
+used in RSA OAEP to the digest named <em>mdname</em>.  If the RSA algorithm
+implementation for the selected provider supports it then the digest will be
+fetched using the properties <em>mdprops</em>. The padding mode must have been set to
+<strong>RSA_PKCS1_OAEP_PADDING</strong>.</p>
+<p><code>EVP_PKEY_CTX_set_rsa_oaep_md()</code> does the same as
+<code>EVP_PKEY_CTX_set_rsa_oaep_md_name()</code> except that the name of the digest is
+inferred from the supplied <em>md</em> and it is not possible to specify any
+properties.</p>
+<p><code>EVP_PKEY_CTX_get_rsa_oaep_md_name()</code> gets the message digest
+algorithm name used in RSA OAEP and stores it in the buffer <em>name</em> which is of
+size <em>namelen</em>. The padding mode must have been set to
+<strong>RSA_PKCS1_OAEP_PADDING</strong>. The buffer should be sufficiently large for any
+expected digest algorithm names or the function will fail.</p>
+<p><code>EVP_PKEY_CTX_get_rsa_oaep_md()</code> does the same as
+<code>EVP_PKEY_CTX_get_rsa_oaep_md_name()</code> except that it returns a pointer to an
+EVP_MD object instead. Note that only known, built-in EVP_MD objects will be
+returned. The EVP_MD object may be NULL if the digest is not one of these (such
+as a digest only implemented in a third party provider).</p>
+<p>EVP_PKEY_CTX_set0_rsa_oaep_label() sets the RSA OAEP label to binary data
+<em>label</em> and its length in bytes to <em>len</em>. If <em>label</em> is NULL or <em>len</em> is 0,
+the label is cleared. The library takes ownership of the label so the
+caller should not free the original memory pointed to by <em>label</em>.
+The padding mode must have been set to <strong>RSA_PKCS1_OAEP_PADDING</strong>.</p>
+<p>EVP_PKEY_CTX_get0_rsa_oaep_label() gets the RSA OAEP label to
+<em>label</em>. The return value is the label length. The padding mode
+must have been set to <strong>RSA_PKCS1_OAEP_PADDING</strong>. The resulting pointer is owned
+by the library and should not be freed by the caller.</p>
+<p><strong>RSA_PKCS1_WITH_TLS_PADDING</strong> is used when decrypting an RSA encrypted TLS
+pre-master secret in a TLS ClientKeyExchange message. It is the same as
+RSA_PKCS1_PADDING except that it additionally verifies that the result is the
+correct length and the first two bytes are the protocol version initially
+requested by the client. If the encrypted content is publicly invalid then the
+decryption will fail. However, if the padding checks fail then decryption will
+still appear to succeed but a random TLS premaster secret will be returned
+instead. This padding mode accepts two parameters which can be set using the
+<em>EVP_PKEY_CTX_set_params(3)</em> function. These are
+OSSL_ASYM_CIPHER_PARAM_TLS_CLIENT_VERSION and
+OSSL_ASYM_CIPHER_PARAM_TLS_NEGOTIATED_VERSION, both of which are expected to be
+unsigned integers. Normally only the first of these will be set and represents
+the TLS protocol version that was first requested by the client (e.g. 0x0303 for
+TLSv1.2, 0x0302 for TLSv1.1 etc). Historically some buggy clients would use the
+negotiated protocol version instead of the protocol version first requested. If
+this behaviour should be tolerated then
+OSSL_ASYM_CIPHER_PARAM_TLS_NEGOTIATED_VERSION should be set to the actual
+negotiated protocol version. Otherwise it should be left unset.</p>
+<p>
+</p>
+<h2><a name="dsa_parameters">DSA parameters</a></h2>
+<p><code>EVP_PKEY_CTX_set_dsa_paramgen_bits()</code> sets the number of bits used for DSA
+parameter generation to <strong>nbits</strong>. If not specified, 2048 is used.</p>
+<p><code>EVP_PKEY_CTX_set_dsa_paramgen_q_bits()</code> sets the number of bits in the subprime
+parameter <em>q</em> for DSA parameter generation to <em>qbits</em>. If not specified, 224
+is used. If a digest function is specified below, this parameter is ignored and
+instead, the number of bits in <em>q</em> matches the size of the digest.</p>
+<p><code>EVP_PKEY_CTX_set_dsa_paramgen_md()</code> sets the digest function used for DSA
+parameter generation to <em>md</em>. If not specified, one of SHA-1, SHA-224, or
+SHA-256 is selected to match the bit length of <em>q</em> above.</p>
+<p><code>EVP_PKEY_CTX_set_dsa_paramgen_md_props()</code> sets the digest function used for DSA
+parameter generation using <em>md_name</em> and <em>md_properties</em> to retrieve the
+digest from a provider.
+If not specified, <em>md_name</em> will be set to one of SHA-1, SHA-224, or
+SHA-256 depending on the bit length of <em>q</em> above. <em>md_properties</em> is a
+property query string that has a default value of '' if not specified.</p>
+<p><code>EVP_PKEY_CTX_set_dsa_paramgen_gindex()</code> sets the <em>gindex</em> used by the generator
+G. The default value is -1 which uses unverifiable g, otherwise a positive value
+uses verifiable g. This value must be saved if key validation of g is required,
+since it is not part of a persisted key.</p>
+<p><code>EVP_PKEY_CTX_set_dsa_paramgen_seed()</code> sets the <em>seed</em> to use for generation
+rather than using a randomly generated value for the seed. This is useful for
+testing purposes only and can fail if the seed does not produce primes for both
+p &amp; q on its first iteration. This value must be saved if key validation of
+p, q, and verifiable g are required, since it is not part of a persisted key.</p>
+<p><code>EVP_PKEY_CTX_set_dsa_paramgen_type()</code> sets the generation type to use FIPS186-4
+generation if <em>name</em> is &quot;fips186_4&quot;, or FIPS186-2 generation if <em>name</em> is
+&quot;fips186_2&quot;. The default value for the default provider is &quot;fips186_2&quot;. The
+default value for the FIPS provider is &quot;fips186_4&quot;.</p>
+<p>
+</p>
+<h2><a name="dh_parameters">DH parameters</a></h2>
+<p><code>EVP_PKEY_CTX_set_dh_paramgen_prime_len()</code> sets the length of the DH prime
+parameter <em>p</em> for DH parameter generation. If this function is not called then
+2048 is used. Only accepts lengths greater than or equal to 256.</p>
+<p><code>EVP_PKEY_CTX_set_dh_paramgen_subprime_len()</code> sets the length of the DH
+optional subprime parameter <em>q</em> for DH parameter generation. The default is
+256 if the prime is at least 2048 bits long or 160 otherwise. The DH paramgen
+type must have been set to &quot;fips186_4&quot;.</p>
+<p><code>EVP_PKEY_CTX_set_dh_paramgen_generator()</code> sets DH generator to <em>gen</em> for DH
+parameter generation. If not specified 2 is used.</p>
+<p><code>EVP_PKEY_CTX_set_dh_paramgen_type()</code> sets the key type for DH parameter
+generation. The supported parameters are:</p>
+<dl>
+<dt><strong><a name="dh_paramgen_type_group" class="item"><strong>DH_PARAMGEN_TYPE_GROUP</strong></a></strong></dt>
+
+<dd>
+<p>Use a named group. If only the safe prime parameter <em>p</em> is set this can be
+used to select a ffdhe safe prime group of the correct size.</p>
+</dd>
+<dt><strong><a name="dh_paramgen_type_fips_186_4" class="item"><strong>DH_PARAMGEN_TYPE_FIPS_186_4</strong></a></strong></dt>
+
+<dd>
+<p>FIPS186-4 FFC parameter generator.</p>
+</dd>
+<dt><strong><a name="dh_paramgen_type_fips_186_2" class="item"><strong>DH_PARAMGEN_TYPE_FIPS_186_2</strong></a></strong></dt>
+
+<dd>
+<p>FIPS186-2 FFC parameter generator (X9.42 DH).</p>
+</dd>
+<dt><strong><a name="dh_paramgen_type_generator" class="item"><strong>DH_PARAMGEN_TYPE_GENERATOR</strong></a></strong></dt>
+
+<dd>
+<p>Uses a safe prime generator g (PKCS#3 format).</p>
+</dd>
+</dl>
+<p>The default in the default provider is <strong>DH_PARAMGEN_TYPE_GENERATOR</strong> for the
+&quot;DH&quot; keytype, and <strong>DH_PARAMGEN_TYPE_FIPS_186_2</strong> for the &quot;DHX&quot; keytype. In the
+FIPS provider the default value is <strong>DH_PARAMGEN_TYPE_GROUP</strong> for the &quot;DH&quot;
+keytype and &lt;<strong>DH_PARAMGEN_TYPE_FIPS_186_4</strong> for the &quot;DHX&quot; keytype.</p>
+<p><code>EVP_PKEY_CTX_set_dh_paramgen_gindex()</code> sets the <em>gindex</em> used by the generator G.
+The default value is -1 which uses unverifiable g, otherwise a positive value
+uses verifiable g. This value must be saved if key validation of g is required,
+since it is not part of a persisted key.</p>
+<p><code>EVP_PKEY_CTX_set_dh_paramgen_seed()</code> sets the <em>seed</em> to use for generation
+rather than using a randomly generated value for the seed. This is useful for
+testing purposes only and can fail if the seed does not produce primes for both
+p &amp; q on its first iteration. This value must be saved if key validation of p, q,
+and verifiable g are required, since it is not part of a persisted key.</p>
+<p><code>EVP_PKEY_CTX_set_dh_pad()</code> sets the DH padding mode.
+If <em>pad</em> is 1 the shared secret is padded with zeros up to the size of the DH
+prime <em>p</em>.
+If <em>pad</em> is zero (the default) then no padding is performed.</p>
+<p><code>EVP_PKEY_CTX_set_dh_nid()</code> sets the DH parameters to values corresponding to
+<em>nid</em> as defined in <a href="http://www.ietf.org/rfc/rfc7919.txt" class="rfc">RFC7919</a> or <a href="http://www.ietf.org/rfc/rfc3526.txt" class="rfc">RFC3526</a>. The <em>nid</em> parameter must be
+<strong>NID_ffdhe2048</strong>, <strong>NID_ffdhe3072</strong>, <strong>NID_ffdhe4096</strong>, <strong>NID_ffdhe6144</strong>,
+<strong>NID_ffdhe8192</strong>, <strong>NID_modp_1536</strong>, <strong>NID_modp_2048</strong>, <strong>NID_modp_3072</strong>,
+<strong>NID_modp_4096</strong>, <strong>NID_modp_6144</strong>, <strong>NID_modp_8192</strong> or <strong>NID_undef</strong> to clear
+the stored value. This function can be called during parameter or key generation.
+The nid parameter and the rfc5114 parameter are mutually exclusive.</p>
+<p>EVP_PKEY_CTX_set_dh_rfc5114() and EVP_PKEY_CTX_set_dhx_rfc5114() both set the
+DH parameters to the values defined in <a href="http://www.ietf.org/rfc/rfc5114.txt" class="rfc">RFC5114</a>. The <em>rfc5114</em> parameter must
+be 1, 2 or 3 corresponding to <a href="http://www.ietf.org/rfc/rfc5114.txt" class="rfc">RFC5114</a> sections 2.1, 2.2 and 2.3. or 0 to clear
+the stored value. This macro can be called during parameter generation. The
+<em>ctx</em> must have a key type of <strong>EVP_PKEY_DHX</strong>.
+The rfc5114 parameter and the nid parameter are mutually exclusive.</p>
+<p>
+</p>
+<h2><a name="dh_key_derivation_function_parameters">DH key derivation function parameters</a></h2>
+<p>Note that all of the following functions require that the <em>ctx</em> parameter has
+a private key type of <strong>EVP_PKEY_DHX</strong>. When using key derivation, the output of
+<code>EVP_PKEY_derive()</code> is the output of the KDF instead of the DH shared secret.
+The KDF output is typically used as a Key Encryption Key (KEK) that in turn
+encrypts a Content Encryption Key (CEK).</p>
+<p><code>EVP_PKEY_CTX_set_dh_kdf_type()</code> sets the key derivation function type to <em>kdf</em>
+for DH key derivation. Possible values are <strong>EVP_PKEY_DH_KDF_NONE</strong> and
+<strong>EVP_PKEY_DH_KDF_X9_42</strong> which uses the key derivation specified in <a href="http://www.ietf.org/rfc/rfc2631.txt" class="rfc">RFC2631</a>
+(based on the keying algorithm described in X9.42). When using key derivation,
+the <em>kdf_oid</em>, <em>kdf_md</em> and <em>kdf_outlen</em> parameters must also be specified.</p>
+<p><code>EVP_PKEY_CTX_get_dh_kdf_type()</code> gets the key derivation function type for <em>ctx</em>
+used for DH key derivation. Possible values are <strong>EVP_PKEY_DH_KDF_NONE</strong> and
+<strong>EVP_PKEY_DH_KDF_X9_42</strong>.</p>
+<p>EVP_PKEY_CTX_set0_dh_kdf_oid() sets the key derivation function object
+identifier to <em>oid</em> for DH key derivation. This OID should identify the
+algorithm to be used with the Content Encryption Key.
+The library takes ownership of the object identifier so the caller should not
+free the original memory pointed to by <em>oid</em>.</p>
+<p>EVP_PKEY_CTX_get0_dh_kdf_oid() gets the key derivation function oid for <em>ctx</em>
+used for DH key derivation. The resulting pointer is owned by the library and
+should not be freed by the caller.</p>
+<p><code>EVP_PKEY_CTX_set_dh_kdf_md()</code> sets the key derivation function message digest to
+<em>md</em> for DH key derivation. Note that <a href="http://www.ietf.org/rfc/rfc2631.txt" class="rfc">RFC2631</a> specifies that this digest should
+be SHA1 but OpenSSL tolerates other digests.</p>
+<p><code>EVP_PKEY_CTX_get_dh_kdf_md()</code> gets the key derivation function message digest for
+<em>ctx</em> used for DH key derivation.</p>
+<p><code>EVP_PKEY_CTX_set_dh_kdf_outlen()</code> sets the key derivation function output length
+to <em>len</em> for DH key derivation.</p>
+<p><code>EVP_PKEY_CTX_get_dh_kdf_outlen()</code> gets the key derivation function output length
+for <em>ctx</em> used for DH key derivation.</p>
+<p>EVP_PKEY_CTX_set0_dh_kdf_ukm() sets the user key material to <em>ukm</em> and its
+length to <em>len</em> for DH key derivation. This parameter is optional and
+corresponds to the partyAInfo field in <a href="http://www.ietf.org/rfc/rfc2631.txt" class="rfc">RFC2631</a> terms. The specification
+requires that it is 512 bits long but this is not enforced by OpenSSL.
+The library takes ownership of the user key material so the caller should not
+free the original memory pointed to by <em>ukm</em>.</p>
+<p>EVP_PKEY_CTX_get0_dh_kdf_ukm() gets the user key material for <em>ctx</em>.
+The return value is the user key material length. The resulting pointer is owned
+by the library and should not be freed by the caller.</p>
+<p>
+</p>
+<h2><a name="ec_parameters">EC parameters</a></h2>
+<p>Use <code>EVP_PKEY_CTX_set_group_name()</code> (described above) to set the curve name to
+<em>name</em> for parameter and key generation.</p>
+<p><code>EVP_PKEY_CTX_set_ec_paramgen_curve_nid()</code> does the same as
+<code>EVP_PKEY_CTX_set_group_name()</code>, but is specific to EC and uses a <em>nid</em> rather
+than a name string.</p>
+<p>For EC parameter generation, one of <code>EVP_PKEY_CTX_set_group_name()</code>
+or <code>EVP_PKEY_CTX_set_ec_paramgen_curve_nid()</code> must be called or an error occurs
+because there is no default curve.
+These function can also be called to set the curve explicitly when
+generating an EC key.</p>
+<p><code>EVP_PKEY_CTX_get_group_name()</code> (described above) can be used to obtain the curve
+name that's currently set with <em>ctx</em>.</p>
+<p><code>EVP_PKEY_CTX_set_ec_param_enc()</code> sets the EC parameter encoding to <em>param_enc</em>
+when generating EC parameters or an EC key. The encoding can be
+<strong>OPENSSL_EC_EXPLICIT_CURVE</strong> for explicit parameters (the default in versions
+of OpenSSL before 1.1.0) or <strong>OPENSSL_EC_NAMED_CURVE</strong> to use named curve form.
+For maximum compatibility the named curve form should be used. Note: the
+<strong>OPENSSL_EC_NAMED_CURVE</strong> value was added in OpenSSL 1.1.0; previous
+versions should use 0 instead.</p>
+<p>
+</p>
+<h2><a name="ecdh_parameters">ECDH parameters</a></h2>
+<p><code>EVP_PKEY_CTX_set_ecdh_cofactor_mode()</code> sets the cofactor mode to <em>cofactor_mode</em>
+for ECDH key derivation. Possible values are 1 to enable cofactor
+key derivation, 0 to disable it and -1 to clear the stored cofactor mode and
+fallback to the private key cofactor mode.</p>
+<p><code>EVP_PKEY_CTX_get_ecdh_cofactor_mode()</code> returns the cofactor mode for <em>ctx</em> used
+for ECDH key derivation. Possible values are 1 when cofactor key derivation is
+enabled and 0 otherwise.</p>
+<p>
+</p>
+<h2><a name="ecdh_key_derivation_function_parameters">ECDH key derivation function parameters</a></h2>
+<p><code>EVP_PKEY_CTX_set_ecdh_kdf_type()</code> sets the key derivation function type to
+<em>kdf</em> for ECDH key derivation. Possible values are <strong>EVP_PKEY_ECDH_KDF_NONE</strong>
+and <strong>EVP_PKEY_ECDH_KDF_X9_63</strong> which uses the key derivation specified in X9.63.
+When using key derivation, the <em>kdf_md</em> and <em>kdf_outlen</em> parameters must
+also be specified.</p>
+<p><code>EVP_PKEY_CTX_get_ecdh_kdf_type()</code> returns the key derivation function type for
+<em>ctx</em> used for ECDH key derivation. Possible values are
+<strong>EVP_PKEY_ECDH_KDF_NONE</strong> and <strong>EVP_PKEY_ECDH_KDF_X9_63</strong>.</p>
+<p><code>EVP_PKEY_CTX_set_ecdh_kdf_md()</code> sets the key derivation function message digest
+to <em>md</em> for ECDH key derivation. Note that X9.63 specifies that this digest
+should be SHA1 but OpenSSL tolerates other digests.</p>
+<p><code>EVP_PKEY_CTX_get_ecdh_kdf_md()</code> gets the key derivation function message digest
+for <em>ctx</em> used for ECDH key derivation.</p>
+<p><code>EVP_PKEY_CTX_set_ecdh_kdf_outlen()</code> sets the key derivation function output
+length to <em>len</em> for ECDH key derivation.</p>
+<p><code>EVP_PKEY_CTX_get_ecdh_kdf_outlen()</code> gets the key derivation function output
+length for <em>ctx</em> used for ECDH key derivation.</p>
+<p>EVP_PKEY_CTX_set0_ecdh_kdf_ukm() sets the user key material to <em>ukm</em> for ECDH
+key derivation. This parameter is optional and corresponds to the shared info in
+X9.63 terms. The library takes ownership of the user key material so the caller
+should not free the original memory pointed to by <em>ukm</em>.</p>
+<p>EVP_PKEY_CTX_get0_ecdh_kdf_ukm() gets the user key material for <em>ctx</em>.
+The return value is the user key material length. The resulting pointer is owned
+by the library and should not be freed by the caller.</p>
+<p>
+</p>
+<h2><a name="other_parameters">Other parameters</a></h2>
+<p>EVP_PKEY_CTX_set1_id(), EVP_PKEY_CTX_get1_id() and EVP_PKEY_CTX_get1_id_len()
+are used to manipulate the special identifier field for specific signature
+algorithms such as SM2. The EVP_PKEY_CTX_set1_id() sets an ID pointed by <em>id</em> with
+the length <em>id_len</em> to the library. The library takes a copy of the id so that
+the caller can safely free the original memory pointed to by <em>id</em>.
+EVP_PKEY_CTX_get1_id_len() returns the length of the ID set via a previous call
+to EVP_PKEY_CTX_set1_id(). The length is usually used to allocate adequate
+memory for further calls to EVP_PKEY_CTX_get1_id(). EVP_PKEY_CTX_get1_id()
+returns the previously set ID value to caller in <em>id</em>. The caller should
+allocate adequate memory space for the <em>id</em> before calling EVP_PKEY_CTX_get1_id().</p>
+<p><code>EVP_PKEY_CTX_set_kem_op()</code> sets the KEM operation to run. This can be set after
+<code>EVP_PKEY_encapsulate_init()</code> or <code>EVP_PKEY_decapsulate_init()</code> to select the
+kem operation. RSA is the only key type that supports encapsulation currently,
+and as there is no default operation for the RSA type, this function must be
+called before <code>EVP_PKEY_encapsulate()</code> or <code>EVP_PKEY_decapsulate()</code>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>All other functions described on this page return a positive value for success
+and 0 or a negative value for failure. In particular a return value of -2
+indicates the operation is not supported by the public key algorithm.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_PKEY_CTX_set_params(3)</em>,
+<em>EVP_PKEY_CTX_new(3)</em>,
+<em>EVP_PKEY_encrypt(3)</em>,
+<em>EVP_PKEY_decrypt(3)</em>,
+<em>EVP_PKEY_sign(3)</em>,
+<em>EVP_PKEY_verify(3)</em>,
+<em>EVP_PKEY_verify_recover(3)</em>,
+<em>EVP_PKEY_derive(3)</em>,
+<em>EVP_PKEY_keygen(3)</em>
+<em>EVP_PKEY_encapsulate(3)</em>
+<em>EVP_PKEY_decapsulate(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><code>EVP_PKEY_CTX_get_rsa_oaep_md_name()</code>, EVP_PKEY_CTX_get_rsa_mgf1_md_name(),
+EVP_PKEY_CTX_set_rsa_mgf1_md_name(), <code>EVP_PKEY_CTX_set_rsa_oaep_md_name()</code>,
+<code>EVP_PKEY_CTX_set_dsa_paramgen_md_props()</code>, <code>EVP_PKEY_CTX_set_dsa_paramgen_gindex()</code>,
+<code>EVP_PKEY_CTX_set_dsa_paramgen_type()</code>, <code>EVP_PKEY_CTX_set_dsa_paramgen_seed()</code>,
+<code>EVP_PKEY_CTX_set_group_name()</code> and <code>EVP_PKEY_CTX_get_group_name()</code>
+were added in OpenSSL 3.0.</p>
+<p>The EVP_PKEY_CTX_set1_id(), EVP_PKEY_CTX_get1_id() and
+EVP_PKEY_CTX_get1_id_len() macros were added in 1.1.1, other functions were
+added in OpenSSL 1.0.0.</p>
+<p>In OpenSSL 1.1.1 and below the functions were mostly macros.
+From OpenSSL 3.0 they are all functions.</p>
+<p><code>EVP_PKEY_CTX_set_rsa_keygen_pubexp()</code>, EVP_PKEY_CTX_get0_dh_kdf_ukm(),
+and EVP_PKEY_CTX_get0_ecdh_kdf_ukm() were deprecated in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2006-2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

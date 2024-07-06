@@ -1,0 +1,204 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_KDF-HKDF</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#identity">Identity</a></li>
+		<li><a href="#supported_parameters">Supported parameters</a></li>
+	</ul>
+
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#conforming_to">CONFORMING TO</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_KDF-HKDF - The HKDF EVP_KDF implementation</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Support for computing the <strong>HKDF</strong> KDF through the <strong>EVP_KDF</strong> API.</p>
+<p>The EVP_KDF-HKDF algorithm implements the HKDF key derivation function.
+HKDF follows the &quot;extract-then-expand&quot; paradigm, where the KDF logically
+consists of two modules. The first stage takes the input keying material
+and &quot;extracts&quot; from it a fixed-length pseudorandom key K. The second stage
+&quot;expands&quot; the key K into several additional pseudorandom keys (the output
+of the KDF).</p>
+<p>
+</p>
+<h2><a name="identity">Identity</a></h2>
+<p>&quot;HKDF&quot; is the name for this implementation; it
+can be used with the <code>EVP_KDF_fetch()</code> function.</p>
+<p>
+</p>
+<h2><a name="supported_parameters">Supported parameters</a></h2>
+<p>The supported parameters are:</p>
+<dl>
+<dt><strong><a name="properties_ossl_kdf_param_properties_utf8_string" class="item">&quot;properties&quot; (<strong>OSSL_KDF_PARAM_PROPERTIES</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dt><strong><a name="digest_ossl_kdf_param_digest_utf8_string" class="item">&quot;digest&quot; (<strong>OSSL_KDF_PARAM_DIGEST</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dt><strong><a name="key_ossl_kdf_param_key_octet_string" class="item">&quot;key&quot; (<strong>OSSL_KDF_PARAM_KEY</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dt><strong><a name="salt_ossl_kdf_param_salt_octet_string" class="item">&quot;salt&quot; (<strong>OSSL_KDF_PARAM_SALT</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>These parameters work as described in <em>EVP_KDF(3)/PARAMETERS</em>.</p>
+</dd>
+<dt><strong><a name="info_ossl_kdf_param_info_octet_string" class="item">&quot;info&quot; (<strong>OSSL_KDF_PARAM_INFO</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>This parameter sets the info value.
+The length of the context info buffer cannot exceed 1024 bytes;
+this should be more than enough for any normal use of HKDF.</p>
+</dd>
+<dt><strong><a name="mode_ossl_kdf_param_mode_utf8_string_or_integer" class="item">&quot;mode&quot; (<strong>OSSL_KDF_PARAM_MODE</strong>) &lt;UTF8 string&gt; or &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>This parameter sets the mode for the HKDF operation.
+There are three modes that are currently defined:</p>
+<dl>
+<dt><strong><a name="extract_and_expand_or_evp_kdf_hkdf_mode_extract_and_expand" class="item">&quot;EXTRACT_AND_EXPAND&quot; or <strong>EVP_KDF_HKDF_MODE_EXTRACT_AND_EXPAND</strong></a></strong></dt>
+
+<dd>
+<p>This is the default mode.  Calling <em>EVP_KDF_derive(3)</em> on an EVP_KDF_CTX set
+up for HKDF will perform an extract followed by an expand operation in one go.
+The derived key returned will be the result after the expand operation. The
+intermediate fixed-length pseudorandom key K is not returned.</p>
+<p>In this mode the digest, key, salt and info values must be set before a key is
+derived otherwise an error will occur.</p>
+</dd>
+<dt><strong><a name="extract_only_or_evp_kdf_hkdf_mode_extract_only" class="item">&quot;EXTRACT_ONLY&quot; or <strong>EVP_KDF_HKDF_MODE_EXTRACT_ONLY</strong></a></strong></dt>
+
+<dd>
+<p>In this mode calling <em>EVP_KDF_derive(3)</em> will just perform the extract
+operation. The value returned will be the intermediate fixed-length pseudorandom
+key K.  The <em>keylen</em> parameter must match the size of K, which can be looked
+up by calling <code>EVP_KDF_CTX_get_kdf_size()</code> after setting the mode and digest.</p>
+<p>The digest, key and salt values must be set before a key is derived otherwise
+an error will occur.</p>
+</dd>
+<dt><strong><a name="expand_only_or_evp_kdf_hkdf_mode_expand_only" class="item">&quot;EXPAND_ONLY&quot; or <strong>EVP_KDF_HKDF_MODE_EXPAND_ONLY</strong></a></strong></dt>
+
+<dd>
+<p>In this mode calling <em>EVP_KDF_derive(3)</em> will just perform the expand
+operation. The input key should be set to the intermediate fixed-length
+pseudorandom key K returned from a previous extract operation.</p>
+<p>The digest, key and info values must be set before a key is derived otherwise
+an error will occur.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>A context for HKDF can be obtained by calling:</p>
+<pre>
+ <span class="variable">EVP_KDF</span> <span class="variable">*kdf</span> <span class="operator">=</span> <span class="variable">EVP_KDF_fetch</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"HKDF"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+ <span class="variable">EVP_KDF_CTX</span> <span class="variable">*kctx</span> <span class="operator">=</span> <span class="variable">EVP_KDF_CTX_new</span><span class="operator">(</span><span class="variable">kdf</span><span class="operator">);</span>
+</pre>
+<p>The output length of an HKDF expand operation is specified via the <em>keylen</em>
+parameter to the <em>EVP_KDF_derive(3)</em> function.  When using
+EVP_KDF_HKDF_MODE_EXTRACT_ONLY the <em>keylen</em> parameter must equal the size of
+the intermediate fixed-length pseudorandom key otherwise an error will occur.
+For that mode, the fixed output size can be looked up by calling <code>EVP_KDF_CTX_get_kdf_size()</code>
+after setting the mode and digest on the <strong>EVP_KDF_CTX</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>This example derives 10 bytes using SHA-256 with the secret key &quot;secret&quot;,
+salt value &quot;salt&quot; and info value &quot;label&quot;:</p>
+<pre>
+ <span class="variable">EVP_KDF</span> <span class="variable">*kdf</span><span class="operator">;</span>
+ <span class="variable">EVP_KDF_CTX</span> <span class="variable">*kctx</span><span class="operator">;</span>
+ <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">out</span><span class="operator">[</span><span class="number">10</span><span class="operator">]</span><span class="operator">;</span>
+ <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[</span><span class="number">5</span><span class="operator">]</span><span class="operator">,</span> <span class="variable">*p</span> <span class="operator">=</span> <span class="variable">params</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">kdf</span> <span class="operator">=</span> <span class="variable">EVP_KDF_fetch</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"HKDF"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+ <span class="variable">kctx</span> <span class="operator">=</span> <span class="variable">EVP_KDF_CTX_new</span><span class="operator">(</span><span class="variable">kdf</span><span class="operator">);</span>
+ <span class="variable">EVP_KDF_free</span><span class="operator">(</span><span class="variable">kdf</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">*p</span><span class="operator">++</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_utf8_string</span><span class="operator">(</span><span class="variable">OSSL_KDF_PARAM_DIGEST</span><span class="operator">,</span>
+                                         <span class="variable">SN_sha256</span><span class="operator">,</span> <span class="variable">strlen</span><span class="operator">(</span><span class="variable">SN_sha256</span><span class="operator">));</span>
+ <span class="variable">*p</span><span class="operator">++</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_octet_string</span><span class="operator">(</span><span class="variable">OSSL_KDF_PARAM_KEY</span><span class="operator">,</span>
+                                          <span class="string">"secret"</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">size_t</span><span class="operator">)</span><span class="number">6</span><span class="operator">);</span>
+ <span class="variable">*p</span><span class="operator">++</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_octet_string</span><span class="operator">(</span><span class="variable">OSSL_KDF_PARAM_INFO</span><span class="operator">,</span>
+                                          <span class="string">"label"</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">size_t</span><span class="operator">)</span><span class="number">5</span><span class="operator">);</span>
+ <span class="variable">*p</span><span class="operator">++</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_octet_string</span><span class="operator">(</span><span class="variable">OSSL_KDF_PARAM_SALT</span><span class="operator">,</span>
+                                          <span class="string">"salt"</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">size_t</span><span class="operator">)</span><span class="number">4</span><span class="operator">);</span>
+ <span class="variable">*p</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_end</span><span class="operator">();</span>
+ <span class="keyword">if</span> <span class="operator">(</span><span class="variable">EVP_KDF_derive</span><span class="operator">(</span><span class="variable">kctx</span><span class="operator">,</span> <span class="variable">out</span><span class="operator">,</span> <span class="variable">sizeof</span><span class="operator">(</span><span class="variable">out</span><span class="operator">),</span> <span class="variable">params</span><span class="operator">)</span> <span class="operator">&lt;=</span> <span class="number">0</span><span class="operator">)</span> <span class="operator">{</span>
+     <span class="variable">error</span><span class="operator">(</span><span class="string">"EVP_KDF_derive"</span><span class="operator">);</span>
+ <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="variable">EVP_KDF_CTX_free</span><span class="operator">(</span><span class="variable">kctx</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="conforming_to">CONFORMING TO</a></h1>
+<p>RFC 5869</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_KDF(3)</em>,
+<em>EVP_KDF_CTX_new(3)</em>,
+<em>EVP_KDF_CTX_free(3)</em>,
+<em>EVP_KDF_CTX_get_kdf_size(3)</em>,
+<em>EVP_KDF_CTX_set_params(3)</em>,
+<em>EVP_KDF_derive(3)</em>,
+<em>EVP_KDF(3)/PARAMETERS</em>,
+<em>EVP_KDF-TLS13_KDF(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>This functionality was added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2016-2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

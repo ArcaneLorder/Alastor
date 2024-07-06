@@ -1,0 +1,26 @@
+﻿  adler32.c
+  compress.c
+  crc32.c
+  deflate.c
+  gzclose.c
+  gzlib.c
+  gzread.c
+  gzwrite.c
+  infback.c
+  inffast.c
+  inflate.c
+  inftrees.c
+  trees.c
+  uncompr.c
+  zutil.c
+  ioapi.c
+  iowin32.c
+  unzip.c
+  zip.c
+    正在创建库 x86\ZlibDllRelease\zlibwapi.lib 和对象 x86\ZlibDllRelease\zlibwapi.exp
+  正在生成代码
+  0 of 269 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  zlibvc.vcxproj -> D:\Code\Alastor\Thirdparty\zlib\contrib\vstudio\vc14\x86\ZlibDllRelease\zlibwapi.dll

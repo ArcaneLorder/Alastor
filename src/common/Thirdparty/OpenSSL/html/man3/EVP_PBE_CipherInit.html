@@ -1,0 +1,154 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_PBE_CipherInit</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#pbe_operations">PBE operations</a></li>
+		<li><a href="#pbe_algorithm_search">PBE algorithm search</a></li>
+		<li><a href="#pbe_algorithm_add">PBE algorithm add</a></li>
+	</ul>
+
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_PBE_CipherInit, EVP_PBE_CipherInit_ex,
+EVP_PBE_find, EVP_PBE_find_ex,
+EVP_PBE_alg_add_type, EVP_PBE_alg_add - Password based encryption routines</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PBE_CipherInit</span><span class="operator">(</span><span class="variable">ASN1_OBJECT</span> <span class="variable">*pbe_obj</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*pass</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">passlen</span><span class="operator">,</span>
+                        <span class="variable">ASN1_TYPE</span> <span class="variable">*param</span><span class="operator">,</span> <span class="variable">EVP_CIPHER_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">en_de</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PBE_CipherInit_ex</span><span class="operator">(</span><span class="variable">ASN1_OBJECT</span> <span class="variable">*pbe_obj</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*pass</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">passlen</span><span class="operator">,</span>
+                           <span class="variable">ASN1_TYPE</span> <span class="variable">*param</span><span class="operator">,</span> <span class="variable">EVP_CIPHER_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">en_de</span><span class="operator">,</span>
+                           <span class="variable">OSSL_LIB_CTX</span> <span class="variable">*libctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*propq</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PBE_find</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">type</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">pbe_nid</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*pcnid</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*pmnid</span><span class="operator">,</span>
+                  <span class="variable">EVP_PBE_KEYGEN</span> <span class="operator">**</span><span class="variable">pkeygen</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PBE_find_ex</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">type</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">pbe_nid</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*pcnid</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*pmnid</span><span class="operator">,</span>
+                     <span class="variable">EVP_PBE_KEYGEN</span> <span class="operator">**</span><span class="variable">pkeygen</span><span class="operator">,</span> <span class="variable">EVP_PBE_KEYGEN_EX</span> <span class="operator">**</span><span class="variable">keygen_ex</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PBE_alg_add_type</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">pbe_type</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">pbe_nid</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">cipher_nid</span><span class="operator">,</span>
+                          <span class="keyword">int</span> <span class="variable">md_nid</span><span class="operator">,</span> <span class="variable">EVP_PBE_KEYGEN</span> <span class="variable">*keygen</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PBE_alg_add</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">nid</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_CIPHER</span> <span class="variable">*cipher</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_MD</span> <span class="variable">*md</span><span class="operator">,</span>
+                     <span class="variable">EVP_PBE_KEYGEN</span> <span class="variable">*keygen</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>
+</p>
+<h2><a name="pbe_operations">PBE operations</a></h2>
+<p><code>EVP_PBE_CipherInit()</code> and <code>EVP_PBE_CipherInit_ex()</code> initialise an <strong>EVP_CIPHER_CTX</strong>
+<em>ctx</em> for encryption (<em>en_de</em>=1) or decryption (<em>en_de</em>=0) using the password
+<em>pass</em> of length <em>passlen</em>. The PBE algorithm type and parameters are extracted
+from an OID <em>pbe_obj</em> and parameters <em>param</em>.</p>
+<p><code>EVP_PBE_CipherInit_ex()</code> also allows the application to specify a library context
+<em>libctx</em> and property query <em>propq</em> to select appropriate algorithm
+implementations.</p>
+<p>
+</p>
+<h2><a name="pbe_algorithm_search">PBE algorithm search</a></h2>
+<p><code>EVP_PBE_find()</code> and <code>EVP_PBE_find_ex()</code> search for a matching algorithm using two parameters:</p>
+<p>1. An algorithm type <em>type</em> which can be:</p>
+<ul>
+<li>
+<p>EVP_PBE_TYPE_OUTER - A PBE algorithm</p>
+</li>
+<li>
+<p>EVP_PBE_TYPE_PRF - A pseudo-random function</p>
+</li>
+<li>
+<p>EVP_PBE_TYPE_KDF - A key derivation function</p>
+</li>
+</ul>
+<p>2. A <em>pbe_nid</em> which can represent the algorithm identifier with parameters e.g.
+<strong>NID_pbeWithSHA1AndRC2_CBC</strong> or an algorithm class e.g. <strong>NID_pbes2</strong>.</p>
+<p>They return the algorithm's cipher ID <em>pcnid</em>, digest ID <em>pmnid</em> and a key
+generation function for the algorithm <em>pkeygen</em>. <code>EVP_PBE_CipherInit_ex()</code> also
+returns an extended key generation function <em>keygen_ex</em> which takes a library
+context and property query.</p>
+<p>If a NULL is supplied for any of <em>pcnid</em>, <em>pmnid</em>, <em>pkeygen</em> or <em>pkeygen_ex</em>
+then this parameter is not returned.</p>
+<p>
+</p>
+<h2><a name="pbe_algorithm_add">PBE algorithm add</a></h2>
+<p><code>EVP_PBE_alg_add_type()</code> and <code>EVP_PBE_alg_add()</code> add an algorithm to the list
+of known algorithms. Their parameters have the same meaning as for
+<code>EVP_PBE_find()</code> and <code>EVP_PBE_find_ex()</code> functions.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The arguments <em>pbe_obj</em> and <em>param</em> to <code>EVP_PBE_CipherInit()</code> and <code>EVP_PBE_CipherInit_ex()</code>
+together form an <strong>X509_ALGOR</strong> and can often be extracted directly from this structure.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>Return value is 1 for success and 0 if an error occurred.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>PKCS5_PBE_keyivgen(3)</em>,
+<em>PKCS12_PBE_keyivgen_ex(3)</em>,
+<em>PKCS5_v2_PBE_keyivgen_ex(3)</em>,
+<em>PKCS12_pbe_crypt_ex(3)</em>,
+<em>PKCS12_create_ex(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><code>EVP_PBE_CipherInit_ex()</code> and <code>EVP_PBE_find_ex()</code> were added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2021-2022 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

@@ -1,0 +1,993 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>openssl</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#command_summary">COMMAND SUMMARY</a></li>
+	<ul>
+
+		<li><a href="#configuration_option">Configuration Option</a></li>
+		<li><a href="#standard_commands">Standard Commands</a></li>
+		<li><a href="#message_digest_commands">Message Digest Commands</a></li>
+		<li><a href="#encryption__decryption__and_encoding_commands">Encryption, Decryption, and Encoding Commands</a></li>
+	</ul>
+
+	<li><a href="#options">OPTIONS</a></li>
+	<ul>
+
+		<li><a href="#common_options">Common Options</a></li>
+		<li><a href="#format_options">Format Options</a></li>
+		<li><a href="#pass_phrase_options">Pass Phrase Options</a></li>
+		<li><a href="#random_state_options">Random State Options</a></li>
+		<li><a href="#certificate_verification_options">Certificate Verification Options</a></li>
+		<li><a href="#name_format_options">Name Format Options</a></li>
+		<li><a href="#tls_version_options">TLS Version Options</a></li>
+		<li><a href="#engine_options">Engine Options</a></li>
+		<li><a href="#provider_options">Provider Options</a></li>
+	</ul>
+
+	<li><a href="#environment">ENVIRONMENT</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>openssl - OpenSSL command line program</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong>
+<em>command</em>
+[ <em>options</em> ... ]
+[ <em>parameters</em> ... ]</p>
+<p><strong>openssl</strong> <strong>no-</strong><em>XXX</em> [ <em>options</em> ]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>OpenSSL is a cryptography toolkit implementing the Secure Sockets Layer (SSL
+v2/v3) and Transport Layer Security (TLS v1) network protocols and related
+cryptography standards required by them.</p>
+<p>The <strong>openssl</strong> program is a command line program for using the various
+cryptography functions of OpenSSL's <strong>crypto</strong> library from the shell.
+It can be used for</p>
+<pre>
+ o  Creation and management of private keys, public keys and parameters
+ o  Public key cryptographic operations
+ o  Creation of X.509 certificates, CSRs and CRLs
+ o  Calculation of Message Digests and Message Authentication Codes
+ o  Encryption and Decryption with Ciphers
+ o  SSL/TLS Client and Server Tests
+ o  Handling of S/MIME signed or encrypted mail
+ o  Timestamp requests, generation and verification</pre>
+<p>
+</p>
+<hr />
+<h1><a name="command_summary">COMMAND SUMMARY</a></h1>
+<p>The <strong>openssl</strong> program provides a rich variety of commands (<em>command</em> in
+the <a href="#synopsis">SYNOPSIS</a> above).
+Each command can have many options and argument parameters, shown above as
+<em>options</em> and <em>parameters</em>.</p>
+<p>Detailed documentation and use cases for most standard subcommands are available
+(e.g., <a href="#x509">openssl-x509(1)</a>). The subcommand <a href="#list">openssl-list(1)</a> may be used to list
+subcommands.</p>
+<p>The command <strong>no-</strong><em>XXX</em> tests whether a command of the
+specified name is available.  If no command named <em>XXX</em> exists, it
+returns 0 (success) and prints <strong>no-</strong><em>XXX</em>; otherwise it returns 1
+and prints <em>XXX</em>.  In both cases, the output goes to <strong>stdout</strong> and
+nothing is printed to <strong>stderr</strong>.  Additional command line arguments
+are always ignored.  Since for each cipher there is a command of the
+same name, this provides an easy way for shell scripts to test for the
+availability of ciphers in the <strong>openssl</strong> program.  (<strong>no-</strong><em>XXX</em> is
+not able to detect pseudo-commands such as <strong>quit</strong>,
+<strong>list</strong>, or <strong>no-</strong><em>XXX</em> itself.)</p>
+<p>
+</p>
+<h2><a name="configuration_option">Configuration Option</a></h2>
+<p>Many commands use an external configuration file for some or all of their
+arguments and have a <strong>-config</strong> option to specify that file.
+The default name of the file is <em class="file">openssl.cnf</em> in the default certificate
+storage area, which can be determined from the <a href="#version">openssl-version(1)</a>
+command using the <strong>-d</strong> or <strong>-a</strong> option.
+The environment variable <strong>OPENSSL_CONF</strong> can be used to specify a different
+file location or to disable loading a configuration (using the empty string).</p>
+<p>Among others, the configuration file can be used to load modules
+and to specify parameters for generating certificates and random numbers.
+See <em>config(5)</em> for details.</p>
+<p>
+</p>
+<h2><a name="standard_commands">Standard Commands</a></h2>
+<dl>
+<dt><strong><a name="asn1parse" class="item"><strong>asn1parse</strong></a></strong></dt>
+
+<dd>
+<p>Parse an ASN.1 sequence.</p>
+</dd>
+<dt><strong><a name="ca" class="item"><strong>ca</strong></a></strong></dt>
+
+<dd>
+<p>Certificate Authority (CA) Management.</p>
+</dd>
+<dt><strong><a name="ciphers" class="item"><strong>ciphers</strong></a></strong></dt>
+
+<dd>
+<p>Cipher Suite Description Determination.</p>
+</dd>
+<dt><strong><a name="cms" class="item"><strong>cms</strong></a></strong></dt>
+
+<dd>
+<p>CMS (Cryptographic Message Syntax) command.</p>
+</dd>
+<dt><strong><a name="crl" class="item"><strong>crl</strong></a></strong></dt>
+
+<dd>
+<p>Certificate Revocation List (CRL) Management.</p>
+</dd>
+<dt><strong><a name="crl2pkcs7" class="item"><strong>crl2pkcs7</strong></a></strong></dt>
+
+<dd>
+<p>CRL to PKCS#7 Conversion.</p>
+</dd>
+<dt><strong><a name="dgst" class="item"><strong>dgst</strong></a></strong></dt>
+
+<dd>
+<p>Message Digest calculation. MAC calculations are superseded by
+<a href="#mac">openssl-mac(1)</a>.</p>
+</dd>
+<dt><strong><a name="dhparam" class="item"><strong>dhparam</strong></a></strong></dt>
+
+<dd>
+<p>Generation and Management of Diffie-Hellman Parameters. Superseded by
+<a href="#genpkey">openssl-genpkey(1)</a> and <a href="#pkeyparam">openssl-pkeyparam(1)</a>.</p>
+</dd>
+<dt><strong><a name="dsa" class="item"><strong>dsa</strong></a></strong></dt>
+
+<dd>
+<p>DSA Data Management.</p>
+</dd>
+<dt><strong><a name="dsaparam" class="item"><strong>dsaparam</strong></a></strong></dt>
+
+<dd>
+<p>DSA Parameter Generation and Management. Superseded by
+<a href="#genpkey">openssl-genpkey(1)</a> and <a href="#pkeyparam">openssl-pkeyparam(1)</a>.</p>
+</dd>
+<dt><strong><a name="ec" class="item"><strong>ec</strong></a></strong></dt>
+
+<dd>
+<p>EC (Elliptic curve) key processing.</p>
+</dd>
+<dt><strong><a name="ecparam" class="item"><strong>ecparam</strong></a></strong></dt>
+
+<dd>
+<p>EC parameter manipulation and generation.</p>
+</dd>
+<dt><strong><a name="enc" class="item"><strong>enc</strong></a></strong></dt>
+
+<dd>
+<p>Encryption, decryption, and encoding.</p>
+</dd>
+<dt><strong><a name="engine" class="item"><strong>engine</strong></a></strong></dt>
+
+<dd>
+<p>Engine (loadable module) information and manipulation.</p>
+</dd>
+<dt><strong><a name="errstr" class="item"><strong>errstr</strong></a></strong></dt>
+
+<dd>
+<p>Error Number to Error String Conversion.</p>
+</dd>
+<dt><strong><a name="fipsinstall" class="item"><strong>fipsinstall</strong></a></strong></dt>
+
+<dd>
+<p>FIPS configuration installation.</p>
+</dd>
+<dt><strong><a name="gendsa" class="item"><strong>gendsa</strong></a></strong></dt>
+
+<dd>
+<p>Generation of DSA Private Key from Parameters. Superseded by
+<a href="#genpkey">openssl-genpkey(1)</a> and <a href="#pkey">openssl-pkey(1)</a>.</p>
+</dd>
+<dt><strong><a name="genpkey" class="item"><strong>genpkey</strong></a></strong></dt>
+
+<dd>
+<p>Generation of Private Key or Parameters.</p>
+</dd>
+<dt><strong><a name="genrsa" class="item"><strong>genrsa</strong></a></strong></dt>
+
+<dd>
+<p>Generation of RSA Private Key. Superseded by <a href="#genpkey">openssl-genpkey(1)</a>.</p>
+</dd>
+<dt><strong><a name="help" class="item"><strong>help</strong></a></strong></dt>
+
+<dd>
+<p>Display information about a command's options.</p>
+</dd>
+<dt><strong><a name="info" class="item"><strong>info</strong></a></strong></dt>
+
+<dd>
+<p>Display diverse information built into the OpenSSL libraries.</p>
+</dd>
+<dt><strong><a name="kdf" class="item"><strong>kdf</strong></a></strong></dt>
+
+<dd>
+<p>Key Derivation Functions.</p>
+</dd>
+<dt><strong><a name="list" class="item"><strong>list</strong></a></strong></dt>
+
+<dd>
+<p>List algorithms and features.</p>
+</dd>
+<dt><strong><a name="mac" class="item"><strong>mac</strong></a></strong></dt>
+
+<dd>
+<p>Message Authentication Code Calculation.</p>
+</dd>
+<dt><strong><a name="nseq" class="item"><strong>nseq</strong></a></strong></dt>
+
+<dd>
+<p>Create or examine a Netscape certificate sequence.</p>
+</dd>
+<dt><strong><a name="ocsp" class="item"><strong>ocsp</strong></a></strong></dt>
+
+<dd>
+<p>Online Certificate Status Protocol command.</p>
+</dd>
+<dt><strong><a name="passwd" class="item"><strong>passwd</strong></a></strong></dt>
+
+<dd>
+<p>Generation of hashed passwords.</p>
+</dd>
+<dt><strong><a name="pkcs12" class="item"><strong>pkcs12</strong></a></strong></dt>
+
+<dd>
+<p>PKCS#12 Data Management.</p>
+</dd>
+<dt><strong><a name="pkcs7" class="item"><strong>pkcs7</strong></a></strong></dt>
+
+<dd>
+<p>PKCS#7 Data Management.</p>
+</dd>
+<dt><strong><a name="pkcs8" class="item"><strong>pkcs8</strong></a></strong></dt>
+
+<dd>
+<p>PKCS#8 format private key conversion command.</p>
+</dd>
+<dt><strong><a name="pkey" class="item"><strong>pkey</strong></a></strong></dt>
+
+<dd>
+<p>Public and private key management.</p>
+</dd>
+<dt><strong><a name="pkeyparam" class="item"><strong>pkeyparam</strong></a></strong></dt>
+
+<dd>
+<p>Public key algorithm parameter management.</p>
+</dd>
+<dt><strong><a name="pkeyutl" class="item"><strong>pkeyutl</strong></a></strong></dt>
+
+<dd>
+<p>Public key algorithm cryptographic operation command.</p>
+</dd>
+<dt><strong><a name="prime" class="item"><strong>prime</strong></a></strong></dt>
+
+<dd>
+<p>Compute prime numbers.</p>
+</dd>
+<dt><strong><a name="rand" class="item"><strong>rand</strong></a></strong></dt>
+
+<dd>
+<p>Generate pseudo-random bytes.</p>
+</dd>
+<dt><strong><a name="rehash" class="item"><strong>rehash</strong></a></strong></dt>
+
+<dd>
+<p>Create symbolic links to certificate and CRL files named by the hash values.</p>
+</dd>
+<dt><strong><a name="req" class="item"><strong>req</strong></a></strong></dt>
+
+<dd>
+<p>PKCS#10 X.509 Certificate Signing Request (CSR) Management.</p>
+</dd>
+<dt><strong><a name="rsa" class="item"><strong>rsa</strong></a></strong></dt>
+
+<dd>
+<p>RSA key management.</p>
+</dd>
+<dt><strong><a name="rsautl" class="item"><strong>rsautl</strong></a></strong></dt>
+
+<dd>
+<p>RSA command for signing, verification, encryption, and decryption. Superseded
+by  <a href="#pkeyutl">openssl-pkeyutl(1)</a>.</p>
+</dd>
+<dt><strong><a name="s_client" class="item"><strong>s_client</strong></a></strong></dt>
+
+<dd>
+<p>This implements a generic SSL/TLS client which can establish a transparent
+connection to a remote server speaking SSL/TLS. It's intended for testing
+purposes only and provides only rudimentary interface functionality but
+internally uses mostly all functionality of the OpenSSL <strong>ssl</strong> library.</p>
+</dd>
+<dt><strong><a name="s_server" class="item"><strong>s_server</strong></a></strong></dt>
+
+<dd>
+<p>This implements a generic SSL/TLS server which accepts connections from remote
+clients speaking SSL/TLS. It's intended for testing purposes only and provides
+only rudimentary interface functionality but internally uses mostly all
+functionality of the OpenSSL <strong>ssl</strong> library.  It provides both an own command
+line oriented protocol for testing SSL functions and a simple HTTP response
+facility to emulate an SSL/TLS-aware webserver.</p>
+</dd>
+<dt><strong><a name="s_time" class="item"><strong>s_time</strong></a></strong></dt>
+
+<dd>
+<p>SSL Connection Timer.</p>
+</dd>
+<dt><strong><a name="sess_id" class="item"><strong>sess_id</strong></a></strong></dt>
+
+<dd>
+<p>SSL Session Data Management.</p>
+</dd>
+<dt><strong><a name="smime" class="item"><strong>smime</strong></a></strong></dt>
+
+<dd>
+<p>S/MIME mail processing.</p>
+</dd>
+<dt><strong><a name="speed" class="item"><strong>speed</strong></a></strong></dt>
+
+<dd>
+<p>Algorithm Speed Measurement.</p>
+</dd>
+<dt><strong><a name="spkac" class="item"><strong>spkac</strong></a></strong></dt>
+
+<dd>
+<p>SPKAC printing and generating command.</p>
+</dd>
+<dt><strong><a name="srp" class="item"><strong>srp</strong></a></strong></dt>
+
+<dd>
+<p>Maintain SRP password file. This command is deprecated.</p>
+</dd>
+<dt><strong><a name="storeutl" class="item"><strong>storeutl</strong></a></strong></dt>
+
+<dd>
+<p>Command to list and display certificates, keys, CRLs, etc.</p>
+</dd>
+<dt><strong><a name="ts" class="item"><strong>ts</strong></a></strong></dt>
+
+<dd>
+<p>Time Stamping Authority command.</p>
+</dd>
+<dt><strong><a name="verify" class="item"><strong>verify</strong></a></strong></dt>
+
+<dd>
+<p>X.509 Certificate Verification.
+See also the <em>openssl-verification-options(1)</em> manual page.</p>
+</dd>
+<dt><strong><a name="version" class="item"><strong>version</strong></a></strong></dt>
+
+<dd>
+<p>OpenSSL Version Information.</p>
+</dd>
+<dt><strong><a name="x509" class="item"><strong>x509</strong></a></strong></dt>
+
+<dd>
+<p>X.509 Certificate Data Management.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="message_digest_commands">Message Digest Commands</a></h2>
+<dl>
+<dt><strong><a name="blake2b512" class="item"><strong>blake2b512</strong></a></strong></dt>
+
+<dd>
+<p>BLAKE2b-512 Digest</p>
+</dd>
+<dt><strong><a name="blake2s256" class="item"><strong>blake2s256</strong></a></strong></dt>
+
+<dd>
+<p>BLAKE2s-256 Digest</p>
+</dd>
+<dt><strong><a name="md2" class="item"><strong>md2</strong></a></strong></dt>
+
+<dd>
+<p>MD2 Digest</p>
+</dd>
+<dt><strong><a name="md4" class="item"><strong>md4</strong></a></strong></dt>
+
+<dd>
+<p>MD4 Digest</p>
+</dd>
+<dt><strong><a name="md5" class="item"><strong>md5</strong></a></strong></dt>
+
+<dd>
+<p>MD5 Digest</p>
+</dd>
+<dt><strong><a name="mdc2" class="item"><strong>mdc2</strong></a></strong></dt>
+
+<dd>
+<p>MDC2 Digest</p>
+</dd>
+<dt><strong><a name="rmd160" class="item"><strong>rmd160</strong></a></strong></dt>
+
+<dd>
+<p>RMD-160 Digest</p>
+</dd>
+<dt><strong><a name="sha1" class="item"><strong>sha1</strong></a></strong></dt>
+
+<dd>
+<p>SHA-1 Digest</p>
+</dd>
+<dt><strong><a name="sha224" class="item"><strong>sha224</strong></a></strong></dt>
+
+<dd>
+<p>SHA-2 224 Digest</p>
+</dd>
+<dt><strong><a name="sha256" class="item"><strong>sha256</strong></a></strong></dt>
+
+<dd>
+<p>SHA-2 256 Digest</p>
+</dd>
+<dt><strong><a name="sha384" class="item"><strong>sha384</strong></a></strong></dt>
+
+<dd>
+<p>SHA-2 384 Digest</p>
+</dd>
+<dt><strong><a name="sha512" class="item"><strong>sha512</strong></a></strong></dt>
+
+<dd>
+<p>SHA-2 512 Digest</p>
+</dd>
+<dt><strong><a name="sha3_224" class="item"><strong>sha3-224</strong></a></strong></dt>
+
+<dd>
+<p>SHA-3 224 Digest</p>
+</dd>
+<dt><strong><a name="sha3_256" class="item"><strong>sha3-256</strong></a></strong></dt>
+
+<dd>
+<p>SHA-3 256 Digest</p>
+</dd>
+<dt><strong><a name="sha3_384" class="item"><strong>sha3-384</strong></a></strong></dt>
+
+<dd>
+<p>SHA-3 384 Digest</p>
+</dd>
+<dt><strong><a name="sha3_512" class="item"><strong>sha3-512</strong></a></strong></dt>
+
+<dd>
+<p>SHA-3 512 Digest</p>
+</dd>
+<dt><strong><a name="shake128" class="item"><strong>shake128</strong></a></strong></dt>
+
+<dd>
+<p>SHA-3 SHAKE128 Digest</p>
+</dd>
+<dt><strong><a name="shake256" class="item"><strong>shake256</strong></a></strong></dt>
+
+<dd>
+<p>SHA-3 SHAKE256 Digest</p>
+</dd>
+<dt><strong><a name="sm3" class="item"><strong>sm3</strong></a></strong></dt>
+
+<dd>
+<p>SM3 Digest</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="encryption__decryption__and_encoding_commands">Encryption, Decryption, and Encoding Commands</a></h2>
+<p>The following aliases provide convenient access to the most used encodings
+and ciphers.</p>
+<p>Depending on how OpenSSL was configured and built, not all ciphers listed
+here may be present. See <a href="#enc">openssl-enc(1)</a> for more information.</p>
+<dl>
+<dt><strong><a name="aes128_aes_128_cbc_aes_128_cfb_aes_128_ctr_aes_128_ecb_aes_128_ofb" class="item"><strong>aes128</strong>, <strong>aes-128-cbc</strong>, <strong>aes-128-cfb</strong>, <strong>aes-128-ctr</strong>, <strong>aes-128-ecb</strong>, <strong>aes-128-ofb</strong></a></strong></dt>
+
+<dd>
+<p>AES-128 Cipher</p>
+</dd>
+<dt><strong><a name="aes192_aes_192_cbc_aes_192_cfb_aes_192_ctr_aes_192_ecb_aes_192_ofb" class="item"><strong>aes192</strong>, <strong>aes-192-cbc</strong>, <strong>aes-192-cfb</strong>, <strong>aes-192-ctr</strong>, <strong>aes-192-ecb</strong>, <strong>aes-192-ofb</strong></a></strong></dt>
+
+<dd>
+<p>AES-192 Cipher</p>
+</dd>
+<dt><strong><a name="aes256_aes_256_cbc_aes_256_cfb_aes_256_ctr_aes_256_ecb_aes_256_ofb" class="item"><strong>aes256</strong>, <strong>aes-256-cbc</strong>, <strong>aes-256-cfb</strong>, <strong>aes-256-ctr</strong>, <strong>aes-256-ecb</strong>, <strong>aes-256-ofb</strong></a></strong></dt>
+
+<dd>
+<p>AES-256 Cipher</p>
+</dd>
+<dt><strong><a name="aria128_aria_128_cbc_aria_128_cfb_aria_128_ctr_aria_128_ecb_aria_128_ofb" class="item"><strong>aria128</strong>, <strong>aria-128-cbc</strong>, <strong>aria-128-cfb</strong>, <strong>aria-128-ctr</strong>, <strong>aria-128-ecb</strong>, <strong>aria-128-ofb</strong></a></strong></dt>
+
+<dd>
+<p>Aria-128 Cipher</p>
+</dd>
+<dt><strong><a name="aria192_aria_192_cbc_aria_192_cfb_aria_192_ctr_aria_192_ecb_aria_192_ofb" class="item"><strong>aria192</strong>, <strong>aria-192-cbc</strong>, <strong>aria-192-cfb</strong>, <strong>aria-192-ctr</strong>, <strong>aria-192-ecb</strong>, <strong>aria-192-ofb</strong></a></strong></dt>
+
+<dd>
+<p>Aria-192 Cipher</p>
+</dd>
+<dt><strong><a name="aria256_aria_256_cbc_aria_256_cfb_aria_256_ctr_aria_256_ecb_aria_256_ofb" class="item"><strong>aria256</strong>, <strong>aria-256-cbc</strong>, <strong>aria-256-cfb</strong>, <strong>aria-256-ctr</strong>, <strong>aria-256-ecb</strong>, <strong>aria-256-ofb</strong></a></strong></dt>
+
+<dd>
+<p>Aria-256 Cipher</p>
+</dd>
+<dt><strong><a name="base64" class="item"><strong>base64</strong></a></strong></dt>
+
+<dd>
+<p>Base64 Encoding</p>
+</dd>
+<dt><strong><a name="bf_bf_cbc_bf_cfb_bf_ecb_bf_ofb" class="item"><strong>bf</strong>, <strong>bf-cbc</strong>, <strong>bf-cfb</strong>, <strong>bf-ecb</strong>, <strong>bf-ofb</strong></a></strong></dt>
+
+<dd>
+<p>Blowfish Cipher</p>
+</dd>
+<dt><strong><a name="camellia128_camellia_128_cbc_camellia_128_cfb_camellia_128_ctr_camellia_128_ecb_camellia_128_ofb" class="item"><strong>camellia128</strong>, <strong>camellia-128-cbc</strong>, <strong>camellia-128-cfb</strong>, <strong>camellia-128-ctr</strong>, <strong>camellia-128-ecb</strong>, <strong>camellia-128-ofb</strong></a></strong></dt>
+
+<dd>
+<p>Camellia-128 Cipher</p>
+</dd>
+<dt><strong><a name="camellia192_camellia_192_cbc_camellia_192_cfb_camellia_192_ctr_camellia_192_ecb_camellia_192_ofb" class="item"><strong>camellia192</strong>, <strong>camellia-192-cbc</strong>, <strong>camellia-192-cfb</strong>, <strong>camellia-192-ctr</strong>, <strong>camellia-192-ecb</strong>, <strong>camellia-192-ofb</strong></a></strong></dt>
+
+<dd>
+<p>Camellia-192 Cipher</p>
+</dd>
+<dt><strong><a name="camellia256_camellia_256_cbc_camellia_256_cfb_camellia_256_ctr_camellia_256_ecb_camellia_256_ofb" class="item"><strong>camellia256</strong>, <strong>camellia-256-cbc</strong>, <strong>camellia-256-cfb</strong>, <strong>camellia-256-ctr</strong>, <strong>camellia-256-ecb</strong>, <strong>camellia-256-ofb</strong></a></strong></dt>
+
+<dd>
+<p>Camellia-256 Cipher</p>
+</dd>
+<dt><strong><a name="cast_cast_cbc" class="item"><strong>cast</strong>, <strong>cast-cbc</strong></a></strong></dt>
+
+<dd>
+<p>CAST Cipher</p>
+</dd>
+<dt><strong><a name="cast5_cbc_cast5_cfb_cast5_ecb_cast5_ofb" class="item"><strong>cast5-cbc</strong>, <strong>cast5-cfb</strong>, <strong>cast5-ecb</strong>, <strong>cast5-ofb</strong></a></strong></dt>
+
+<dd>
+<p>CAST5 Cipher</p>
+</dd>
+<dt><strong><a name="chacha20" class="item"><strong>chacha20</strong></a></strong></dt>
+
+<dd>
+<p>Chacha20 Cipher</p>
+</dd>
+<dt><strong><a name="des_des_cbc_des_cfb_des_ecb_des_ede_des_ede_cbc_des_ede_cfb_des_ede_ofb_des_ofb" class="item"><strong>des</strong>, <strong>des-cbc</strong>, <strong>des-cfb</strong>, <strong>des-ecb</strong>, <strong>des-ede</strong>, <strong>des-ede-cbc</strong>, <strong>des-ede-cfb</strong>, <strong>des-ede-ofb</strong>, <strong>des-ofb</strong></a></strong></dt>
+
+<dd>
+<p>DES Cipher</p>
+</dd>
+<dt><strong><a name="des3_desx_des_ede3_des_ede3_cbc_des_ede3_cfb_des_ede3_ofb" class="item"><strong>des3</strong>, <strong>desx</strong>, <strong>des-ede3</strong>, <strong>des-ede3-cbc</strong>, <strong>des-ede3-cfb</strong>, <strong>des-ede3-ofb</strong></a></strong></dt>
+
+<dd>
+<p>Triple-DES Cipher</p>
+</dd>
+<dt><strong><a name="idea_idea_cbc_idea_cfb_idea_ecb_idea_ofb" class="item"><strong>idea</strong>, <strong>idea-cbc</strong>, <strong>idea-cfb</strong>, <strong>idea-ecb</strong>, <strong>idea-ofb</strong></a></strong></dt>
+
+<dd>
+<p>IDEA Cipher</p>
+</dd>
+<dt><strong><a name="rc2_rc2_cbc_rc2_cfb_rc2_ecb_rc2_ofb" class="item"><strong>rc2</strong>, <strong>rc2-cbc</strong>, <strong>rc2-cfb</strong>, <strong>rc2-ecb</strong>, <strong>rc2-ofb</strong></a></strong></dt>
+
+<dd>
+<p>RC2 Cipher</p>
+</dd>
+<dt><strong><a name="rc4" class="item"><strong>rc4</strong></a></strong></dt>
+
+<dd>
+<p>RC4 Cipher</p>
+</dd>
+<dt><strong><a name="rc5_rc5_cbc_rc5_cfb_rc5_ecb_rc5_ofb" class="item"><strong>rc5</strong>, <strong>rc5-cbc</strong>, <strong>rc5-cfb</strong>, <strong>rc5-ecb</strong>, <strong>rc5-ofb</strong></a></strong></dt>
+
+<dd>
+<p>RC5 Cipher</p>
+</dd>
+<dt><strong><a name="seed_seed_cbc_seed_cfb_seed_ecb_seed_ofb" class="item"><strong>seed</strong>, <strong>seed-cbc</strong>, <strong>seed-cfb</strong>, <strong>seed-ecb</strong>, <strong>seed-ofb</strong></a></strong></dt>
+
+<dd>
+<p>SEED Cipher</p>
+</dd>
+<dt><strong><a name="sm4_sm4_cbc_sm4_cfb_sm4_ctr_sm4_ecb_sm4_ofb" class="item"><strong>sm4</strong>, <strong>sm4-cbc</strong>, <strong>sm4-cfb</strong>, <strong>sm4-ctr</strong>, <strong>sm4-ecb</strong>, <strong>sm4-ofb</strong></a></strong></dt>
+
+<dd>
+<p>SM4 Cipher</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<p>Details of which options are available depend on the specific command.
+This section describes some common options with common behavior.</p>
+<p>
+</p>
+<h2><a name="common_options">Common Options</a></h2>
+<dl>
+<dt><strong><strong>-help</strong></strong></dt>
+
+<dd>
+<p>Provides a terse summary of all options.
+If an option takes an argument, the &quot;type&quot; of argument is also given.</p>
+</dd>
+<dt><strong><a name="__" class="item"><strong>--</strong></a></strong></dt>
+
+<dd>
+<p>This terminates the list of options. It is mostly useful if any filename
+parameters start with a minus sign:</p>
+<pre>
+ openssl verify [flags...] -- -cert1.pem...</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="format_options">Format Options</a></h2>
+<p>See <em>openssl-format-options(1)</em> for manual page.</p>
+<p>
+</p>
+<h2><a name="pass_phrase_options">Pass Phrase Options</a></h2>
+<p>See the <em>openssl-passphrase-options(1)</em> manual page.</p>
+<p>
+</p>
+<h2><a name="random_state_options">Random State Options</a></h2>
+<p>Prior to OpenSSL 1.1.1, it was common for applications to store information
+about the state of the random-number generator in a file that was loaded
+at startup and rewritten upon exit. On modern operating systems, this is
+generally no longer necessary as OpenSSL will seed itself from a trusted
+entropy source provided by the operating system. These flags are still
+supported for special platforms or circumstances that might require them.</p>
+<p>It is generally an error to use the same seed file more than once and
+every use of <strong>-rand</strong> should be paired with <strong>-writerand</strong>.</p>
+<dl>
+<dt><strong><a name="rand_files" class="item"><strong>-rand</strong> <em>files</em></a></strong></dt>
+
+<dd>
+<p>A file or files containing random data used to seed the random number
+generator.
+Multiple files can be specified separated by an OS-dependent character.
+The separator is <code>;</code> for MS-Windows, <code>,</code> for OpenVMS, and <code>:</code> for
+all others. Another way to specify multiple files is to repeat this flag
+with different filenames.</p>
+</dd>
+<dt><strong><a name="writerand_file" class="item"><strong>-writerand</strong> <em>file</em></a></strong></dt>
+
+<dd>
+<p>Writes the seed data to the specified <em>file</em> upon exit.
+This file can be used in a subsequent command invocation.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="certificate_verification_options">Certificate Verification Options</a></h2>
+<p>See the <em>openssl-verification-options(1)</em> manual page.</p>
+<p>
+</p>
+<h2><a name="name_format_options">Name Format Options</a></h2>
+<p>See the <em>openssl-namedisplay-options(1)</em> manual page.</p>
+<p>
+</p>
+<h2><a name="tls_version_options">TLS Version Options</a></h2>
+<p>Several commands use SSL, TLS, or DTLS. By default, the commands use TLS and
+clients will offer the lowest and highest protocol version they support,
+and servers will pick the highest version that the client offers that is also
+supported by the server.</p>
+<p>The options below can be used to limit which protocol versions are used,
+and whether TCP (SSL and TLS) or UDP (DTLS) is used.
+Note that not all protocols and flags may be available, depending on how
+OpenSSL was built.</p>
+<dl>
+<dt><strong><a name="ssl3_tls1_tls1_1_tls1_2_tls1_3_no_ssl3_no_tls1_no_tls1_1_no_tls1_2_no_tls1_3" class="item"><strong>-ssl3</strong>, <strong>-tls1</strong>, <strong>-tls1_1</strong>, <strong>-tls1_2</strong>, <strong>-tls1_3</strong>, <strong>-no_ssl3</strong>, <strong>-no_tls1</strong>, <strong>-no_tls1_1</strong>, <strong>-no_tls1_2</strong>, <strong>-no_tls1_3</strong></a></strong></dt>
+
+<dd>
+<p>These options require or disable the use of the specified SSL or TLS protocols.
+When a specific TLS version is required, only that version will be offered or
+accepted.
+Only one specific protocol can be given and it cannot be combined with any of
+the <strong>no_</strong> options.
+The <strong>no_*</strong> options do not work with <strong>s_time</strong> and <strong>ciphers</strong> commands but work with
+<strong>s_client</strong> and <strong>s_server</strong> commands.</p>
+</dd>
+<dt><strong><a name="dtls_dtls1_dtls1_2" class="item"><strong>-dtls</strong>, <strong>-dtls1</strong>, <strong>-dtls1_2</strong></a></strong></dt>
+
+<dd>
+<p>These options specify to use DTLS instead of TLS.
+With <strong>-dtls</strong>, clients will negotiate any supported DTLS protocol version.
+Use the <strong>-dtls1</strong> or <strong>-dtls1_2</strong> options to support only DTLS1.0 or DTLS1.2,
+respectively.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="engine_options">Engine Options</a></h2>
+<dl>
+<dt><strong><a name="engine_id" class="item"><strong>-engine</strong> <em>id</em></a></strong></dt>
+
+<dd>
+<p>Load the engine identified by <em>id</em> and use all the methods it implements
+(algorithms, key storage, etc.), unless specified otherwise in the
+command-specific documentation or it is configured to do so, as described in
+<em>config(5)/Engine Configuration</em>.</p>
+<p>The engine will be used for key ids specified with <strong>-key</strong> and similar
+options when an option like <strong>-keyform engine</strong> is given.</p>
+<p>A special case is the <code>loader_attic</code> engine, which
+is meant just for internal OpenSSL testing purposes and
+supports loading keys, parameters, certificates, and CRLs from files.
+When this engine is used, files with such credentials are read via this engine.
+Using the <code>file:</code> schema is optional; a plain file (path) name will do.</p>
+</dd>
+</dl>
+<p>Options specifying keys, like <strong>-key</strong> and similar, can use the generic
+OpenSSL engine key loading URI scheme <code>org.openssl.engine:</code> to retrieve
+private keys and public keys.  The URI syntax is as follows, in simplified
+form:</p>
+<pre>
+    <span class="variable">org</span><span class="operator">.</span><span class="variable">openssl</span><span class="operator">.</span><span class="variable">engine</span><span class="operator">:</span><span class="operator">{</span><span class="string">engineid</span><span class="operator">}</span><span class="operator">:</span><span class="operator">{</span><span class="string">keyid</span><span class="operator">}</span>
+</pre>
+<p>Where <code>{engineid}</code> is the identity/name of the engine, and <code>{keyid}</code> is a
+key identifier that's acceptable by that engine.  For example, when using an
+engine that interfaces against a PKCS#11 implementation, the generic key URI
+would be something like this (this happens to be an example for the PKCS#11
+engine that's part of OpenSC):</p>
+<pre>
+    -key org.openssl.engine:pkcs11:label_some-private-key</pre>
+<p>As a third possibility, for engines and providers that have implemented
+their own <em>OSSL_STORE_LOADER(3)</em>, <code>org.openssl.engine:</code> should not be
+necessary.  For a PKCS#11 implementation that has implemented such a loader,
+the PKCS#11 URI as defined in <a href="http://www.ietf.org/rfc/rfc7512.txt" class="rfc">RFC 7512</a> should be possible to use directly:</p>
+<pre>
+    <span class="operator">-</span><span class="variable">key</span> <span class="variable">pkcs11</span><span class="operator">:</span><span class="variable">object</span><span class="operator">=</span><span class="variable">some</span><span class="operator">-</span><span class="variable">private</span><span class="operator">-</span><span class="variable">key</span><span class="operator">;</span><span class="variable">pin</span><span class="operator">-</span><span class="variable">value</span><span class="operator">=</span><span class="number">1234</span>
+</pre>
+<p>
+</p>
+<h2><a name="provider_options">Provider Options</a></h2>
+<dl>
+<dt><strong><a name="provider_name" class="item"><strong>-provider</strong> <em>name</em></a></strong></dt>
+
+<dd>
+<p>Load and initialize the provider identified by <em>name</em>. The <em>name</em>
+can be also a path to the provider module. In that case the provider name
+will be the specified path and not just the provider module name.
+Interpretation of relative paths is platform specific. The configured
+&quot;MODULESDIR&quot; path, <strong>OPENSSL_MODULES</strong> environment variable, or the path
+specified by <strong>-provider-path</strong> is prepended to relative paths.
+See <em>provider(7)</em> for a more detailed description.</p>
+</dd>
+<dt><strong><a name="provider_path_path" class="item"><strong>-provider-path</strong> <em>path</em></a></strong></dt>
+
+<dd>
+<p>Specifies the search path that is to be used for looking for providers.
+Equivalently, the <strong>OPENSSL_MODULES</strong> environment variable may be set.</p>
+</dd>
+<dt><strong><a name="propquery_propq" class="item"><strong>-propquery</strong> <em>propq</em></a></strong></dt>
+
+<dd>
+<p>Specifies the <em>property query clause</em> to be used when fetching algorithms
+from the loaded providers.
+See <em>property(7)</em> for a more detailed description.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="environment">ENVIRONMENT</a></h1>
+<p>The OpenSSL library can be take some configuration parameters from the
+environment.  Some of these variables are listed below.  For information
+about specific commands, see <a href="#engine">openssl-engine(1)</a>,
+<a href="#rehash">openssl-rehash(1)</a>, and <em>tsget(1)</em>.</p>
+<p>For information about the use of environment variables in configuration,
+see <em>config(5)/ENVIRONMENT</em>.</p>
+<p>For information about querying or specifying CPU architecture flags, see
+<em>OPENSSL_ia32cap(3)</em>, and <em>OPENSSL_s390xcap(3)</em>.</p>
+<p>For information about all environment variables used by the OpenSSL libraries,
+see <em>openssl-env(7)</em>.</p>
+<dl>
+<dt><strong><a name="openssl_trace_name" class="item"><strong>OPENSSL_TRACE=</strong><em>name</em>[,...]</a></strong></dt>
+
+<dd>
+<p>Enable tracing output of OpenSSL library, by name.
+This output will only make sense if you know OpenSSL internals well.
+Also, it might not give you any output at all, depending on how
+OpenSSL was built.</p>
+<p>The value is a comma separated list of names, with the following
+available:</p>
+<dl>
+<dt><strong><a name="trace" class="item"><strong>TRACE</strong></a></strong></dt>
+
+<dd>
+<p>Traces the OpenSSL trace API itself.</p>
+</dd>
+<dt><strong><a name="init" class="item"><strong>INIT</strong></a></strong></dt>
+
+<dd>
+<p>Traces OpenSSL library initialization and cleanup.</p>
+</dd>
+<dt><strong><a name="tls" class="item"><strong>TLS</strong></a></strong></dt>
+
+<dd>
+<p>Traces the TLS/SSL protocol.</p>
+</dd>
+<dt><strong><a name="tls_cipher" class="item"><strong>TLS_CIPHER</strong></a></strong></dt>
+
+<dd>
+<p>Traces the ciphers used by the TLS/SSL protocol.</p>
+</dd>
+<dt><strong><a name="conf" class="item"><strong>CONF</strong></a></strong></dt>
+
+<dd>
+<p>Show details about provider and engine configuration.</p>
+</dd>
+<dt><strong><a name="engine_table" class="item"><strong>ENGINE_TABLE</strong></a></strong></dt>
+
+<dd>
+<p>The function that is used by RSA, DSA (etc) code to select registered
+ENGINEs, cache defaults and functional references (etc), will generate
+debugging summaries.</p>
+</dd>
+<dt><strong><a name="engine_ref_count" class="item"><strong>ENGINE_REF_COUNT</strong></a></strong></dt>
+
+<dd>
+<p>Reference counts in the ENGINE structure will be monitored with a line
+of generated for each change.</p>
+</dd>
+<dt><strong><a name="pkcs5v2" class="item"><strong>PKCS5V2</strong></a></strong></dt>
+
+<dd>
+<p>Traces PKCS#5 v2 key generation.</p>
+</dd>
+<dt><strong><a name="pkcs12_keygen" class="item"><strong>PKCS12_KEYGEN</strong></a></strong></dt>
+
+<dd>
+<p>Traces PKCS#12 key generation.</p>
+</dd>
+<dt><strong><a name="pkcs12_decrypt" class="item"><strong>PKCS12_DECRYPT</strong></a></strong></dt>
+
+<dd>
+<p>Traces PKCS#12 decryption.</p>
+</dd>
+<dt><strong><a name="x509v3_policy" class="item"><strong>X509V3_POLICY</strong></a></strong></dt>
+
+<dd>
+<p>Generates the complete policy tree at various points during X.509 v3
+policy evaluation.</p>
+</dd>
+<dt><strong><a name="bn_ctx" class="item"><strong>BN_CTX</strong></a></strong></dt>
+
+<dd>
+<p>Traces BIGNUM context operations.</p>
+</dd>
+<dt><strong><a name="cmp" class="item"><strong>CMP</strong></a></strong></dt>
+
+<dd>
+<p>Traces CMP client and server activity.</p>
+</dd>
+<dt><strong><a name="store" class="item"><strong>STORE</strong></a></strong></dt>
+
+<dd>
+<p>Traces STORE operations.</p>
+</dd>
+<dt><strong><a name="decoder" class="item"><strong>DECODER</strong></a></strong></dt>
+
+<dd>
+<p>Traces decoder operations.</p>
+</dd>
+<dt><strong><a name="encoder" class="item"><strong>ENCODER</strong></a></strong></dt>
+
+<dd>
+<p>Traces encoder operations.</p>
+</dd>
+<dt><strong><a name="ref_count" class="item"><strong>REF_COUNT</strong></a></strong></dt>
+
+<dd>
+<p>Traces decrementing certain ASN.1 structure references.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="#asn1parse">openssl-asn1parse(1)</a>,
+<a href="#ca">openssl-ca(1)</a>,
+<a href="#ciphers">openssl-ciphers(1)</a>,
+<a href="#cms">openssl-cms(1)</a>,
+<a href="#crl">openssl-crl(1)</a>,
+<a href="#crl2pkcs7">openssl-crl2pkcs7(1)</a>,
+<a href="#dgst">openssl-dgst(1)</a>,
+<a href="#dhparam">openssl-dhparam(1)</a>,
+<a href="#dsa">openssl-dsa(1)</a>,
+<a href="#dsaparam">openssl-dsaparam(1)</a>,
+<a href="#ec">openssl-ec(1)</a>,
+<a href="#ecparam">openssl-ecparam(1)</a>,
+<a href="#enc">openssl-enc(1)</a>,
+<a href="#engine">openssl-engine(1)</a>,
+<a href="#errstr">openssl-errstr(1)</a>,
+<a href="#gendsa">openssl-gendsa(1)</a>,
+<a href="#genpkey">openssl-genpkey(1)</a>,
+<a href="#genrsa">openssl-genrsa(1)</a>,
+<a href="#kdf">openssl-kdf(1)</a>,
+<a href="#list">openssl-list(1)</a>,
+<a href="#mac">openssl-mac(1)</a>,
+<a href="#nseq">openssl-nseq(1)</a>,
+<a href="#ocsp">openssl-ocsp(1)</a>,
+<a href="#passwd">openssl-passwd(1)</a>,
+<a href="#pkcs12">openssl-pkcs12(1)</a>,
+<a href="#pkcs7">openssl-pkcs7(1)</a>,
+<a href="#pkcs8">openssl-pkcs8(1)</a>,
+<a href="#pkey">openssl-pkey(1)</a>,
+<a href="#pkeyparam">openssl-pkeyparam(1)</a>,
+<a href="#pkeyutl">openssl-pkeyutl(1)</a>,
+<a href="#prime">openssl-prime(1)</a>,
+<a href="#rand">openssl-rand(1)</a>,
+<a href="#rehash">openssl-rehash(1)</a>,
+<a href="#req">openssl-req(1)</a>,
+<a href="#rsa">openssl-rsa(1)</a>,
+<a href="#rsautl">openssl-rsautl(1)</a>,
+<a href="#s_client">openssl-s_client(1)</a>,
+<a href="#s_server">openssl-s_server(1)</a>,
+<a href="#s_time">openssl-s_time(1)</a>,
+<a href="#sess_id">openssl-sess_id(1)</a>,
+<a href="#smime">openssl-smime(1)</a>,
+<a href="#speed">openssl-speed(1)</a>,
+<a href="#spkac">openssl-spkac(1)</a>,
+<a href="#srp">openssl-srp(1)</a>,
+<a href="#storeutl">openssl-storeutl(1)</a>,
+<a href="#ts">openssl-ts(1)</a>,
+<a href="#verify">openssl-verify(1)</a>,
+<a href="#version">openssl-version(1)</a>,
+<a href="#x509">openssl-x509(1)</a>,
+<em>config(5)</em>,
+<em>crypto(7)</em>,
+<em>openssl-env(7)</em>.
+<em>ssl(7)</em>,
+<em>x509v3_config(5)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>The <strong>list</strong> -<em>XXX</em><strong>-algorithms</strong> options were added in OpenSSL 1.0.0;
+For notes on the availability of other commands, see their individual
+manual pages.</p>
+<p>The <strong>-issuer_checks</strong> option is deprecated as of OpenSSL 1.1.0 and
+is silently ignored.</p>
+<p>The <strong>-xcertform</strong> and <strong>-xkeyform</strong> options
+are obsolete since OpenSSL 3.0 and have no effect.</p>
+<p>The interactive mode, which could be invoked by running <code>openssl</code>
+with no further arguments, was removed in OpenSSL 3.0, and running
+that program with no arguments is now equivalent to <code>openssl help</code>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2000-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

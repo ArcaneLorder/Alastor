@@ -1,0 +1,153 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OSSL_PROVIDER-legacy</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#properties">Properties</a></li>
+	</ul>
+
+	<li><a href="#operations_and_algorithms">OPERATIONS AND ALGORITHMS</a></li>
+	<ul>
+
+		<li><a href="#hashing_algorithms___message_digests">Hashing Algorithms / Message Digests</a></li>
+		<li><a href="#symmetric_ciphers">Symmetric Ciphers</a></li>
+		<li><a href="#key_derivation_function__kdf_">Key Derivation Function (KDF)</a></li>
+	</ul>
+
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>OSSL_PROVIDER-legacy - OpenSSL legacy provider</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The OpenSSL legacy provider supplies OpenSSL implementations of algorithms
+that have been deemed legacy.  Such algorithms have commonly fallen out of
+use, have been deemed insecure by the cryptography community, or something
+similar.</p>
+<p>We can consider this the retirement home of cryptographic algorithms.</p>
+<p>
+</p>
+<h2><a name="properties">Properties</a></h2>
+<p>The implementations in this provider specifically has this property
+defined:</p>
+<dl>
+<dt><strong><a name="provider_legacy" class="item">&quot;provider=legacy&quot;</a></strong></dt>
+
+</dl>
+<p>It may be used in a property query string with fetching functions such as
+<em>EVP_MD_fetch(3)</em> or <em>EVP_CIPHER_fetch(3)</em>, as well as with other
+functions that take a property query string, such as
+<em>EVP_PKEY_CTX_new_from_name(3)</em>.</p>
+<p>It isn't mandatory to query for any of these properties, except to
+make sure to get implementations of this provider and none other.</p>
+<p>
+</p>
+<hr />
+<h1><a name="operations_and_algorithms">OPERATIONS AND ALGORITHMS</a></h1>
+<p>The OpenSSL legacy provider supports these operations and algorithms:</p>
+<p>
+</p>
+<h2><a name="hashing_algorithms___message_digests">Hashing Algorithms / Message Digests</a></h2>
+<dl>
+<dt><strong><a name="md2" class="item">MD2, see <a href="#md2">EVP_MD-MD2(7)</a></a></strong></dt>
+
+<dt><strong><a name="md4" class="item">MD4, see <a href="#md4">EVP_MD-MD4(7)</a></a></strong></dt>
+
+<dt><strong><a name="mdc2" class="item">MDC2, see <a href="#mdc2">EVP_MD-MDC2(7)</a></a></strong></dt>
+
+<dt><strong><a name="whirlpool" class="item">WHIRLPOOL, see <a href="#whirlpool">EVP_MD-WHIRLPOOL(7)</a></a></strong></dt>
+
+<dt><strong><a name="ripemd160" class="item">RIPEMD160, see <a href="#ripemd160">EVP_MD-RIPEMD160(7)</a></a></strong></dt>
+
+</dl>
+<p>
+</p>
+<h2><a name="symmetric_ciphers">Symmetric Ciphers</a></h2>
+<p>Not all of these symmetric cipher algorithms are enabled by default.</p>
+<dl>
+<dt><strong><a name="blowfish" class="item">Blowfish, see <a href="#blowfish">EVP_CIPHER-BLOWFISH(7)</a></a></strong></dt>
+
+<dt><strong><a name="cast" class="item">CAST, see <a href="#cast">EVP_CIPHER-CAST(7)</a></a></strong></dt>
+
+<dt><strong><a name="des" class="item">DES, see <a href="#des">EVP_CIPHER-DES(7)</a></a></strong></dt>
+
+<dd>
+<p>The algorithm names are: DES_ECB, DES_CBC, DES_OFB, DES_CFB, DES_CFB1, DES_CFB8
+and DESX_CBC.</p>
+</dd>
+<dt><strong><a name="idea" class="item">IDEA, see <a href="#idea">EVP_CIPHER-IDEA(7)</a></a></strong></dt>
+
+<dt><strong><a name="rc2" class="item">RC2, see <a href="#rc2">EVP_CIPHER-RC2(7)</a></a></strong></dt>
+
+<dt><strong><a name="rc4" class="item">RC4, see <a href="#rc4">EVP_CIPHER-RC4(7)</a></a></strong></dt>
+
+<dt><strong><a name="rc5" class="item">RC5, see <a href="#rc5">EVP_CIPHER-RC5(7)</a></a></strong></dt>
+
+<dd>
+<p>Disabled by default. Use <em>enable-rc5</em> config option to enable.</p>
+</dd>
+<dt><strong><a name="seed" class="item">SEED, see <a href="#seed">EVP_CIPHER-SEED(7)</a></a></strong></dt>
+
+</dl>
+<p>
+</p>
+<h2><a name="key_derivation_function__kdf_">Key Derivation Function (KDF)</a></h2>
+<dl>
+<dt><strong><a name="pbkdf1" class="item">PBKDF1</a></strong></dt>
+
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>OSSL_PARAM(3)</em>,
+<em>openssl-core.h(7)</em>,
+<em>openssl-core_dispatch.h(7)</em>,
+<em>provider(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>This functionality was added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2020-2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

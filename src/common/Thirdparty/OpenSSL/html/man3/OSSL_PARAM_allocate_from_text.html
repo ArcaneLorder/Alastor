@@ -1,0 +1,248 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OSSL_PARAM_allocate_from_text</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#the_use_of_key_and_value_in_detail">The use of <em>key</em> and <em>value</em> in detail</a></li>
+	</ul>
+
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>OSSL_PARAM_allocate_from_text
+- OSSL_PARAM construction utilities</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/params.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OSSL_PARAM_allocate_from_text</span><span class="operator">(</span><span class="variable">OSSL_PARAM</span> <span class="variable">*to</span><span class="operator">,</span>
+                                   <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*paramdefs</span><span class="operator">,</span>
+                                   <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*value</span><span class="operator">,</span>
+                                   <span class="variable">size_t</span> <span class="variable">value_n</span><span class="operator">,</span>
+                                   <span class="keyword">int</span> <span class="variable">*found</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>With OpenSSL before version 3.0, parameters were passed down to or
+retrieved from algorithm implementations via control functions.
+Some of these control functions existed in variants that took string
+parameters, for example <em>EVP_PKEY_CTX_ctrl_str(3)</em>.</p>
+<p>OpenSSL 3.0 introduces a new mechanism to do the same thing with an
+array of parameters that contain name, value, value type and value
+size (see <em>OSSL_PARAM(3)</em> for more information).</p>
+<p><code>OSSL_PARAM_allocate_from_text()</code> uses <em>key</em> to look up an item in
+<em>paramdefs</em>.  If an item was found, it converts <em>value</em> to something
+suitable for that item's <em>data_type</em>, and stores the result in
+<em>to-</em>data &gt;&gt; as well as its size in <em>to-</em>data_size &gt;&gt;.
+<em>to-</em>key &gt;&gt; and <em>to-</em>data_type &gt;&gt; are assigned the corresponding
+values from the item that was found, and <em>to-</em>return_size &gt;&gt; is set
+to zero.</p>
+<p><em>to-</em>data &gt;&gt; is always allocated using <em>OPENSSL_zalloc(3)</em> and
+needs to be freed by the caller when it's not useful any more, using
+<em>OPENSSL_free(3)</em>.</p>
+<p>If <em>found</em> is not NULL, <em>*found</em> is set to 1 if <em>key</em> could be
+located in <em>paramdefs</em>, and to 0 otherwise.</p>
+<p>
+</p>
+<h2><a name="the_use_of_key_and_value_in_detail">The use of <em>key</em> and <em>value</em> in detail</a></h2>
+<p><code>OSSL_PARAM_allocate_from_text()</code> takes note if <em>key</em> starts with
+&quot;hex&quot;, and will only use the rest of <em>key</em> to look up an item in
+<em>paramdefs</em> in that case.  As an example, if <em>key</em> is &quot;hexid&quot;, &quot;id&quot;
+will be looked up in <em>paramdefs</em>.</p>
+<p>When an item in <em>paramdefs</em> has been found, <em>value</em> is converted
+depending on that item's <em>data_type</em>, as follows:</p>
+<dl>
+<dt><strong><a name="ossl_param_integer_and_ossl_param_unsigned_integer" class="item"><strong>OSSL_PARAM_INTEGER</strong> and <strong>OSSL_PARAM_UNSIGNED_INTEGER</strong></a></strong></dt>
+
+<dd>
+<p>If <em>key</em> didn't start with &quot;hex&quot;, <em>value</em> is assumed to contain
+<em>value_n</em> decimal characters, which are decoded, and the resulting
+bytes become the number stored in the <em>to-</em>data &gt;&gt; storage.</p>
+<p>If <em>value</em> starts with &quot;0x&quot;, it is assumed to contain <em>value_n</em>
+hexadecimal characters.</p>
+<p>If <em>key</em> started with &quot;hex&quot;, <em>value</em> is assumed to contain
+<em>value_n</em> hexadecimal characters without the &quot;0x&quot; prefix.</p>
+<p>If <em>value</em> contains characters that couldn't be decoded as
+hexadecimal or decimal characters, <code>OSSL_PARAM_allocate_from_text()</code>
+considers that an error.</p>
+</dd>
+<dt><strong><a name="ossl_param_utf8_string" class="item"><strong>OSSL_PARAM_UTF8_STRING</strong></a></strong></dt>
+
+<dd>
+<p>If <em>key</em> started with &quot;hex&quot;, <code>OSSL_PARAM_allocate_from_text()</code>
+considers that an error.</p>
+<p>Otherwise, <em>value</em> is considered a C string and is copied to the
+<em>to-</em>data &gt;&gt; storage.
+On systems where the native character encoding is EBCDIC, the bytes in
+<em>to-</em>data &gt;&gt; are converted to ASCII.</p>
+</dd>
+<dt><strong><a name="ossl_param_octet_string" class="item"><strong>OSSL_PARAM_OCTET_STRING</strong></a></strong></dt>
+
+<dd>
+<p>If <em>key</em> started with &quot;hex&quot;, <em>value</em> is assumed to contain
+<em>value_n</em> hexadecimal characters, which are decoded, and the
+resulting bytes are stored in the <em>to-</em>data &gt;&gt; storage.
+If <em>value</em> contains characters that couldn't be decoded as
+hexadecimal or decimal characters, <code>OSSL_PARAM_allocate_from_text()</code>
+considers that an error.</p>
+<p>If <em>key</em> didn't start with &quot;hex&quot;, <em>value_n</em> bytes from <em>value</em> are
+copied to the <em>to-</em>data &gt;&gt; storage.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>OSSL_PARAM_allocate_from_text()</code> returns 1 if <em>key</em> was found in
+<em>paramdefs</em> and there was no other failure, otherwise 0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The parameter descriptor array comes from functions dedicated to
+return them.
+The following <em>OSSL_PARAM(3)</em> attributes are used:</p>
+<dl>
+<dt><strong><a name="key" class="item"><em>key</em></a></strong></dt>
+
+<dt><strong><a name="data_type" class="item"><em>data_type</em></a></strong></dt>
+
+<dt><strong><a name="data_size" class="item"><em>data_size</em></a></strong></dt>
+
+</dl>
+<p>All other attributes are ignored.</p>
+<p>The <em>data_size</em> attribute can be zero, meaning that the parameter it
+describes expects arbitrary length data.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Code that looked like this:</p>
+<pre>
+  <span class="keyword">int</span> <span class="variable">mac_ctrl_string</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*value</span><span class="operator">)</span>
+  <span class="operator">{</span>
+      <span class="keyword">int</span> <span class="variable">rv</span><span class="operator">;</span>
+      <span class="variable">char</span> <span class="variable">*stmp</span><span class="operator">,</span> <span class="variable">*vtmp</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+      <span class="variable">stmp</span> <span class="operator">=</span> <span class="variable">OPENSSL_strdup</span><span class="operator">(</span><span class="variable">value</span><span class="operator">);</span>
+      <span class="keyword">if</span> <span class="operator">(</span><span class="variable">stmp</span> <span class="operator">==</span> <span class="variable">NULL</span><span class="operator">)</span>
+          <span class="keyword">return</span> <span class="operator">-</span><span class="number">1</span><span class="operator">;</span>
+      <span class="variable">vtmp</span> <span class="operator">=</span> <span class="variable">strchr</span><span class="operator">(</span><span class="variable">stmp</span><span class="operator">,</span> <span class="string">':'</span><span class="operator">);</span>
+      <span class="keyword">if</span> <span class="operator">(</span><span class="variable">vtmp</span> <span class="operator">!=</span> <span class="variable">NULL</span><span class="operator">)</span>
+          <span class="variable">*vtmp</span><span class="operator">++</span> <span class="operator">=</span> <span class="string">'\0'</span><span class="operator">;</span>
+      <span class="variable">rv</span> <span class="operator">=</span> <span class="variable">EVP_MAC_ctrl_str</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="variable">stmp</span><span class="operator">,</span> <span class="variable">vtmp</span><span class="operator">);</span>
+      <span class="variable">OPENSSL_free</span><span class="operator">(</span><span class="variable">stmp</span><span class="operator">);</span>
+      <span class="keyword">return</span> <span class="variable">rv</span><span class="operator">;</span>
+        <span class="operator">}</span>
+</pre>
+<pre>
+  ...</pre>
+<pre>
+  <span class="keyword">for</span> <span class="operator">(</span><span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span><span class="operator">;</span> <span class="variable">i</span> <span class="operator">&lt;</span> <span class="variable">sk_OPENSSL_STRING_num</span><span class="operator">(</span><span class="variable">macopts</span><span class="operator">);</span> <span class="variable">i</span><span class="operator">++)</span> <span class="operator">{</span>
+      <span class="variable">char</span> <span class="variable">*macopt</span> <span class="operator">=</span> <span class="variable">sk_OPENSSL_STRING_value</span><span class="operator">(</span><span class="variable">macopts</span><span class="operator">,</span> <span class="variable">i</span><span class="operator">);</span>
+</pre>
+<pre>
+      <span class="keyword">if</span> <span class="operator">(</span><span class="variable">pkey_ctrl_string</span><span class="operator">(</span><span class="variable">mac_ctx</span><span class="operator">,</span> <span class="variable">macopt</span><span class="operator">)</span> <span class="operator">&lt;=</span> <span class="number">0</span><span class="operator">)</span> <span class="operator">{</span>
+          <span class="variable">BIO_printf</span><span class="operator">(</span><span class="variable">bio_err</span><span class="operator">,</span>
+                     <span class="string">"MAC parameter error \"%s\"\n"</span><span class="operator">,</span> <span class="variable">macopt</span><span class="operator">);</span>
+          <span class="variable">ERR_print_errors</span><span class="operator">(</span><span class="variable">bio_err</span><span class="operator">);</span>
+          <span class="keyword">goto</span> <span class="variable">mac_end</span><span class="operator">;</span>
+      <span class="operator">}</span>
+        <span class="operator">}</span>
+</pre>
+<p>Can be written like this instead:</p>
+<pre>
+  <span class="variable">OSSL_PARAM</span> <span class="variable">*params</span> <span class="operator">=</span>
+      <span class="variable">OPENSSL_zalloc</span><span class="operator">(</span><span class="variable">sizeof</span><span class="operator">(</span><span class="variable">*params</span><span class="operator">)</span>
+                     <span class="operator">*</span> <span class="operator">(</span><span class="variable">sk_OPENSSL_STRING_num</span><span class="operator">(</span><span class="variable">opts</span><span class="operator">)</span> <span class="operator">+</span> <span class="number">1</span><span class="operator">));</span>
+  <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*paramdefs</span> <span class="operator">=</span> <span class="variable">EVP_MAC_settable_ctx_params</span><span class="operator">(</span><span class="variable">mac</span><span class="operator">);</span>
+  <span class="variable">size_t</span> <span class="variable">params_n</span><span class="operator">;</span>
+  <span class="variable">char</span> <span class="variable">*opt</span> <span class="operator">=</span> <span class="string">"&lt;unknown&gt;"</span><span class="operator">;</span>
+</pre>
+<pre>
+  <span class="keyword">for</span> <span class="operator">(</span><span class="variable">params_n</span> <span class="operator">=</span> <span class="number">0</span><span class="operator">;</span> <span class="variable">params_n</span> <span class="operator">&lt;</span> <span class="operator">(</span><span class="variable">size_t</span><span class="operator">)</span><span class="variable">sk_OPENSSL_STRING_num</span><span class="operator">(</span><span class="variable">opts</span><span class="operator">);</span>
+       <span class="variable">params_n</span><span class="operator">++)</span> <span class="operator">{</span>
+      <span class="variable">char</span> <span class="variable">*stmp</span><span class="operator">,</span> <span class="variable">*vtmp</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+      <span class="variable">opt</span> <span class="operator">=</span> <span class="variable">sk_OPENSSL_STRING_value</span><span class="operator">(</span><span class="variable">opts</span><span class="operator">,</span> <span class="operator">(</span><span class="keyword">int</span><span class="operator">)</span><span class="variable">params_n</span><span class="operator">);</span>
+      <span class="keyword">if</span> <span class="operator">((</span><span class="variable">stmp</span> <span class="operator">=</span> <span class="variable">OPENSSL_strdup</span><span class="operator">(</span><span class="variable">opt</span><span class="operator">))</span> <span class="operator">==</span> <span class="variable">NULL</span>
+              <span class="operator">||</span> <span class="operator">(</span><span class="variable">vtmp</span> <span class="operator">=</span> <span class="variable">strchr</span><span class="operator">(</span><span class="variable">stmp</span><span class="operator">,</span> <span class="string">':'</span><span class="operator">))</span> <span class="operator">==</span> <span class="variable">NULL</span><span class="operator">)</span>
+          <span class="keyword">goto</span> <span class="variable">err</span><span class="operator">;</span>
+</pre>
+<pre>
+      <span class="variable">*vtmp</span><span class="operator">++</span> <span class="operator">=</span> <span class="string">'\0'</span><span class="operator">;</span>
+      <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">OSSL_PARAM_allocate_from_text</span><span class="operator">(&amp;</span><span class="variable">params</span><span class="operator">[</span><span class="variable">params_n</span><span class="operator">]</span><span class="operator">,</span>
+                                         <span class="variable">paramdefs</span><span class="operator">,</span> <span class="variable">stmp</span><span class="operator">,</span>
+                                         <span class="variable">vtmp</span><span class="operator">,</span> <span class="variable">strlen</span><span class="operator">(</span><span class="variable">vtmp</span><span class="operator">),</span> <span class="variable">NULL</span><span class="operator">))</span>
+          <span class="keyword">goto</span> <span class="variable">err</span><span class="operator">;</span>
+        <span class="operator">}</span>
+        <span class="variable">params</span><span class="operator">[</span><span class="variable">params_n</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_end</span><span class="operator">();</span>
+        <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">EVP_MAC_CTX_set_params</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="variable">params</span><span class="operator">))</span>
+      <span class="keyword">goto</span> <span class="variable">err</span><span class="operator">;</span>
+        <span class="keyword">while</span> <span class="operator">(</span><span class="variable">params_n</span><span class="operator">--</span> <span class="operator">&gt;</span> <span class="number">0</span><span class="operator">)</span>
+      <span class="variable">OPENSSL_free</span><span class="operator">(</span><span class="variable">params</span><span class="operator">[</span><span class="variable">params_n</span><span class="operator">]</span><span class="operator">.</span><span class="variable">data</span><span class="operator">);</span>
+        <span class="variable">OPENSSL_free</span><span class="operator">(</span><span class="variable">params</span><span class="operator">);</span>
+        <span class="regex">/* ... */</span>
+        <span class="keyword">return</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">err</span><span class="operator">:</span>
+  <span class="variable">BIO_printf</span><span class="operator">(</span><span class="variable">bio_err</span><span class="operator">,</span> <span class="string">"MAC parameter error '%s'\n"</span><span class="operator">,</span> <span class="variable">opt</span><span class="operator">);</span>
+  <span class="variable">ERR_print_errors</span><span class="operator">(</span><span class="variable">bio_err</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>OSSL_PARAM(3)</em>, <em>OSSL_PARAM_int(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2019-2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

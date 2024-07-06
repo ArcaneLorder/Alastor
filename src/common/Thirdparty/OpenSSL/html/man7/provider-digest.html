@@ -1,0 +1,325 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>provider-digest</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#context_management_functions">Context Management Functions</a></li>
+		<li><a href="#digest_generation_functions">Digest Generation Functions</a></li>
+		<li><a href="#digest_parameters">Digest Parameters</a></li>
+		<li><a href="#digest_context_parameters">Digest Context Parameters</a></li>
+	</ul>
+
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>provider-digest - The digest library &lt;-&gt; provider functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/core_dispatch.h&gt;</span>
+ <span class="comment">#include &lt;openssl/core_names.h&gt;</span>
+</pre>
+<pre>
+ /*
+  * Digests support the following function signatures in OSSL_DISPATCH arrays.
+  * (The function signatures are not actual functions).
+  */</pre>
+<pre>
+ <span class="regex">/* Context management */</span>
+ <span class="variable">void</span> <span class="variable">*OSSL_FUNC_digest_newctx</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">OSSL_FUNC_digest_freectx</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*dctx</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">*OSSL_FUNC_digest_dupctx</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*dctx</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* Digest generation */</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_digest_init</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*dctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_digest_update</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*dctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*in</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">inl</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_digest_final</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*dctx</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*out</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">*outl</span><span class="operator">,</span>
+                            <span class="variable">size_t</span> <span class="variable">outsz</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_digest_digest</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*in</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">inl</span><span class="operator">,</span>
+                             <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*out</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">*outl</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">outsz</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* Digest parameter descriptors */</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*OSSL_FUNC_digest_gettable_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* Digest operation parameter descriptors */</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*OSSL_FUNC_digest_gettable_ctx_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*dctx</span><span class="operator">,</span>
+                                                        <span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*OSSL_FUNC_digest_settable_ctx_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*dctx</span><span class="operator">,</span>
+                                                        <span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* Digest parameters */</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_digest_get_params</span><span class="operator">(</span><span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* Digest operation parameters */</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_digest_set_ctx_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*dctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_digest_get_ctx_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*dctx</span><span class="operator">,</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This documentation is primarily aimed at provider authors. See <em>provider(7)</em>
+for further information.</p>
+<p>The DIGEST operation enables providers to implement digest algorithms and make
+them available to applications via the API functions <em>EVP_DigestInit_ex(3)</em>,
+<em>EVP_DigestUpdate(3)</em> and <em>EVP_DigestFinal(3)</em> (and other related functions).</p>
+<p>All &quot;functions&quot; mentioned here are passed as function pointers between
+<em class="file">libcrypto</em> and the provider in <em>OSSL_DISPATCH(3)</em> arrays via
+<em>OSSL_ALGORITHM(3)</em> arrays that are returned by the provider's
+<code>provider_query_operation()</code> function
+(see <em>provider-base(7)/Provider Functions</em>).</p>
+<p>All these &quot;functions&quot; have a corresponding function type definition
+named <strong>OSSL_FUNC_{name}_fn</strong>, and a helper function to retrieve the
+function pointer from an <em>OSSL_DISPATCH(3)</em> element named
+<strong>OSSL_FUNC_{name}</strong>.
+For example, the &quot;function&quot; <code>OSSL_FUNC_digest_newctx()</code> has these:</p>
+<pre>
+ <span class="variable">typedef</span> <span class="variable">void</span> <span class="operator">*(</span><span class="variable">OSSL_FUNC_digest_newctx_fn</span><span class="operator">)(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="variable">static</span> <span class="variable">ossl_inline</span> <span class="variable">OSSL_FUNC_digest_newctx_fn</span>
+     <span class="variable">OSSL_FUNC_digest_newctx</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="variable">*opf</span><span class="operator">);</span>
+</pre>
+<p><em>OSSL_DISPATCH(3)</em> arrays are indexed by numbers that are provided as
+macros in <em>openssl-core_dispatch.h(7)</em>, as follows:</p>
+<pre>
+ OSSL_FUNC_digest_newctx               OSSL_FUNC_DIGEST_NEWCTX
+ OSSL_FUNC_digest_freectx              OSSL_FUNC_DIGEST_FREECTX
+ OSSL_FUNC_digest_dupctx               OSSL_FUNC_DIGEST_DUPCTX</pre>
+<pre>
+ OSSL_FUNC_digest_init                 OSSL_FUNC_DIGEST_INIT
+ OSSL_FUNC_digest_update               OSSL_FUNC_DIGEST_UPDATE
+ OSSL_FUNC_digest_final                OSSL_FUNC_DIGEST_FINAL
+ OSSL_FUNC_digest_digest               OSSL_FUNC_DIGEST_DIGEST</pre>
+<pre>
+ OSSL_FUNC_digest_get_params           OSSL_FUNC_DIGEST_GET_PARAMS
+ OSSL_FUNC_digest_get_ctx_params       OSSL_FUNC_DIGEST_GET_CTX_PARAMS
+ OSSL_FUNC_digest_set_ctx_params       OSSL_FUNC_DIGEST_SET_CTX_PARAMS</pre>
+<pre>
+ OSSL_FUNC_digest_gettable_params      OSSL_FUNC_DIGEST_GETTABLE_PARAMS
+ OSSL_FUNC_digest_gettable_ctx_params  OSSL_FUNC_DIGEST_GETTABLE_CTX_PARAMS
+ OSSL_FUNC_digest_settable_ctx_params  OSSL_FUNC_DIGEST_SETTABLE_CTX_PARAMS</pre>
+<p>A digest algorithm implementation may not implement all of these functions.
+In order to be usable all or none of OSSL_FUNC_digest_newctx, OSSL_FUNC_digest_freectx,
+OSSL_FUNC_digest_init, OSSL_FUNC_digest_update and OSSL_FUNC_digest_final should be implemented.
+All other functions are optional.</p>
+<p>
+</p>
+<h2><a name="context_management_functions">Context Management Functions</a></h2>
+<p><code>OSSL_FUNC_digest_newctx()</code> should create and return a pointer to a provider side
+structure for holding context information during a digest operation.
+A pointer to this context will be passed back in a number of the other digest
+operation function calls.
+The parameter <em>provctx</em> is the provider context generated during provider
+initialisation (see <em>provider(7)</em>).</p>
+<p><code>OSSL_FUNC_digest_freectx()</code> is passed a pointer to the provider side digest context in
+the <em>dctx</em> parameter.
+This function should free any resources associated with that context.</p>
+<p><code>OSSL_FUNC_digest_dupctx()</code> should duplicate the provider side digest context in the
+<em>dctx</em> parameter and return the duplicate copy.</p>
+<p>
+</p>
+<h2><a name="digest_generation_functions">Digest Generation Functions</a></h2>
+<p><code>OSSL_FUNC_digest_init()</code> initialises a digest operation given a newly created
+provider side digest context in the <em>dctx</em> parameter.
+The <em>params</em>, if not NULL, should be set on the context in a manner similar to
+using <code>OSSL_FUNC_digest_set_ctx_params()</code>.</p>
+<p><code>OSSL_FUNC_digest_update()</code> is called to supply data to be digested as part of a
+previously initialised digest operation.
+The <em>dctx</em> parameter contains a pointer to a previously initialised provider
+side context.
+<code>OSSL_FUNC_digest_update()</code> should digest <em>inl</em> bytes of data at the location pointed to
+by <em>in</em>.
+<code>OSSL_FUNC_digest_update()</code> may be called multiple times for a single digest operation.</p>
+<p><code>OSSL_FUNC_digest_final()</code> generates a digest started through previous <code>OSSL_FUNC_digest_init()</code>
+and <code>OSSL_FUNC_digest_update()</code> calls.
+The <em>dctx</em> parameter contains a pointer to the provider side context.
+The digest should be written to <em>*out</em> and the length of the digest to
+<em>*outl</em>.
+The digest should not exceed <em>outsz</em> bytes.</p>
+<p><code>OSSL_FUNC_digest_digest()</code> is a &quot;oneshot&quot; digest function.
+No provider side digest context is used.
+Instead the provider context that was created during provider initialisation is
+passed in the <em>provctx</em> parameter (see <em>provider(7)</em>).
+<em>inl</em> bytes at <em>in</em> should be digested and the result should be stored at
+<em>out</em>. The length of the digest should be stored in <em>*outl</em> which should not
+exceed <em>outsz</em> bytes.</p>
+<p>
+</p>
+<h2><a name="digest_parameters">Digest Parameters</a></h2>
+<p>See <em>OSSL_PARAM(3)</em> for further details on the parameters structure used by
+these functions.</p>
+<p><code>OSSL_FUNC_digest_get_params()</code> gets details of the algorithm implementation
+and stores them in <em>params</em>.</p>
+<p><code>OSSL_FUNC_digest_set_ctx_params()</code> sets digest operation parameters for the
+provider side digest context <em>dctx</em> to <em>params</em>.
+Any parameter settings are additional to any that were previously set.
+Passing NULL for <em>params</em> should return true.</p>
+<p><code>OSSL_FUNC_digest_get_ctx_params()</code> gets digest operation details details from
+the given provider side digest context <em>dctx</em> and stores them in <em>params</em>.
+Passing NULL for <em>params</em> should return true.</p>
+<p><code>OSSL_FUNC_digest_gettable_params()</code> returns a constant <em>OSSL_PARAM(3)</em> array
+containing descriptors of the parameters that <code>OSSL_FUNC_digest_get_params()</code>
+can handle.</p>
+<p><code>OSSL_FUNC_digest_gettable_ctx_params()</code> and
+<code>OSSL_FUNC_digest_settable_ctx_params()</code> both return constant
+<em>OSSL_PARAM(3)</em> arrays as descriptors of the parameters that
+<code>OSSL_FUNC_digest_get_ctx_params()</code> and <code>OSSL_FUNC_digest_set_ctx_params()</code>
+can handle, respectively.  The array is based on the current state of
+the provider side context if <em>dctx</em> is not NULL and on the provider
+side algorithm <em>provctx</em> otherwise.</p>
+<p>Parameters currently recognised by built-in digests with this function
+are as follows. Not all parameters are relevant to, or are understood
+by all digests:</p>
+<dl>
+<dt><strong><a name="blocksize_ossl_digest_param_block_size_unsigned_integer" class="item">&quot;blocksize&quot; (<strong>OSSL_DIGEST_PARAM_BLOCK_SIZE</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>The digest block size.
+The length of the &quot;blocksize&quot; parameter should not exceed that of a <strong>size_t</strong>.</p>
+</dd>
+<dt><strong><a name="size_ossl_digest_param_size_unsigned_integer" class="item">&quot;size&quot; (<strong>OSSL_DIGEST_PARAM_SIZE</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>The digest output size.
+The length of the &quot;size&quot; parameter should not exceed that of a <strong>size_t</strong>.</p>
+</dd>
+<dt><strong><a name="flags_ossl_digest_param_flags_unsigned_integer" class="item">&quot;flags&quot; (<strong>OSSL_DIGEST_PARAM_FLAGS</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>Diverse flags that describe exceptional behaviour for the digest:</p>
+<dl>
+<dt><strong><a name="evp_md_flag_oneshot" class="item"><strong>EVP_MD_FLAG_ONESHOT</strong></a></strong></dt>
+
+<dd>
+<p>This digest method can only handle one block of input.</p>
+</dd>
+<dt><strong><a name="evp_md_flag_xof" class="item"><strong>EVP_MD_FLAG_XOF</strong></a></strong></dt>
+
+<dd>
+<p>This digest method is an extensible-output function (XOF) and supports
+setting the <strong>OSSL_DIGEST_PARAM_XOFLEN</strong> parameter.</p>
+</dd>
+<dt><strong><a name="evp_md_flag_digalgid_null" class="item"><strong>EVP_MD_FLAG_DIGALGID_NULL</strong></a></strong></dt>
+
+<dd>
+<p>When setting up a DigestAlgorithmIdentifier, this flag will have the
+parameter set to NULL by default.  Use this for PKCS#1.  <em>Note: if
+combined with EVP_MD_FLAG_DIGALGID_ABSENT, the latter will override.</em></p>
+</dd>
+<dt><strong><a name="evp_md_flag_digalgid_absent" class="item"><strong>EVP_MD_FLAG_DIGALGID_ABSENT</strong></a></strong></dt>
+
+<dd>
+<p>When setting up a DigestAlgorithmIdentifier, this flag will have the
+parameter be left absent by default.  <em>Note: if combined with
+EVP_MD_FLAG_DIGALGID_NULL, the latter will be overridden.</em></p>
+</dd>
+<dt><strong><a name="evp_md_flag_digalgid_custom" class="item"><strong>EVP_MD_FLAG_DIGALGID_CUSTOM</strong></a></strong></dt>
+
+<dd>
+<p>Custom DigestAlgorithmIdentifier handling via ctrl, with
+<strong>EVP_MD_FLAG_DIGALGID_ABSENT</strong> as default.  <em>Note: if combined with
+EVP_MD_FLAG_DIGALGID_NULL, the latter will be overridden.</em>
+Currently unused.</p>
+</dd>
+</dl>
+<p>The length of the &quot;flags&quot; parameter should equal that of an
+<strong>unsigned long int</strong>.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="digest_context_parameters">Digest Context Parameters</a></h2>
+<p><code>OSSL_FUNC_digest_set_ctx_params()</code> sets digest parameters associated with the
+given provider side digest context <em>dctx</em> to <em>params</em>.
+Any parameter settings are additional to any that were previously set.
+See <em>OSSL_PARAM(3)</em> for further details on the parameters structure.</p>
+<p><code>OSSL_FUNC_digest_get_ctx_params()</code> gets details of currently set parameters
+values associated with the give provider side digest context <em>dctx</em>
+and stores them in <em>params</em>.
+See <em>OSSL_PARAM(3)</em> for further details on the parameters structure.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>OSSL_FUNC_digest_newctx()</code> and <code>OSSL_FUNC_digest_dupctx()</code> should return the newly created
+provider side digest context, or NULL on failure.</p>
+<p><code>OSSL_FUNC_digest_init()</code>, <code>OSSL_FUNC_digest_update()</code>, <code>OSSL_FUNC_digest_final()</code>, <code>OSSL_FUNC_digest_digest()</code>,
+<code>OSSL_FUNC_digest_set_params()</code> and <code>OSSL_FUNC_digest_get_params()</code> should return 1 for success or
+0 on error.</p>
+<p><code>OSSL_FUNC_digest_size()</code> should return the digest size.</p>
+<p><code>OSSL_FUNC_digest_block_size()</code> should return the block size of the underlying digest
+algorithm.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>The <code>EVP_Q_digest()</code>, <code>EVP_Digest()</code> and <code>EVP_DigestFinal_ex()</code> API calls do not
+expect the digest size to be larger than EVP_MAX_MD_SIZE. Any algorithm which
+produces larger digests is unusable with those API calls.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>provider(7)</em>, <em>OSSL_PROVIDER-FIPS(7)</em>, <em>OSSL_PROVIDER-default(7)</em>,
+<em>OSSL_PROVIDER-legacy(7)</em>,
+<em>EVP_MD-common(7)</em>, <em>EVP_MD-BLAKE2(7)</em>, <em>EVP_MD-MD2(7)</em>,
+<em>EVP_MD-MD4(7)</em>, <em>EVP_MD-MD5(7)</em>, <em>EVP_MD-MD5-SHA1(7)</em>,
+<em>EVP_MD-MDC2(7)</em>, <em>EVP_MD-RIPEMD160(7)</em>, <em>EVP_MD-SHA1(7)</em>,
+<em>EVP_MD-SHA2(7)</em>, <em>EVP_MD-SHA3(7)</em>, <em>EVP_MD-SHAKE(7)</em>,
+<em>EVP_MD-SM3(7)</em>, <em>EVP_MD-WHIRLPOOL(7)</em>,
+<em>EVP_MD-NULL(7)</em>,
+<em>life_cycle-digest(7)</em>, <em>EVP_DigestInit(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>The provider DIGEST interface was introduced in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2019-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

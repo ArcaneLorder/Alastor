@@ -1,0 +1,153 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OSSL_CMP_ITAV_set0</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>OSSL_CMP_ITAV_create,
+OSSL_CMP_ITAV_set0,
+OSSL_CMP_ITAV_get0_type,
+OSSL_CMP_ITAV_get0_value,
+OSSL_CMP_ITAV_push0_stack_item
+- OSSL_CMP_ITAV utility functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  <span class="comment">#include &lt;openssl/cmp.h&gt;</span>
+  <span class="variable">OSSL_CMP_ITAV</span> <span class="variable">*OSSL_CMP_ITAV_create</span><span class="operator">(</span><span class="variable">ASN1_OBJECT</span> <span class="variable">*type</span><span class="operator">,</span> <span class="variable">ASN1_TYPE</span> <span class="variable">*value</span><span class="operator">);</span>
+  <span class="variable">void</span> <span class="variable">OSSL_CMP_ITAV_set0</span><span class="operator">(</span><span class="variable">OSSL_CMP_ITAV</span> <span class="variable">*itav</span><span class="operator">,</span> <span class="variable">ASN1_OBJECT</span> <span class="variable">*type</span><span class="operator">,</span>
+                          <span class="variable">ASN1_TYPE</span> <span class="variable">*value</span><span class="operator">);</span>
+  <span class="variable">ASN1_OBJECT</span> <span class="variable">*OSSL_CMP_ITAV_get0_type</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CMP_ITAV</span> <span class="variable">*itav</span><span class="operator">);</span>
+  <span class="variable">ASN1_TYPE</span> <span class="variable">*OSSL_CMP_ITAV_get0_value</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CMP_ITAV</span> <span class="variable">*itav</span><span class="operator">);</span>
+</pre>
+<pre>
+  <span class="keyword">int</span> <span class="variable">OSSL_CMP_ITAV_push0_stack_item</span><span class="operator">(</span><span class="variable">STACK_OF</span><span class="operator">(</span><span class="variable">OSSL_CMP_ITAV</span><span class="operator">)</span> <span class="operator">**</span><span class="variable">itav_sk_p</span><span class="operator">,</span>
+                                     <span class="variable">OSSL_CMP_ITAV</span> <span class="variable">*itav</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Certificate Management Protocol (CMP, <a href="http://www.ietf.org/rfc/rfc4210.txt" class="rfc">RFC 4210</a>) extension to OpenSSL</p>
+<p>ITAV is short for InfoTypeAndValue. This type is defined in <a href="http://www.ietf.org/rfc/rfc4210.txt" class="rfc">RFC 4210</a>
+section 5.3.19 and Appendix F. It is used at various places in CMP messages,
+e.g., in the generalInfo PKIHeader field, to hold a key-value pair.</p>
+<p><code>OSSL_CMP_ITAV_create()</code> creates a new <strong>OSSL_CMP_ITAV</strong> structure and fills it in.
+It combines <code>OSSL_CMP_ITAV_new()</code> and OSSL_CMP_ITAV_set0().</p>
+<p>OSSL_CMP_ITAV_set0() sets the <em>itav</em> with an infoType of <em>type</em> and an
+infoValue of <em>value</em>. This function uses the pointers <em>type</em> and <em>value</em>
+internally, so they must <strong>not</strong> be freed up after the call.</p>
+<p>OSSL_CMP_ITAV_get0_type() returns a direct pointer to the infoType in the
+<em>itav</em>.</p>
+<p>OSSL_CMP_ITAV_get0_value() returns a direct pointer to the infoValue in
+the <em>itav</em> as generic <strong>ASN1_TYPE</strong> pointer.</p>
+<p>OSSL_CMP_ITAV_push0_stack_item() pushes <em>itav</em> to the stack pointed to
+by <em>*itav_sk_p</em>. It creates a new stack if <em>*itav_sk_p</em> points to NULL.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>CMP is defined in <a href="http://www.ietf.org/rfc/rfc4210.txt" class="rfc">RFC 4210</a> (and CRMF in <a href="http://www.ietf.org/rfc/rfc4211.txt" class="rfc">RFC 4211</a>).</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>OSSL_CMP_ITAV_create()</code> returns a pointer to the ITAV structure on success,
+or NULL on error.</p>
+<p>OSSL_CMP_ITAV_set0() does not return a value.</p>
+<p>OSSL_CMP_ITAV_get0_type() and OSSL_CMP_ITAV_get0_value()
+return the respective pointer or NULL if their input is NULL.</p>
+<p>OSSL_CMP_ITAV_push0_stack_item() returns 1 on success, 0 on error.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>The following code creates and sets a structure representing a generic
+InfoTypeAndValue sequence, using an OID created from text as type, and an
+integer as value. Afterwards, it is pushed to the <strong>OSSL_CMP_CTX</strong> to be later
+included in the requests' PKIHeader's genInfo field.</p>
+<pre>
+    <span class="variable">ASN1_OBJECT</span> <span class="variable">*type</span> <span class="operator">=</span> <span class="variable">OBJ_txt2obj</span><span class="operator">(</span><span class="string">"1.2.3.4.5"</span><span class="operator">,</span> <span class="number">1</span><span class="operator">);</span>
+    <span class="keyword">if</span> <span class="operator">(</span><span class="variable">type</span> <span class="operator">==</span> <span class="variable">NULL</span><span class="operator">)</span> <span class="operator">...</span>
+</pre>
+<pre>
+    <span class="variable">ASN1_INTEGER</span> <span class="variable">*asn1int</span> <span class="operator">=</span> <span class="variable">ASN1_INTEGER_new</span><span class="operator">();</span>
+    <span class="keyword">if</span> <span class="operator">(</span><span class="variable">asn1int</span> <span class="operator">==</span> <span class="variable">NULL</span> <span class="operator">||</span> <span class="operator">!</span><span class="variable">ASN1_INTEGER_set</span><span class="operator">(</span><span class="variable">asn1int</span><span class="operator">,</span> <span class="number">12345</span><span class="operator">))</span> <span class="operator">...</span>
+</pre>
+<pre>
+    <span class="variable">ASN1_TYPE</span> <span class="variable">*val</span> <span class="operator">=</span> <span class="variable">ASN1_TYPE_new</span><span class="operator">();</span>
+    <span class="keyword">if</span> <span class="operator">(</span><span class="variable">val</span> <span class="operator">==</span> <span class="variable">NULL</span><span class="operator">)</span> <span class="operator">...</span>
+    <span class="variable">ASN1_TYPE_set</span><span class="operator">(</span><span class="variable">val</span><span class="operator">,</span> <span class="variable">V_ASN1_INTEGER</span><span class="operator">,</span> <span class="variable">asn1int</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">OSSL_CMP_ITAV</span> <span class="variable">*itav</span> <span class="operator">=</span> <span class="variable">OSSL_CMP_ITAV_create</span><span class="operator">(</span><span class="variable">type</span><span class="operator">,</span> <span class="variable">val</span><span class="operator">);</span>
+    <span class="keyword">if</span> <span class="operator">(</span><span class="variable">itav</span> <span class="operator">==</span> <span class="variable">NULL</span><span class="operator">)</span> <span class="operator">...</span>
+</pre>
+<pre>
+    <span class="variable">OSSL_CMP_CTX</span> <span class="variable">*ctx</span> <span class="operator">=</span> <span class="variable">OSSL_CMP_CTX_new</span><span class="operator">();</span>
+    <span class="keyword">if</span> <span class="operator">(</span><span class="variable">ctx</span> <span class="operator">==</span> <span class="variable">NULL</span> <span class="operator">||</span> <span class="operator">!</span><span class="variable">OSSL_CMP_CTX_geninfo_push0_ITAV</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="variable">itav</span><span class="operator">))</span> <span class="operator">{</span>
+        <span class="variable">OSSL_CMP_ITAV_free</span><span class="operator">(</span><span class="variable">itav</span><span class="operator">);</span> <span class="regex">/* also frees type and val */</span>
+        <span class="keyword">goto</span> <span class="variable">err</span><span class="operator">;</span>
+    <span class="operator">}</span>
+</pre>
+<pre>
+    ...</pre>
+<pre>
+    <span class="variable">OSSL_CMP_CTX_free</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">);</span> <span class="regex">/* also frees itav */</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>OSSL_CMP_CTX_new(3)</em>, <em>OSSL_CMP_CTX_free(3)</em>, <em>ASN1_TYPE_set(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>The OpenSSL CMP support was added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2007-2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

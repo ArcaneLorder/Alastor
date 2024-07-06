@@ -1,0 +1,106 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>X509V3_set_ctx</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>X509V3_set_ctx,
+X509V3_set_issuer_pkey - X.509 v3 extension generation utilities</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/x509v3.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">void</span> <span class="variable">X509V3_set_ctx</span><span class="operator">(</span><span class="variable">X509V3_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">X509</span> <span class="variable">*issuer</span><span class="operator">,</span> <span class="variable">X509</span> <span class="variable">*subject</span><span class="operator">,</span>
+                     <span class="variable">X509_REQ</span> <span class="variable">*req</span><span class="operator">,</span> <span class="variable">X509_CRL</span> <span class="variable">*crl</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">flags</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">X509V3_set_issuer_pkey</span><span class="operator">(</span><span class="variable">X509V3_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>X509V3_set_ctx() fills in the basic fields of <em>ctx</em> of type <strong>X509V3_CTX</strong>,
+providing details potentially needed by functions producing X509 v3 extensions,
+e.g., to look up values for filling in authority key identifiers.
+Any of <em>subject</em>, <em>req</em>, or <em>crl</em> may be provided, pointing to a certificate,
+certification request, or certificate revocation list, respectively.
+When constructing the subject key identifier of a certificate by computing a
+hash value of its public key, the public key is taken from <em>subject</em> or <em>req</em>.
+Similarly, when constructing subject alternative names from any email addresses
+contained in a subject DN, the subject DN is taken from <em>subject</em> or <em>req</em>.
+If <em>subject</em> or <em>crl</em> is provided, <em>issuer</em> should point to its issuer,
+for instance to help generating an authority key identifier extension.
+Note that if <em>subject</em> is provided, <em>issuer</em> may be the same as <em>subject</em>,
+which means that <em>subject</em> is self-issued (or even self-signed).
+<em>flags</em> may be 0
+or contain <strong>X509V3_CTX_TEST</strong>, which means that just the syntax of
+extension definitions is to be checked without actually producing an extension,
+or <strong>X509V3_CTX_REPLACE</strong>, which means that each X.509v3 extension added as
+defined in some configuration section shall replace any already existing
+extension with the same OID.</p>
+<p>X509V3_set_issuer_pkey() explicitly sets the issuer private key of
+the certificate that has been provided in <em>ctx</em>.
+This should be done for self-issued certificates (which may be self-signed
+or not) to provide fallback data for the authority key identifier extension.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>X509V3_set_ctx() and X509V3_set_issuer_pkey()
+return 1 on success and 0 on error.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>X509_add_ext(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>X509V3_set_issuer_pkey() was added in OpenSSL 3.0.</p>
+<p>CTX_TEST was deprecated in OpenSSL 3.0; use X509V3_CTX_TEST instead.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2015-2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

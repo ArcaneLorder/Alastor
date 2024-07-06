@@ -1,0 +1,114 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OSSL_DISPATCH</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#ossl_dispatch_fields"><strong>OSSL_DISPATCH</strong> fields</a></li>
+	</ul>
+
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>OSSL_DISPATCH - OpenSSL Core type to define a dispatchable function table</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/core.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">typedef</span> <span class="variable">struct</span> <span class="variable">ossl_dispatch_st</span> <span class="variable">OSSL_DISPATCH</span><span class="operator">;</span>
+ <span class="variable">struct</span> <span class="variable">ossl_dispatch_st</span> <span class="operator">{</span>
+     <span class="keyword">int</span> <span class="variable">function_id</span><span class="operator">;</span>
+     <span class="variable">void</span> <span class="operator">(</span><span class="variable">*function</span><span class="operator">)(</span><span class="variable">void</span><span class="operator">);</span>
+ <span class="operator">};</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This type is a tuple of function identity and function pointer.
+Arrays of this type are passed between the OpenSSL libraries and the
+providers to describe what functionality one side provides to the other.</p>
+<p>Arrays of this type must be terminated with a tuple having function identity
+zero and function pointer NULL.</p>
+<p>
+</p>
+<h2><a name="ossl_dispatch_fields"><strong>OSSL_DISPATCH</strong> fields</a></h2>
+<dl>
+<dt><strong><a name="function_id" class="item"><em>function_id</em></a></strong></dt>
+
+<dd>
+<p>OpenSSL defined function identity of the implemented function.</p>
+</dd>
+<dt><strong><a name="function" class="item"><em>function</em></a></strong></dt>
+
+<dd>
+<p>Pointer to the implemented function itself.  Despite the generic definition
+of this field, the implemented function it points to must have a function
+signature that corresponds to the <em>function_id</em></p>
+</dd>
+</dl>
+<p>Available function identities and corresponding function signatures are
+defined in <em>openssl-core_dispatch.h(7)</em>.
+Furthermore, the chosen function identities and associated function
+signature must be chosen specifically for the operation that it's intended
+for, as determined by the intended <em>OSSL_ALGORITHM(3)</em> array.</p>
+<p>Any function identity not recognised by the recipient of this type
+will be ignored.
+This ensures that providers built with one OpenSSL version in mind
+will work together with any other OpenSSL version that supports this
+mechanism.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>crypto(7)</em>, <em>openssl-core_dispatch.h(7)</em>, <em>OSSL_ALGORITHM(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><strong>OSSL_DISPATCH</strong> was added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2022 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

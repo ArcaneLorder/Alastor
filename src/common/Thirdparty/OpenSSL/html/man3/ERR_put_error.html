@@ -1,0 +1,218 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ERR_put_error</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#reporting_errors">Reporting errors</a></li>
+		<ul>
+
+			<li><a href="#openssl_library_reports">OpenSSL library reports</a></li>
+			<li><a href="#other_pieces_of_software">Other pieces of software</a></li>
+		</ul>
+
+	</ul>
+
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>ERR_raise, ERR_raise_data,
+ERR_put_error, ERR_add_error_data, ERR_add_error_vdata,
+ERR_add_error_txt, ERR_add_error_mem_bio
+- record an error</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/err.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">void</span> <span class="variable">ERR_raise</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">lib</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">reason</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">ERR_raise_data</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">lib</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">reason</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*fmt</span><span class="operator">,</span> <span class="operator">...);</span>
+</pre>
+<pre>
+ <span class="variable">void</span> <span class="variable">ERR_add_error_data</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">num</span><span class="operator">,</span> <span class="operator">...);</span>
+ <span class="variable">void</span> <span class="variable">ERR_add_error_vdata</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">num</span><span class="operator">,</span> <span class="variable">va_list</span> <span class="variable">arg</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">ERR_add_error_txt</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*sep</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*txt</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">ERR_add_error_mem_bio</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*sep</span><span class="operator">,</span> <span class="variable">BIO</span> <span class="variable">*bio</span><span class="operator">);</span>
+</pre>
+<p>The following function has been deprecated since OpenSSL 3.0, and can be
+hidden entirely by defining <strong>OPENSSL_API_COMPAT</strong> with a suitable version value,
+see <em>openssl_user_macros(7)</em>:</p>
+<pre>
+ <span class="variable">void</span> <span class="variable">ERR_put_error</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">lib</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">func</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">reason</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*file</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">line</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>ERR_raise()</code> adds a new error to the thread's error queue.  The
+error occurred in the library <strong>lib</strong> for the reason given by the
+<strong>reason</strong> code.  Furthermore, the name of the file, the line, and name
+of the function where the error occurred is saved with the error
+record.</p>
+<p><code>ERR_raise_data()</code> does the same thing as <code>ERR_raise()</code>, but also lets the
+caller specify additional information as a format string <strong>fmt</strong> and an
+arbitrary number of values, which are processed with <em>BIO_snprintf(3)</em>.</p>
+<p><code>ERR_put_error()</code> adds an error code to the thread's error queue. It
+signals that the error of reason code <strong>reason</strong> occurred in function
+<strong>func</strong> of library <strong>lib</strong>, in line number <strong>line</strong> of <strong>file</strong>.
+This function is usually called by a macro.</p>
+<p><code>ERR_add_error_data()</code> associates the concatenation of its <strong>num</strong> string
+arguments as additional data with the error code added last.
+<code>ERR_add_error_vdata()</code> is similar except the argument is a <strong>va_list</strong>.
+Multiple calls to these functions append to the current top of the error queue.
+The total length of the string data per error is limited to 4096 characters.</p>
+<p><code>ERR_add_error_txt()</code> appends the given text string as additional data to the
+last error queue entry, after inserting the optional separator string if it is
+not NULL and the top error entry does not yet have additional data.
+In case the separator is at the end of the text it is not appended to the data.
+The <strong>sep</strong> argument may be for instance &quot;\n&quot; to insert a line break when needed.
+If the associated data would become more than 4096 characters long
+(which is the limit given above)
+it is split over sufficiently many new copies of the last error queue entry.</p>
+<p><code>ERR_add_error_mem_bio()</code> is the same as <code>ERR_add_error_txt()</code> except that
+the text string is taken from the given memory BIO.
+It appends '\0' to the BIO contents if not already NUL-terminated.</p>
+<p><em>ERR_load_strings(3)</em> can be used to register
+error strings so that the application can a generate human-readable
+error messages for the error code.</p>
+<p>
+</p>
+<h2><a name="reporting_errors">Reporting errors</a></h2>
+<p>
+</p>
+<h3><a name="openssl_library_reports">OpenSSL library reports</a></h3>
+<p>Each OpenSSL sub-library has library code <strong>ERR_LIB_XXX</strong> and has its own set
+of reason codes <strong>XXX_R_...</strong>.  These are both passed in combination to
+<code>ERR_raise()</code> and <code>ERR_raise_data()</code>, and the combination ultimately produces
+the correct error text for the reported error.</p>
+<p>All these macros and the numbers they have as values are specific to
+OpenSSL's libraries.  OpenSSL reason codes normally consist of textual error
+descriptions. For example, the function ssl3_read_bytes() reports a
+&quot;handshake failure&quot; as follows:</p>
+<pre>
+ <span class="variable">ERR_raise</span><span class="operator">(</span><span class="variable">ERR_LIB_SSL</span><span class="operator">,</span> <span class="variable">SSL_R_SSL_HANDSHAKE_FAILURE</span><span class="operator">);</span>
+</pre>
+<p>There are two exceptions:</p>
+<dl>
+<dt><strong><a name="err_lib_sys" class="item"><strong>ERR_LIB_SYS</strong></a></strong></dt>
+
+<dd>
+<p>This &quot;library code&quot; indicates that a system error is being reported.  In
+this case, the reason code given to <code>ERR_raise()</code> and <code>ERR_raise_data()</code> <em>must</em>
+be <em>errno(3)</em>.</p>
+<pre>
+ <span class="variable">ERR_raise</span><span class="operator">(</span><span class="variable">ERR_LIB_SYS</span><span class="operator">,</span> <span class="variable">errno</span><span class="operator">);</span>
+</pre>
+</dd>
+<dt><strong><a name="err_r_xxx" class="item"><strong>ERR_R_XXX</strong></a></strong></dt>
+
+<dd>
+<p>This set of error codes is considered global, and may be used in combination
+with any sub-library code.</p>
+<pre>
+ <span class="variable">ERR_raise</span><span class="operator">(</span><span class="variable">ERR_LIB_RSA</span><span class="operator">,</span> <span class="variable">ERR_R_PASSED_INVALID_ARGUMENT</span><span class="operator">);</span>
+</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="other_pieces_of_software">Other pieces of software</a></h3>
+<p>Other pieces of software that may want to use OpenSSL's error reporting
+system, such as engines or applications, must normally get their own
+numbers.</p>
+<ul>
+<li>
+<p>To get a &quot;library&quot; code, call <em>ERR_get_next_error_library(3)</em>; this gives
+the calling code a dynamic number, usable for the duration of the process.</p>
+</li>
+<li>
+<p>Reason codes for each such &quot;library&quot; are determined or generated by the
+authors of that code.  They must be numbers in the range 1 to 524287 (in
+other words, they must be nonzero unsigned 18 bit integers).</p>
+</li>
+</ul>
+<p>The exceptions mentioned in <a href="#openssl_library_reports">OpenSSL library reports</a> above are valid for
+other pieces of software, i.e. they may use <strong>ERR_LIB_SYS</strong> to report system
+errors:</p>
+<pre>
+ <span class="variable">ERR_raise</span><span class="operator">(</span><span class="variable">ERR_LIB_SYS</span><span class="operator">,</span> <span class="variable">errno</span><span class="operator">);</span>
+</pre>
+<p>... and they may use <strong>ERR_R_XXX</strong> macros together with their own &quot;library&quot;
+code.</p>
+<pre>
+ <span class="keyword">int</span> <span class="variable">app_lib_code</span> <span class="operator">=</span> <span class="variable">ERR_get_next_error_library</span><span class="operator">();</span>
+</pre>
+<pre>
+ /* ... */</pre>
+<pre>
+ <span class="variable">ERR_raise</span><span class="operator">(</span><span class="variable">app_lib_code</span><span class="operator">,</span> <span class="variable">ERR_R_PASSED_INVALID_ARGUMENT</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>ERR_raise()</code>, <code>ERR_raise_data()</code>, <code>ERR_put_error()</code>,
+<code>ERR_add_error_data()</code>, <code>ERR_add_error_vdata()</code>
+<code>ERR_add_error_txt()</code>, and <code>ERR_add_error_mem_bio()</code>
+return no values.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p><code>ERR_raise()</code>, <code>ERR_raise()</code> and <code>ERR_put_error()</code> are implemented as macros.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>ERR_load_strings(3)</em>, <em>ERR_get_next_error_library(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>ERR_raise, ERR_raise_data, <code>ERR_add_error_txt()</code> and <code>ERR_add_error_mem_bio()</code>
+were added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

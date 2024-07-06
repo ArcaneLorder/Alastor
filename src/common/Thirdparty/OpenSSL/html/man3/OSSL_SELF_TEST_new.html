@@ -1,0 +1,213 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OSSL_SELF_TEST_new</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>OSSL_SELF_TEST_new,
+OSSL_SELF_TEST_free,
+OSSL_SELF_TEST_onbegin,
+OSSL_SELF_TEST_oncorrupt_byte,
+OSSL_SELF_TEST_onend - functionality to trigger a callback during a self test</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/self_test.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">OSSL_SELF_TEST</span> <span class="variable">*OSSL_SELF_TEST_new</span><span class="operator">(</span><span class="variable">OSSL_CALLBACK</span> <span class="variable">*cb</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*cbarg</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">OSSL_SELF_TEST_free</span><span class="operator">(</span><span class="variable">OSSL_SELF_TEST</span> <span class="variable">*st</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">void</span> <span class="variable">OSSL_SELF_TEST_onbegin</span><span class="operator">(</span><span class="variable">OSSL_SELF_TEST</span> <span class="variable">*st</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*type</span><span class="operator">,</span>
+                             <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*desc</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_SELF_TEST_oncorrupt_byte</span><span class="operator">(</span><span class="variable">OSSL_SELF_TEST</span> <span class="variable">*st</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*bytes</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">OSSL_SELF_TEST_onend</span><span class="operator">(</span><span class="variable">OSSL_SELF_TEST</span> <span class="variable">*st</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">ret</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>These methods are intended for use by provider implementers, to display
+diagnostic information during self testing.</p>
+<p><code>OSSL_SELF_TEST_new()</code> allocates an opaque <strong>OSSL_SELF_TEST</strong> object that has a
+callback and callback argument associated with it.</p>
+<p>The callback <em>cb</em> may be triggered multiple times by a self test to indicate
+different phases.</p>
+<p><code>OSSL_SELF_TEST_free()</code> frees the space allocated by <code>OSSL_SELF_TEST_new()</code>.</p>
+<p><code>OSSL_SELF_TEST_onbegin()</code> may be inserted at the start of a block of self test
+code. It can be used for diagnostic purposes.
+If this method is called the callback <em>cb</em> will receive the following
+<em>OSSL_PARAM(3)</em> object.</p>
+<dl>
+<dt><strong><a name="st_phase_ossl_prov_param_self_test_phase_utf8_string" class="item">&quot;st-phase&quot; (<strong>OSSL_PROV_PARAM_SELF_TEST_PHASE</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>The value is the string &quot;Start&quot;</p>
+</dd>
+</dl>
+<p><code>OSSL_SELF_TEST_oncorrupt_byte()</code> may be inserted just after the known answer is
+calculated, but before the self test compares the result. The first byte in the
+passed in array of <em>bytes</em> will be corrupted if the callback returns 0,
+otherwise it leaves the array unaltered. It can be used for failure testing.
+The <em>type</em> and <em>desc</em> can be used to identify an individual self test to
+target for failure testing.
+If this method is called the callback <em>cb</em> will receive the following
+<em>OSSL_PARAM(3)</em> object.</p>
+<dl>
+<dt><strong><a name="st_phase_ossl_prov_param_self_test_phase_utf8_string2" class="item">&quot;st-phase&quot; (<strong>OSSL_PROV_PARAM_SELF_TEST_PHASE</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>The value is the string &quot;Corrupt&quot;</p>
+</dd>
+</dl>
+<p><code>OSSL_SELF_TEST_onend()</code> may be inserted at the end of a block of self test code
+just before cleanup to indicate if the test passed or failed. It can be used for
+diagnostic purposes.
+If this method is called the callback <em>cb</em> will receive the following
+<em>OSSL_PARAM(3)</em> object.</p>
+<dl>
+<dt><strong><a name="st_phase_ossl_prov_param_self_test_phase_utf8_string3" class="item">&quot;st-phase&quot; (<strong>OSSL_PROV_PARAM_SELF_TEST_PHASE</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>The value of the string is &quot;Pass&quot; if <em>ret</em> is non zero, otherwise it has the
+value &quot;Fail&quot;.</p>
+</dd>
+</dl>
+<p>After the callback <em>cb</em> has been called the values that were set by
+<code>OSSL_SELF_TEST_onbegin()</code> for <em>type</em> and <em>desc</em> are set to the value &quot;None&quot;.</p>
+<p>If <code>OSSL_SELF_TEST_onbegin()</code>, <code>OSSL_SELF_TEST_oncorrupt_byte()</code> or
+<code>OSSL_SELF_TEST_onend()</code> is called the following additional <em>OSSL_PARAM(3)</em> are
+passed to the callback.</p>
+<dl>
+<dt><strong><a name="st_type_ossl_prov_param_self_test_type_utf8_string" class="item">&quot;st-type&quot; (<strong>OSSL_PROV_PARAM_SELF_TEST_TYPE</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>The value is setup by the <em>type</em> passed to <code>OSSL_SELF_TEST_onbegin()</code>.
+This allows the callback to identify the type of test being run.</p>
+</dd>
+<dt><strong><a name="st_desc_ossl_prov_param_self_test_desc_utf8_string" class="item">&quot;st-desc&quot; (<strong>OSSL_PROV_PARAM_SELF_TEST_DESC</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>The value is setup by the <em>type</em> passed to <code>OSSL_SELF_TEST_onbegin()</code>.
+This allows the callback to identify the sub category of the test being run.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>OSSL_SELF_TEST_new()</code> returns the allocated <strong>OSSL_SELF_TEST</strong> object, or NULL if
+it fails.</p>
+<p><code>OSSL_SELF_TEST_oncorrupt_byte()</code> returns 1 if corruption occurs, otherwise it
+returns 0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>A single self test could be set up in the following way:</p>
+<pre>
+    <span class="variable">OSSL_SELF_TEST</span> <span class="variable">*st</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+    <span class="variable">OSSL_CALLBACK</span> <span class="variable">*cb</span><span class="operator">;</span>
+    <span class="variable">void</span> <span class="variable">*cbarg</span><span class="operator">;</span>
+    <span class="keyword">int</span> <span class="variable">ok</span> <span class="operator">=</span> <span class="number">0</span><span class="operator">;</span>
+    <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">out</span><span class="operator">[</span><span class="variable">EVP_MAX_MD_SIZE</span><span class="operator">]</span><span class="operator">;</span>
+    <span class="variable">unsigned</span> <span class="keyword">int</span> <span class="variable">out_len</span> <span class="operator">=</span> <span class="number">0</span><span class="operator">;</span>
+    <span class="variable">EVP_MD_CTX</span> <span class="variable">*ctx</span> <span class="operator">=</span> <span class="variable">EVP_MD_CTX_new</span><span class="operator">();</span>
+    <span class="variable">EVP_MD</span> <span class="variable">*md</span> <span class="operator">=</span> <span class="variable">EVP_MD_fetch</span><span class="operator">(</span><span class="variable">libctx</span><span class="operator">,</span> <span class="variable">t</span><span class="operator">-&gt;</span><span class="variable">algorithm</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="regex">/*
+     * Retrieve the callback - will be NULL if not set by the application via
+     * OSSL_SELF_TEST_set_callback().
+     */</span>
+    <span class="variable">OSSL_SELF_TEST_get_callback</span><span class="operator">(</span><span class="variable">libctx</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">cb</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">cbarg</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">st</span> <span class="operator">=</span> <span class="variable">OSSL_SELF_TEST_new</span><span class="operator">(</span><span class="variable">cb</span><span class="operator">,</span> <span class="variable">cb_arg</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="regex">/* Trigger the optional callback */</span>
+    <span class="variable">OSSL_SELF_TEST_onbegin</span><span class="operator">(</span><span class="variable">st</span><span class="operator">,</span> <span class="variable">OSSL_SELF_TEST_TYPE_KAT_DIGEST</span><span class="operator">,</span>
+                           <span class="variable">OSSL_SELF_TEST_DESC_MD_SHA2</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">EVP_DigestInit_ex</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="variable">md</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">)</span>
+        <span class="operator">||</span> <span class="operator">!</span><span class="variable">EVP_DigestUpdate</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="variable">pt</span><span class="operator">,</span> <span class="variable">pt_len</span><span class="operator">)</span>
+        <span class="operator">||</span> <span class="operator">!</span><span class="variable">EVP_DigestFinal</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="variable">out</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">out_len</span><span class="operator">))</span>
+        <span class="keyword">goto</span> <span class="variable">err</span><span class="operator">;</span>
+</pre>
+<pre>
+    <span class="regex">/* Optional corruption - If the application callback returns 0 */</span>
+    <span class="variable">OSSL_SELF_TEST_oncorrupt_byte</span><span class="operator">(</span><span class="variable">st</span><span class="operator">,</span> <span class="variable">out</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="keyword">if</span> <span class="operator">(</span><span class="variable">out_len</span> <span class="operator">!=</span> <span class="variable">t</span><span class="operator">-&gt;</span><span class="variable">expected_len</span>
+        <span class="operator">||</span> <span class="variable">memcmp</span><span class="operator">(</span><span class="variable">out</span><span class="operator">,</span> <span class="variable">t</span><span class="operator">-&gt;</span><span class="variable">expected</span><span class="operator">,</span> <span class="variable">out_len</span><span class="operator">)</span> <span class="operator">!=</span> <span class="number">0</span><span class="operator">)</span>
+        <span class="keyword">goto</span> <span class="variable">err</span><span class="operator">;</span>
+    <span class="variable">ok</span> <span class="operator">=</span> <span class="number">1</span><span class="operator">;</span>
+      <span class="variable">err</span><span class="operator">:</span>
+    <span class="variable">OSSL_SELF_TEST_onend</span><span class="operator">(</span><span class="variable">st</span><span class="operator">,</span> <span class="variable">ok</span><span class="operator">);</span>
+    <span class="variable">EVP_MD_free</span><span class="operator">(</span><span class="variable">md</span><span class="operator">);</span>
+    <span class="variable">EVP_MD_CTX_free</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">);</span>
+</pre>
+<p>Multiple self test's can be set up in a similar way by repeating the pattern of
+<code>OSSL_SELF_TEST_onbegin()</code>, <code>OSSL_SELF_TEST_oncorrupt_byte()</code>, <code>OSSL_SELF_TEST_onend()</code>
+for each test.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>OSSL_SELF_TEST_set_callback(3)</em>,
+<em>openssl-core.h(7)</em>,
+<em>OSSL_PROVIDER-FIPS(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>The functions described here were added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2020-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

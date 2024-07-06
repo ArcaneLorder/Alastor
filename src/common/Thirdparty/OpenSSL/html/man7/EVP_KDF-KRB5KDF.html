@@ -1,0 +1,163 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_KDF-KRB5KDF</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#identity">Identity</a></li>
+		<li><a href="#supported_parameters">Supported parameters</a></li>
+	</ul>
+
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#conforming_to">CONFORMING TO</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_KDF-KRB5KDF - The <a href="http://www.ietf.org/rfc/rfc3961.txt" class="rfc">RFC3961</a> Krb5 KDF EVP_KDF implementation</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Support for computing the <strong>KRB5KDF</strong> KDF through the <strong>EVP_KDF</strong> API.</p>
+<p>The EVP_KDF-KRB5KDF algorithm implements the key derivation function defined
+in <a href="http://www.ietf.org/rfc/rfc3961.txt" class="rfc">RFC 3961</a>, section 5.1 and is used by Krb5 to derive session keys.
+Three inputs are required to perform key derivation: a cipher, (for example
+AES-128-CBC), the initial key, and a constant.</p>
+<p>
+</p>
+<h2><a name="identity">Identity</a></h2>
+<p>&quot;KRB5KDF&quot; is the name for this implementation;
+it can be used with the <code>EVP_KDF_fetch()</code> function.</p>
+<p>
+</p>
+<h2><a name="supported_parameters">Supported parameters</a></h2>
+<p>The supported parameters are:</p>
+<dl>
+<dt><strong><a name="properties_ossl_kdf_param_properties_utf8_string" class="item">&quot;properties&quot; (<strong>OSSL_KDF_PARAM_PROPERTIES</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dt><strong><a name="cipher_ossl_kdf_param_cipher_utf8_string" class="item">&quot;cipher&quot; (<strong>OSSL_KDF_PARAM_CIPHER</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dt><strong><a name="key_ossl_kdf_param_key_octet_string" class="item">&quot;key&quot; (<strong>OSSL_KDF_PARAM_KEY</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>These parameters work as described in <em>EVP_KDF(3)/PARAMETERS</em>.</p>
+</dd>
+<dt><strong><a name="constant_ossl_kdf_param_constant_octet_string" class="item">&quot;constant&quot; (<strong>OSSL_KDF_PARAM_CONSTANT</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>This parameter sets the constant value for the KDF.
+If a value is already set, the contents are replaced.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>A context for KRB5KDF can be obtained by calling:</p>
+<pre>
+ <span class="variable">EVP_KDF</span> <span class="variable">*kdf</span> <span class="operator">=</span> <span class="variable">EVP_KDF_fetch</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"KRB5KDF"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+ <span class="variable">EVP_KDF_CTX</span> <span class="variable">*kctx</span> <span class="operator">=</span> <span class="variable">EVP_KDF_CTX_new</span><span class="operator">(</span><span class="variable">kdf</span><span class="operator">);</span>
+</pre>
+<p>The output length of the KRB5KDF derivation is specified via the <em>keylen</em>
+parameter to the <em>EVP_KDF_derive(3)</em> function, and MUST match the key
+length for the chosen cipher or an error is returned. Moreover, the
+constant's length must not exceed the block size of the cipher.
+Since the KRB5KDF output length depends on the chosen cipher, calling
+<em>EVP_KDF_CTX_get_kdf_size(3)</em> to obtain the requisite length returns the correct length
+only after the cipher is set. Prior to that <strong>EVP_MAX_KEY_LENGTH</strong> is returned.
+The caller must allocate a buffer of the correct length for the chosen
+cipher, and pass that buffer to the <em>EVP_KDF_derive(3)</em> function along
+with that length.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>This example derives a key using the AES-128-CBC cipher:</p>
+<pre>
+ <span class="variable">EVP_KDF</span> <span class="variable">*kdf</span><span class="operator">;</span>
+ <span class="variable">EVP_KDF_CTX</span> <span class="variable">*kctx</span><span class="operator">;</span>
+ <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">key</span><span class="operator">[</span><span class="number">16</span><span class="operator">]</span> <span class="operator">=</span> <span class="string">"01234..."</span><span class="operator">;</span>
+ <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">constant</span><span class="operator">[]</span> <span class="operator">=</span> <span class="string">"I'm a constant"</span><span class="operator">;</span>
+ <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">out</span><span class="operator">[</span><span class="number">16</span><span class="operator">]</span><span class="operator">;</span>
+ <span class="variable">size_t</span> <span class="variable">outlen</span> <span class="operator">=</span> <span class="variable">sizeof</span><span class="operator">(</span><span class="variable">out</span><span class="operator">);</span>
+ <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[</span><span class="number">4</span><span class="operator">]</span><span class="operator">,</span> <span class="variable">*p</span> <span class="operator">=</span> <span class="variable">params</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">kdf</span> <span class="operator">=</span> <span class="variable">EVP_KDF_fetch</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"KRB5KDF"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+ <span class="variable">kctx</span> <span class="operator">=</span> <span class="variable">EVP_KDF_CTX_new</span><span class="operator">(</span><span class="variable">kdf</span><span class="operator">);</span>
+ <span class="variable">EVP_KDF_free</span><span class="operator">(</span><span class="variable">kdf</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">*p</span><span class="operator">++</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_utf8_string</span><span class="operator">(</span><span class="variable">OSSL_KDF_PARAM_CIPHER</span><span class="operator">,</span>
+                                         <span class="variable">SN_aes_128_cbc</span><span class="operator">,</span>
+                                         <span class="variable">strlen</span><span class="operator">(</span><span class="variable">SN_aes_128_cbc</span><span class="operator">));</span>
+ <span class="variable">*p</span><span class="operator">++</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_octet_string</span><span class="operator">(</span><span class="variable">OSSL_KDF_PARAM_KEY</span><span class="operator">,</span>
+                                          <span class="variable">key</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">size_t</span><span class="operator">)</span><span class="number">16</span><span class="operator">);</span>
+ <span class="variable">*p</span><span class="operator">++</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_octet_string</span><span class="operator">(</span><span class="variable">OSSL_KDF_PARAM_CONSTANT</span><span class="operator">,</span>
+                                          <span class="variable">constant</span><span class="operator">,</span> <span class="variable">strlen</span><span class="operator">(</span><span class="variable">constant</span><span class="operator">));</span>
+ <span class="variable">*p</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_end</span><span class="operator">();</span>
+ <span class="keyword">if</span> <span class="operator">(</span><span class="variable">EVP_KDF_derive</span><span class="operator">(</span><span class="variable">kctx</span><span class="operator">,</span> <span class="variable">out</span><span class="operator">,</span> <span class="variable">outlen</span><span class="operator">,</span> <span class="variable">params</span><span class="operator">)</span> <span class="operator">&lt;=</span> <span class="number">0</span><span class="operator">)</span>
+     <span class="operator">/*</span> <span class="variable">Error</span> <span class="operator">*/</span>
+</pre>
+<pre>
+ <span class="variable">EVP_KDF_CTX_free</span><span class="operator">(</span><span class="variable">kctx</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="conforming_to">CONFORMING TO</a></h1>
+<p>RFC 3961</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_KDF(3)</em>,
+<em>EVP_KDF_CTX_free(3)</em>,
+<em>EVP_KDF_CTX_get_kdf_size(3)</em>,
+<em>EVP_KDF_derive(3)</em>,
+<em>EVP_KDF(3)/PARAMETERS</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>This functionality was added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2016-2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>
