@@ -1,2 +1,8 @@
 # Alastor
-C++ Function Utils
+Multifunctional Functions C++ Library
+# OS
+- Windows
+- Linux
+# List
+- Logger
+> Support multi-thread 
