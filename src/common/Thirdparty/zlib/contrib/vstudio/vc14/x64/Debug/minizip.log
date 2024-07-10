@@ -1,5 +1,0 @@
-﻿cl : 命令行  warning D9035: “Gm”选项已否决，并将在将来的版本中移除
-  minizip.c
-D:\Code\Alastor\Thirdparty\zlib\contrib\minizip\minizip.c(203,25): warning C4267: “=”: 从“size_t”转换到“unsigned long”，可能丢失数据
-D:\Code\Alastor\Thirdparty\zlib\contrib\minizip\minizip.c(421,56): warning C4267: “函数”: 从“size_t”转换到“unsigned long”，可能丢失数据
-  minizip.vcxproj -> D:\Code\Alastor\Thirdparty\zlib\contrib\vstudio\vc14\x64\Debug\minizip.exe
