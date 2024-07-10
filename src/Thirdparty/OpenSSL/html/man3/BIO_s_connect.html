@@ -1,0 +1,230 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>BIO_s_connect</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>BIO_s_connect, BIO_new_connect,
+BIO_set_conn_hostname, BIO_set_conn_port,
+BIO_set_conn_address, BIO_set_conn_ip_family,
+BIO_get_conn_hostname, BIO_get_conn_port,
+BIO_get_conn_address, BIO_get_conn_ip_family,
+BIO_set_nbio, BIO_do_connect - connect BIO</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/bio.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">const</span> <span class="variable">BIO_METHOD</span> <span class="variable">*BIO_s_connect</span><span class="operator">(</span><span class="variable">void</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">BIO</span> <span class="variable">*BIO_new_connect</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*name</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">long</span> <span class="variable">BIO_set_conn_hostname</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">,</span> <span class="variable">char</span> <span class="variable">*name</span><span class="operator">);</span>
+ <span class="variable">long</span> <span class="variable">BIO_set_conn_port</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">,</span> <span class="variable">char</span> <span class="variable">*port</span><span class="operator">);</span>
+ <span class="variable">long</span> <span class="variable">BIO_set_conn_address</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">,</span> <span class="variable">BIO_ADDR</span> <span class="variable">*addr</span><span class="operator">);</span>
+ <span class="variable">long</span> <span class="variable">BIO_set_conn_ip_family</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">,</span> <span class="variable">long</span> <span class="variable">family</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*BIO_get_conn_hostname</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*BIO_get_conn_port</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">BIO_ADDR</span> <span class="variable">*BIO_get_conn_address</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">long</span> <span class="variable">BIO_get_conn_ip_family</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">long</span> <span class="variable">BIO_set_nbio</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">,</span> <span class="variable">long</span> <span class="variable">n</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">long</span> <span class="variable">BIO_do_connect</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*b</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>BIO_s_connect()</code> returns the connect BIO method. This is a wrapper
+round the platform's TCP/IP socket connection routines.</p>
+<p>Using connect BIOs, TCP/IP connections can be made and data
+transferred using only BIO routines. In this way any platform
+specific operations are hidden by the BIO abstraction.</p>
+<p>Read and write operations on a connect BIO will perform I/O
+on the underlying connection. If no connection is established
+and the port and hostname (see below) is set up properly then
+a connection is established first.</p>
+<p>Connect BIOs support <code>BIO_puts()</code> but not <code>BIO_gets()</code>.</p>
+<p>If the close flag is set on a connect BIO then any active
+connection is shutdown and the socket closed when the BIO
+is freed.</p>
+<p>Calling <code>BIO_reset()</code> on a connect BIO will close any active
+connection and reset the BIO into a state where it can connect
+to the same host again.</p>
+<p><code>BIO_new_connect()</code> combines <code>BIO_new()</code> and <code>BIO_set_conn_hostname()</code> into
+a single call: that is it creates a new connect BIO with hostname <strong>name</strong>.</p>
+<p><code>BIO_set_conn_hostname()</code> uses the string <strong>name</strong> to set the hostname.
+The hostname can be an IP address; if the address is an IPv6 one, it
+must be enclosed with brackets <code>[</code> and <code>]</code>.
+The hostname can also include the port in the form hostname:port;
+see <em>BIO_parse_hostserv(3)</em> and <code>BIO_set_conn_port()</code> for details.</p>
+<p><code>BIO_set_conn_port()</code> sets the port to <strong>port</strong>. <strong>port</strong> can be the
+numerical form or a service string such as &quot;http&quot;, which
+will be mapped to a port number using the system function <code>getservbyname()</code>.</p>
+<p><code>BIO_set_conn_address()</code> sets the address and port information using
+a <code>BIO_ADDR(3ssl)</code>.</p>
+<p><code>BIO_set_conn_ip_family()</code> sets the IP family.</p>
+<p><code>BIO_get_conn_hostname()</code> returns the hostname of the connect BIO or
+NULL if the BIO is initialized but no hostname is set.
+This return value is an internal pointer which should not be modified.</p>
+<p><code>BIO_get_conn_port()</code> returns the port as a string.
+This return value is an internal pointer which should not be modified.</p>
+<p><code>BIO_get_conn_address()</code> returns the address information as a BIO_ADDR.
+This return value is an internal pointer which should not be modified.</p>
+<p><code>BIO_get_conn_ip_family()</code> returns the IP family of the connect BIO.</p>
+<p><code>BIO_set_nbio()</code> sets the non blocking I/O flag to <strong>n</strong>. If <strong>n</strong> is
+zero then blocking I/O is set. If <strong>n</strong> is 1 then non blocking I/O
+is set. Blocking I/O is the default. The call to <code>BIO_set_nbio()</code>
+should be made before the connection is established because
+non blocking I/O is set during the connect process.</p>
+<p><code>BIO_do_connect()</code> attempts to connect the supplied BIO.
+This performs an SSL/TLS handshake as far as supported by the BIO.
+For non-SSL BIOs the connection is done typically at TCP level.
+If domain name resolution yields multiple IP addresses all of them are tried
+after <code>connect()</code> failures.
+The function returns 1 if the connection was established successfully.
+A zero or negative value is returned if the connection could not be established.
+The call <code>BIO_should_retry()</code> should be used for non blocking connect BIOs
+to determine if the call should be retried.
+If a connection has already been established this call has no effect.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>If blocking I/O is set then a non positive return value from any
+I/O call is caused by an error condition, although a zero return
+will normally mean that the connection was closed.</p>
+<p>If the port name is supplied as part of the hostname then this will
+override any value set with <code>BIO_set_conn_port()</code>. This may be undesirable
+if the application does not wish to allow connection to arbitrary
+ports. This can be avoided by checking for the presence of the ':'
+character in the passed hostname and either indicating an error or
+truncating the string at that point.</p>
+<p>The values returned by <code>BIO_get_conn_hostname()</code>, <code>BIO_get_conn_address()</code>,
+and <code>BIO_get_conn_port()</code> are updated when a connection attempt is made.
+Before any connection attempt the values returned are those set by the
+application itself.</p>
+<p>Applications do not have to call <code>BIO_do_connect()</code> but may wish to do
+so to separate the connection process from other I/O processing.</p>
+<p>If non blocking I/O is set then retries will be requested as appropriate.</p>
+<p>It addition to <code>BIO_should_read()</code> and <code>BIO_should_write()</code> it is also
+possible for <code>BIO_should_io_special()</code> to be true during the initial
+connection process with the reason BIO_RR_CONNECT. If this is returned
+then this is an indication that a connection attempt would block,
+the application should then take appropriate action to wait until
+the underlying socket has connected and retry the call.</p>
+<p><code>BIO_set_conn_hostname()</code>, <code>BIO_set_conn_port()</code>, <code>BIO_get_conn_hostname()</code>,
+<code>BIO_set_conn_address()</code>, <code>BIO_get_conn_port()</code>, <code>BIO_get_conn_address()</code>,
+<code>BIO_set_conn_ip_family()</code>, <code>BIO_get_conn_ip_family()</code>,
+<code>BIO_set_nbio()</code>, and <code>BIO_do_connect()</code> are macros.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>BIO_s_connect()</code> returns the connect BIO method.</p>
+<p><code>BIO_set_conn_address()</code>, <code>BIO_set_conn_port()</code>, and <code>BIO_set_conn_ip_family()</code>
+return 1 or &lt;=0 if an error occurs.</p>
+<p><code>BIO_set_conn_hostname()</code> returns 1 on success and &lt;=0 on failure.</p>
+<p><code>BIO_get_conn_address()</code> returns the address information or NULL if none
+was set.</p>
+<p><code>BIO_get_conn_hostname()</code> returns the connected hostname or NULL if
+none was set.</p>
+<p><code>BIO_get_conn_ip_family()</code> returns the address family or -1 if none was set.</p>
+<p><code>BIO_get_conn_port()</code> returns a string representing the connected
+port or NULL if not set.</p>
+<p><code>BIO_set_nbio()</code> returns 1 or &lt;=0 if an error occurs.</p>
+<p><code>BIO_do_connect()</code> returns 1 if the connection was successfully
+established and &lt;=0 if the connection failed.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>This is example connects to a webserver on the local host and attempts
+to retrieve a page and copy the result to standard output.</p>
+<pre>
+ <span class="variable">BIO</span> <span class="variable">*cbio</span><span class="operator">,</span> <span class="variable">*out</span><span class="operator">;</span>
+ <span class="keyword">int</span> <span class="variable">len</span><span class="operator">;</span>
+ <span class="variable">char</span> <span class="variable">tmpbuf</span><span class="operator">[</span><span class="number">1024</span><span class="operator">]</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">cbio</span> <span class="operator">=</span> <span class="variable">BIO_new_connect</span><span class="operator">(</span><span class="string">"localhost:http"</span><span class="operator">);</span>
+ <span class="variable">out</span> <span class="operator">=</span> <span class="variable">BIO_new_fp</span><span class="operator">(</span><span class="variable">stdout</span><span class="operator">,</span> <span class="variable">BIO_NOCLOSE</span><span class="operator">);</span>
+ <span class="keyword">if</span> <span class="operator">(</span><span class="variable">BIO_do_connect</span><span class="operator">(</span><span class="variable">cbio</span><span class="operator">)</span> <span class="operator">&lt;=</span> <span class="number">0</span><span class="operator">)</span> <span class="operator">{</span>
+     <span class="variable">fprintf</span><span class="operator">(</span><span class="variable">stderr</span><span class="operator">,</span> <span class="string">"Error connecting to server\n"</span><span class="operator">);</span>
+     <span class="variable">ERR_print_errors_fp</span><span class="operator">(</span><span class="variable">stderr</span><span class="operator">);</span>
+     <span class="keyword">exit</span><span class="operator">(</span><span class="number">1</span><span class="operator">);</span>
+ <span class="operator">}</span>
+ <span class="variable">BIO_puts</span><span class="operator">(</span><span class="variable">cbio</span><span class="operator">,</span> <span class="string">"GET / HTTP/1.0\n\n"</span><span class="operator">);</span>
+ <span class="keyword">for</span> <span class="operator">(;;)</span> <span class="operator">{</span>
+     <span class="variable">len</span> <span class="operator">=</span> <span class="variable">BIO_read</span><span class="operator">(</span><span class="variable">cbio</span><span class="operator">,</span> <span class="variable">tmpbuf</span><span class="operator">,</span> <span class="number">1024</span><span class="operator">);</span>
+     <span class="keyword">if</span> <span class="operator">(</span><span class="variable">len</span> <span class="operator">&lt;=</span> <span class="number">0</span><span class="operator">)</span>
+         <span class="keyword">break</span><span class="operator">;</span>
+     <span class="variable">BIO_write</span><span class="operator">(</span><span class="variable">out</span><span class="operator">,</span> <span class="variable">tmpbuf</span><span class="operator">,</span> <span class="variable">len</span><span class="operator">);</span>
+ <span class="operator">}</span>
+ <span class="variable">BIO_free</span><span class="operator">(</span><span class="variable">cbio</span><span class="operator">);</span>
+ <span class="variable">BIO_free</span><span class="operator">(</span><span class="variable">out</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>BIO_ADDR(3)</em>, <em>BIO_parse_hostserv(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><code>BIO_set_conn_int_port()</code>, <code>BIO_get_conn_int_port()</code>, <code>BIO_set_conn_ip()</code>, and <code>BIO_get_conn_ip()</code>
+were removed in OpenSSL 1.1.0.
+Use <code>BIO_set_conn_address()</code> and <code>BIO_get_conn_address()</code> instead.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2000-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

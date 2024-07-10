@@ -1,0 +1,335 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_PKEY-EC</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#common_ec_parameters">Common EC parameters</a></li>
+		<li><a href="#ec_key_validation">EC key validation</a></li>
+	</ul>
+
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_PKEY-EC,
+EVP_KEYMGMT-EC
+- EVP_PKEY EC keytype and algorithm support</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>EC</strong> keytype is implemented in OpenSSL's default provider.</p>
+<p>
+</p>
+<h2><a name="common_ec_parameters">Common EC parameters</a></h2>
+<p>The normal way of specifying domain parameters for an EC curve is via the
+curve name &quot;group&quot;. For curves with no curve name, explicit parameters can be
+used that specify &quot;field-type&quot;, &quot;p&quot;, &quot;a&quot;, &quot;b&quot;, &quot;generator&quot; and &quot;order&quot;.
+Explicit parameters are supported for backwards compatibility reasons, but they
+are not compliant with multiple standards (including <a href="http://www.ietf.org/rfc/rfc5915.txt" class="rfc">RFC5915</a>) which only allow
+named curves.</p>
+<p>The following KeyGen/Gettable/Import/Export types are available for the
+built-in EC algorithm:</p>
+<dl>
+<dt><strong><a name="group_ossl_pkey_param_group_name_utf8_string" class="item">&quot;group&quot; (<strong>OSSL_PKEY_PARAM_GROUP_NAME</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>The curve name.</p>
+</dd>
+<dt><strong><a name="field_type_ossl_pkey_param_ec_field_type_utf8_string" class="item">&quot;field-type&quot; (<strong>OSSL_PKEY_PARAM_EC_FIELD_TYPE</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>The value should be either &quot;prime-field&quot; or &quot;characteristic-two-field&quot;,
+which correspond to prime field Fp and binary field F2^m.</p>
+</dd>
+<dt><strong><a name="p_ossl_pkey_param_ec_p_unsigned_integer" class="item">&quot;p&quot; (<strong>OSSL_PKEY_PARAM_EC_P</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>For a curve over Fp <em>p</em> is the prime for the field. For a curve over F2^m <em>p</em>
+represents the irreducible polynomial - each bit represents a term in the
+polynomial. Therefore, there will either be three or five bits set dependent on
+whether the polynomial is a trinomial or a pentanomial.</p>
+</dd>
+<dt><strong><a name="a_ossl_pkey_param_ec_a_unsigned_integer" class="item">&quot;a&quot; (<strong>OSSL_PKEY_PARAM_EC_A</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dt><strong><a name="b_ossl_pkey_param_ec_b_unsigned_integer" class="item">&quot;b&quot; (<strong>OSSL_PKEY_PARAM_EC_B</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dt><strong><a name="seed_ossl_pkey_param_ec_seed_octet_string" class="item">&quot;seed&quot; (<strong>OSSL_PKEY_PARAM_EC_SEED</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p><em>a</em> and <em>b</em> represents the coefficients of the curve
+For Fp:   y^2 mod p = x^3 +ax + b mod p OR
+For F2^m: y^2 + xy = x^3 + ax^2 + b</p>
+<p><em>seed</em> is an optional value that is for information purposes only.
+It represents the random number seed used to generate the coefficient <em>b</em> from a
+random number.</p>
+</dd>
+<dt><strong><a name="generator_ossl_pkey_param_ec_generator_octet_string" class="item">&quot;generator&quot; (<strong>OSSL_PKEY_PARAM_EC_GENERATOR</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dt><strong><a name="order_ossl_pkey_param_ec_order_unsigned_integer" class="item">&quot;order&quot; (<strong>OSSL_PKEY_PARAM_EC_ORDER</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dt><strong><a name="cofactor_ossl_pkey_param_ec_cofactor_unsigned_integer" class="item">&quot;cofactor&quot; (<strong>OSSL_PKEY_PARAM_EC_COFACTOR</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>The <em>generator</em> is a well defined point on the curve chosen for cryptographic
+operations. The encoding conforms with Sec. 2.3.3 of the SECG SEC 1 (&quot;Elliptic Curve
+Cryptography&quot;) standard. See EC_POINT_oct2point().
+Integers used for point multiplications will be between 0 and
+<em>order</em> - 1.
+<em>cofactor</em> is an optional value.
+<em>order</em> multiplied by the <em>cofactor</em> gives the number of points on the curve.</p>
+</dd>
+<dt><strong><a name="decoded_from_explicit_ossl_pkey_param_ec_decoded_from_explicit_params_integer" class="item">&quot;decoded-from-explicit&quot; (<strong>OSSL_PKEY_PARAM_EC_DECODED_FROM_EXPLICIT_PARAMS</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>Gets a flag indicating whether the key or parameters were decoded from explicit
+curve parameters. Set to 1 if so or 0 if a named curve was used.</p>
+</dd>
+<dt><strong><a name="use_cofactor_flag_ossl_pkey_param_use_cofactor_ecdh_integer" class="item">&quot;use-cofactor-flag&quot; (<strong>OSSL_PKEY_PARAM_USE_COFACTOR_ECDH</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>Enable Cofactor DH (ECC CDH) if this value is 1, otherwise it uses normal EC DH
+if the value is zero. The cofactor variant multiplies the shared secret by the
+EC curve's cofactor (note for some curves the cofactor is 1).</p>
+<p>See also <em>EVP_KEYEXCH-ECDH(7)</em> for the related
+<strong>OSSL_EXCHANGE_PARAM_EC_ECDH_COFACTOR_MODE</strong> parameter that can be set on a
+per-operation basis.</p>
+</dd>
+<dt><strong><a name="encoding_ossl_pkey_param_ec_encoding_utf8_string" class="item">&quot;encoding&quot; (<strong>OSSL_PKEY_PARAM_EC_ENCODING</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>Set the format used for serializing the EC group parameters.
+Valid values are &quot;explicit&quot; or &quot;named_curve&quot;. The default value is &quot;named_curve&quot;.</p>
+</dd>
+<dt><strong><a name="point_format_ossl_pkey_param_ec_point_conversion_format_utf8_string" class="item">&quot;point-format&quot; (<strong>OSSL_PKEY_PARAM_EC_POINT_CONVERSION_FORMAT</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets or gets the point_conversion_form for the <em>key</em>. For a description of
+point_conversion_forms please see <em>EC_POINT_new(3)</em>. Valid values are
+&quot;uncompressed&quot; or &quot;compressed&quot;. The default value is &quot;uncompressed&quot;.</p>
+</dd>
+<dt><strong><a name="group_check_ossl_pkey_param_ec_group_check_type_utf8_string" class="item">&quot;group-check&quot; (<strong>OSSL_PKEY_PARAM_EC_GROUP_CHECK_TYPE</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets or Gets the type of group check done when <code>EVP_PKEY_param_check()</code> is called.
+Valid values are &quot;default&quot;, &quot;named&quot; and &quot;named-nist&quot;.
+The &quot;named&quot; type checks that the domain parameters match the inbuilt curve parameters,
+&quot;named-nist&quot; is similar but also checks that the named curve is a nist curve.
+The &quot;default&quot; type does domain parameter validation for the OpenSSL default provider,
+but is equivalent to &quot;named-nist&quot; for the OpenSSL FIPS provider.</p>
+</dd>
+<dt><strong><a name="include_public_ossl_pkey_param_ec_include_public_integer" class="item">&quot;include-public&quot; (<strong>OSSL_PKEY_PARAM_EC_INCLUDE_PUBLIC</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>Setting this value to 0 indicates that the public key should not be included when
+encoding the private key. The default value of 1 will include the public key.</p>
+</dd>
+<dt><strong><a name="pub_ossl_pkey_param_pub_key_octet_string" class="item">&quot;pub&quot; (<strong>OSSL_PKEY_PARAM_PUB_KEY</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>The public key value in encoded EC point format conforming to Sec. 2.3.3 and
+2.3.4 of the SECG SEC 1 (&quot;Elliptic Curve Cryptography&quot;) standard.
+This parameter is used when importing or exporting the public key value with the
+<code>EVP_PKEY_fromdata()</code> and <code>EVP_PKEY_todata()</code> functions.</p>
+<p>Note, in particular, that the choice of point compression format used for
+encoding the exported value via <code>EVP_PKEY_todata()</code> depends on the underlying
+provider implementation.
+Before OpenSSL 3.0.8, the implementation of providers included with OpenSSL always
+opted for an encoding in compressed format, unconditionally.
+Since OpenSSL 3.0.8, the implementation has been changed to honor the
+<strong>OSSL_PKEY_PARAM_EC_POINT_CONVERSION_FORMAT</strong> parameter, if set, or to default
+to uncompressed format.</p>
+</dd>
+<dt><strong><a name="priv_ossl_pkey_param_priv_key_unsigned_integer" class="item">&quot;priv&quot; (<strong>OSSL_PKEY_PARAM_PRIV_KEY</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>The private key value.</p>
+</dd>
+<dt><strong><a name="encoded_pub_key_ossl_pkey_param_encoded_public_key_octet_string" class="item">&quot;encoded-pub-key&quot; (<strong>OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Used for getting and setting the encoding of an EC public key. The public key
+is expected to be a point conforming to Sec. 2.3.4 of the SECG SEC 1 (&quot;Elliptic
+Curve Cryptography&quot;) standard.</p>
+</dd>
+<dt><strong><a name="qx_ossl_pkey_param_ec_pub_x_unsigned_integer" class="item">&quot;qx&quot; (<strong>OSSL_PKEY_PARAM_EC_PUB_X</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>Used for getting the EC public key X component.</p>
+</dd>
+<dt><strong><a name="qy_ossl_pkey_param_ec_pub_y_unsigned_integer" class="item">&quot;qy&quot; (<strong>OSSL_PKEY_PARAM_EC_PUB_Y</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>Used for getting the EC public key Y component.</p>
+</dd>
+<dt><strong><a name="default_digest_ossl_pkey_param_default_digest_utf8_string" class="item">&quot;default-digest&quot; (<strong>OSSL_PKEY_PARAM_DEFAULT_DIGEST</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>Getter that returns the default digest name.
+(Currently returns &quot;SHA256&quot; as of OpenSSL 3.0).</p>
+</dd>
+</dl>
+<p>The following Gettable types are also available for the built-in EC algorithm:</p>
+<dl>
+<dt><strong><a name="basis_type_ossl_pkey_param_ec_char2_type_utf8_string" class="item">&quot;basis-type&quot; (<strong>OSSL_PKEY_PARAM_EC_CHAR2_TYPE</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>Supports the values &quot;tpBasis&quot; for a trinomial or &quot;ppBasis&quot; for a pentanomial.
+This field is only used for a binary field F2^m.</p>
+</dd>
+<dt><strong><a name="m_ossl_pkey_param_ec_char2_m_integer" class="item">&quot;m&quot; (<strong>OSSL_PKEY_PARAM_EC_CHAR2_M</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dt><strong><a name="tp_ossl_pkey_param_ec_char2_tp_basis_integer" class="item">&quot;tp&quot; (<strong>OSSL_PKEY_PARAM_EC_CHAR2_TP_BASIS</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dt><strong><a name="k1_ossl_pkey_param_ec_char2_pp_k1_integer" class="item">&quot;k1&quot; (<strong>OSSL_PKEY_PARAM_EC_CHAR2_PP_K1</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dt><strong><a name="k2_ossl_pkey_param_ec_char2_pp_k2_integer" class="item">&quot;k2&quot; (<strong>OSSL_PKEY_PARAM_EC_CHAR2_PP_K2</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dt><strong><a name="k3_ossl_pkey_param_ec_char2_pp_k3_integer" class="item">&quot;k3&quot; (<strong>OSSL_PKEY_PARAM_EC_CHAR2_PP_K3</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>These fields are only used for a binary field F2^m.
+<em>m</em> is the degree of the binary field.</p>
+<p><em>tp</em> is the middle bit of a trinomial so its value must be in the
+range m &gt; tp &gt; 0.</p>
+<p><em>k1</em>, <em>k2</em> and <em>k3</em> are used to get the middle bits of a pentanomial such
+that m &gt; k3 &gt; k2 &gt; k1 &gt; 0</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="ec_key_validation">EC key validation</a></h2>
+<p>For EC keys, <em>EVP_PKEY_param_check(3)</em> behaves in the following way:
+For the OpenSSL default provider it uses either
+<em>EC_GROUP_check(3)</em> or <em>EC_GROUP_check_named_curve(3)</em> depending on the flag
+EC_FLAG_CHECK_NAMED_GROUP.
+The OpenSSL FIPS provider uses <em>EC_GROUP_check_named_curve(3)</em> in order to
+conform to SP800-56Ar3 <em>Assurances of Domain-Parameter Validity</em>.</p>
+<p>For EC keys, <em>EVP_PKEY_param_check_quick(3)</em> is equivalent to
+<em>EVP_PKEY_param_check(3)</em>.</p>
+<p>For EC keys, <em>EVP_PKEY_public_check(3)</em> and <em>EVP_PKEY_public_check_quick(3)</em>
+conform to SP800-56Ar3 <em>ECC Full Public-Key Validation</em> and
+<em>ECC Partial Public-Key Validation</em> respectively.</p>
+<p>For EC Keys, <em>EVP_PKEY_private_check(3)</em> and <em>EVP_PKEY_pairwise_check(3)</em>
+conform to SP800-56Ar3 <em>Private key validity</em> and
+<em>Owner Assurance of Pair-wise Consistency</em> respectively.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>An <strong>EVP_PKEY</strong> context can be obtained by calling:</p>
+<pre>
+    <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*pctx</span> <span class="operator">=</span>
+        <span class="variable">EVP_PKEY_CTX_new_from_name</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"EC"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+</pre>
+<p>An <strong>EVP_PKEY</strong> ECDSA or ECDH key can be generated with a &quot;P-256&quot; named group by
+calling:</p>
+<pre>
+    <span class="variable">pkey</span> <span class="operator">=</span> <span class="variable">EVP_EC_gen</span><span class="operator">(</span><span class="string">"P-256"</span><span class="operator">);</span>
+</pre>
+<p>or like this:</p>
+<pre>
+    <span class="variable">EVP_PKEY</span> <span class="variable">*key</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+    <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[</span><span class="number">2</span><span class="operator">]</span><span class="operator">;</span>
+    <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*gctx</span> <span class="operator">=</span>
+        <span class="variable">EVP_PKEY_CTX_new_from_name</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"EC"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">EVP_PKEY_keygen_init</span><span class="operator">(</span><span class="variable">gctx</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">0</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_utf8_string</span><span class="operator">(</span><span class="variable">OSSL_PKEY_PARAM_GROUP_NAME</span><span class="operator">,</span>
+                                                 <span class="string">"P-256"</span><span class="operator">,</span> <span class="number">0</span><span class="operator">);</span>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">1</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_end</span><span class="operator">();</span>
+    <span class="variable">EVP_PKEY_CTX_set_params</span><span class="operator">(</span><span class="variable">gctx</span><span class="operator">,</span> <span class="variable">params</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">EVP_PKEY_generate</span><span class="operator">(</span><span class="variable">gctx</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">key</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">EVP_PKEY_print_private</span><span class="operator">(</span><span class="variable">bio_out</span><span class="operator">,</span> <span class="variable">key</span><span class="operator">,</span> <span class="number">0</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+    <span class="operator">...</span>
+    <span class="variable">EVP_PKEY_free</span><span class="operator">(</span><span class="variable">key</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_CTX_free</span><span class="operator">(</span><span class="variable">gctx</span><span class="operator">);</span>
+</pre>
+<p>An <strong>EVP_PKEY</strong> EC CDH (Cofactor Diffie-Hellman) key can be generated with a
+&quot;K-571&quot; named group by calling:</p>
+<pre>
+    <span class="keyword">int</span> <span class="variable">use_cdh</span> <span class="operator">=</span> <span class="number">1</span><span class="operator">;</span>
+    <span class="variable">EVP_PKEY</span> <span class="variable">*key</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+    <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[</span><span class="number">3</span><span class="operator">]</span><span class="operator">;</span>
+    <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*gctx</span> <span class="operator">=</span>
+        <span class="variable">EVP_PKEY_CTX_new_from_name</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"EC"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">EVP_PKEY_keygen_init</span><span class="operator">(</span><span class="variable">gctx</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">0</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_utf8_string</span><span class="operator">(</span><span class="variable">OSSL_PKEY_PARAM_GROUP_NAME</span><span class="operator">,</span>
+                                                 <span class="string">"K-571"</span><span class="operator">,</span> <span class="number">0</span><span class="operator">);</span>
+    <span class="regex">/*
+     * This curve has a cofactor that is not 1 - so setting CDH mode changes
+     * the behaviour. For many curves the cofactor is 1 - so setting this has
+     * no effect.
+     */</span>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">1</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_int</span><span class="operator">(</span><span class="variable">OSSL_PKEY_PARAM_USE_COFACTOR_ECDH</span><span class="operator">,</span>
+                                         <span class="operator">&amp;</span><span class="variable">use_cdh</span><span class="operator">);</span>
+    <span class="variable">params</span><span class="operator">[</span><span class="number">2</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_end</span><span class="operator">();</span>
+    <span class="variable">EVP_PKEY_CTX_set_params</span><span class="operator">(</span><span class="variable">gctx</span><span class="operator">,</span> <span class="variable">params</span><span class="operator">);</span>
+</pre>
+<pre>
+    <span class="variable">EVP_PKEY_generate</span><span class="operator">(</span><span class="variable">gctx</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">key</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_print_private</span><span class="operator">(</span><span class="variable">bio_out</span><span class="operator">,</span> <span class="variable">key</span><span class="operator">,</span> <span class="number">0</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+    <span class="operator">...</span>
+    <span class="variable">EVP_PKEY_free</span><span class="operator">(</span><span class="variable">key</span><span class="operator">);</span>
+    <span class="variable">EVP_PKEY_CTX_free</span><span class="operator">(</span><span class="variable">gctx</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_EC_gen(3)</em>,
+<em>EVP_KEYMGMT(3)</em>,
+<em>EVP_PKEY(3)</em>,
+<em>provider-keymgmt(7)</em>,
+<em>EVP_SIGNATURE-ECDSA(7)</em>,
+<em>EVP_KEYEXCH-ECDH(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2020-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

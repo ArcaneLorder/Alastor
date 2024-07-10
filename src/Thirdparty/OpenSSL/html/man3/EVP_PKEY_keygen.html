@@ -1,0 +1,275 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_PKEY_keygen</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_PKEY_Q_keygen,
+EVP_PKEY_keygen_init, EVP_PKEY_paramgen_init, EVP_PKEY_generate,
+EVP_PKEY_CTX_set_cb, EVP_PKEY_CTX_get_cb,
+EVP_PKEY_CTX_get_keygen_info, EVP_PKEY_CTX_set_app_data,
+EVP_PKEY_CTX_get_app_data,
+EVP_PKEY_gen_cb,
+EVP_PKEY_paramgen, EVP_PKEY_keygen
+- key and parameter generation and check functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">EVP_PKEY</span> <span class="variable">*EVP_PKEY_Q_keygen</span><span class="operator">(</span><span class="variable">OSSL_LIB_CTX</span> <span class="variable">*libctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*propq</span><span class="operator">,</span>
+                             <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*type</span><span class="operator">,</span> <span class="operator">...);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_keygen_init</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_paramgen_init</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_generate</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">EVP_PKEY</span> <span class="operator">**</span><span class="variable">ppkey</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_paramgen</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">EVP_PKEY</span> <span class="operator">**</span><span class="variable">ppkey</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_keygen</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">EVP_PKEY</span> <span class="operator">**</span><span class="variable">ppkey</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">typedef</span> <span class="keyword">int</span> <span class="variable">EVP_PKEY_gen_cb</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">void</span> <span class="variable">EVP_PKEY_CTX_set_cb</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">EVP_PKEY_gen_cb</span> <span class="variable">*cb</span><span class="operator">);</span>
+ <span class="variable">EVP_PKEY_gen_cb</span> <span class="variable">*EVP_PKEY_CTX_get_cb</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_CTX_get_keygen_info</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">idx</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">void</span> <span class="variable">EVP_PKEY_CTX_set_app_data</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*data</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">*EVP_PKEY_CTX_get_app_data</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Generating keys is sometimes straight forward, just generate the key's
+numbers and be done with it.  However, there are certain key types that need
+key parameters, often called domain parameters but not necessarily limited
+to that, that also need to be generated.  In addition to this, the caller
+may want to set user provided generation parameters that further affect key
+parameter or key generation, such as the desired key size.</p>
+<p>To flexibly allow all that's just been described, key parameter and key
+generation is divided into an initialization of a key algorithm context,
+functions to set user provided parameters, and finally the key parameter or
+key generation function itself.</p>
+<p>The key algorithm context must be created using <em>EVP_PKEY_CTX_new(3)</em> or
+variants thereof, see that manual for details.</p>
+<p><code>EVP_PKEY_keygen_init()</code> initializes a public key algorithm context <em>ctx</em>
+for a key generation operation.</p>
+<p><code>EVP_PKEY_paramgen_init()</code> is similar to <code>EVP_PKEY_keygen_init()</code> except key
+parameters are generated.</p>
+<p>After initialization, generation parameters may be provided with
+<em>EVP_PKEY_CTX_ctrl(3)</em> or <em>EVP_PKEY_CTX_set_params(3)</em>, or any other
+function described in those manuals.</p>
+<p><code>EVP_PKEY_generate()</code> performs the generation operation, the resulting key
+parameters or key are written to <em>*ppkey</em>.  If <em>*ppkey</em> is NULL when this
+function is called, it will be allocated, and should be freed by the caller
+when no longer useful, using <em>EVP_PKEY_free(3)</em>.</p>
+<p><code>EVP_PKEY_paramgen()</code> and <code>EVP_PKEY_keygen()</code> do exactly the same thing as
+<code>EVP_PKEY_generate()</code>, after checking that the corresponding <code>EVP_PKEY_paramgen_init()</code>
+or <code>EVP_PKEY_keygen_init()</code> was used to initialize <em>ctx</em>.
+These are older functions that are kept for backward compatibility.
+It is safe to use <code>EVP_PKEY_generate()</code> instead.</p>
+<p>The function <code>EVP_PKEY_set_cb()</code> sets the key or parameter generation callback
+to <em>cb</em>. The function <code>EVP_PKEY_CTX_get_cb()</code> returns the key or parameter
+generation callback.</p>
+<p>The function <code>EVP_PKEY_CTX_get_keygen_info()</code> returns parameters associated
+with the generation operation. If <em>idx</em> is -1 the total number of
+parameters available is returned. Any non negative value returns the value of
+that parameter. <code>EVP_PKEY_CTX_gen_keygen_info()</code> with a nonnegative value for
+<em>idx</em> should only be called within the generation callback.</p>
+<p>If the callback returns 0 then the key generation operation is aborted and an
+error occurs. This might occur during a time consuming operation where
+a user clicks on a &quot;cancel&quot; button.</p>
+<p>The functions <code>EVP_PKEY_CTX_set_app_data()</code> and <code>EVP_PKEY_CTX_get_app_data()</code> set
+and retrieve an opaque pointer. This can be used to set some application
+defined value which can be retrieved in the callback: for example a handle
+which is used to update a &quot;progress dialog&quot;.</p>
+<p><code>EVP_PKEY_Q_keygen()</code> abstracts from the explicit use of <strong>EVP_PKEY_CTX</strong> while
+providing a 'quick' but limited way of generating a new asymmetric key pair.
+It provides shorthands for simple and common cases of key generation.
+As usual, the library context <em>libctx</em> and property query <em>propq</em>
+can be given for fetching algorithms from providers.
+If <em>type</em> is <code>RSA</code>,
+a <strong>size_t</strong> parameter must be given to specify the size of the RSA key.
+If <em>type</em> is <code>EC</code>,
+a string parameter must be given to specify the name of the EC curve.
+If <em>type</em> is <code>X25519</code>, <code>X448</code>, <code>ED25519</code>, <code>ED448</code>, or <code>SM2</code>
+no further parameter is needed.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>EVP_PKEY_keygen_init()</code>, <code>EVP_PKEY_paramgen_init()</code>, <code>EVP_PKEY_keygen()</code> and
+<code>EVP_PKEY_paramgen()</code> return 1 for success and 0 or a negative value for failure.
+In particular a return value of -2 indicates the operation is not supported by
+the public key algorithm.</p>
+<p><code>EVP_PKEY_Q_keygen()</code> returns an <strong>EVP_PKEY</strong>, or NULL on failure.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>After the call to <code>EVP_PKEY_keygen_init()</code> or <code>EVP_PKEY_paramgen_init()</code> algorithm
+specific control operations can be performed to set any appropriate parameters
+for the operation.</p>
+<p>The functions <code>EVP_PKEY_keygen()</code> and <code>EVP_PKEY_paramgen()</code> can be called more than
+once on the same context if several operations are performed using the same
+parameters.</p>
+<p>The meaning of the parameters passed to the callback will depend on the
+algorithm and the specific implementation of the algorithm. Some might not
+give any useful information at all during key or parameter generation. Others
+might not even call the callback.</p>
+<p>The operation performed by key or parameter generation depends on the algorithm
+used. In some cases (e.g. EC with a supplied named curve) the &quot;generation&quot;
+option merely sets the appropriate fields in an EVP_PKEY structure.</p>
+<p>In OpenSSL an EVP_PKEY structure containing a private key also contains the
+public key components and parameters (if any). An OpenSSL private key is
+equivalent to what some libraries call a &quot;key pair&quot;. A private key can be used
+in functions which require the use of a public key or parameters.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Generate a 2048 bit RSA key:</p>
+<pre>
+ <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+ <span class="comment">#include &lt;openssl/rsa.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">;</span>
+ <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">ctx</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_CTX_new_id</span><span class="operator">(</span><span class="variable">EVP_PKEY_RSA</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+ <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">ctx</span><span class="operator">)</span>
+     <span class="operator">/*</span> <span class="variable">Error</span> <span class="variable">occurred</span> <span class="operator">*/</span>
+ <span class="keyword">if</span> <span class="operator">(</span><span class="variable">EVP_PKEY_keygen_init</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">)</span> <span class="operator">&lt;=</span> <span class="number">0</span><span class="operator">)</span>
+     <span class="operator">/*</span> <span class="variable">Error</span> <span class="operator">*/</span>
+ <span class="keyword">if</span> <span class="operator">(</span><span class="variable">EVP_PKEY_CTX_set_rsa_keygen_bits</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="number">2048</span><span class="operator">)</span> <span class="operator">&lt;=</span> <span class="number">0</span><span class="operator">)</span>
+     <span class="operator">/*</span> <span class="variable">Error</span> <span class="operator">*/</span>
+</pre>
+<pre>
+ /* Generate key */
+ if (EVP_PKEY_keygen(ctx, &amp;pkey) &lt;= 0)
+     /* Error */</pre>
+<p>Generate a key from a set of parameters:</p>
+<pre>
+ <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+ <span class="comment">#include &lt;openssl/rsa.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">;</span>
+ <span class="variable">ENGINE</span> <span class="variable">*eng</span><span class="operator">;</span>
+ <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">,</span> <span class="variable">*param</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="regex">/* Assumed param, eng are set up already */</span>
+ <span class="variable">ctx</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_CTX_new</span><span class="operator">(</span><span class="variable">param</span><span class="operator">,</span> <span class="variable">eng</span><span class="operator">);</span>
+ <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">ctx</span><span class="operator">)</span>
+     <span class="operator">/*</span> <span class="variable">Error</span> <span class="variable">occurred</span> <span class="operator">*/</span>
+ <span class="keyword">if</span> <span class="operator">(</span><span class="variable">EVP_PKEY_keygen_init</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">)</span> <span class="operator">&lt;=</span> <span class="number">0</span><span class="operator">)</span>
+     <span class="operator">/*</span> <span class="variable">Error</span> <span class="operator">*/</span>
+</pre>
+<pre>
+ /* Generate key */
+ if (EVP_PKEY_keygen(ctx, &amp;pkey) &lt;= 0)
+     /* Error */</pre>
+<p>Example of generation callback for OpenSSL public key implementations:</p>
+<pre>
+ /* Application data is a BIO to output status to */</pre>
+<pre>
+ <span class="variable">EVP_PKEY_CTX_set_app_data</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="variable">status_bio</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">static</span> <span class="keyword">int</span> <span class="variable">genpkey_cb</span><span class="operator">(</span><span class="variable">EVP_PKEY_CTX</span> <span class="variable">*ctx</span><span class="operator">)</span>
+ <span class="operator">{</span>
+     <span class="variable">char</span> <span class="variable">c</span> <span class="operator">=</span> <span class="string">'*'</span><span class="operator">;</span>
+     <span class="variable">BIO</span> <span class="variable">*b</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_CTX_get_app_data</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">);</span>
+     <span class="keyword">int</span> <span class="variable">p</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_CTX_get_keygen_info</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="number">0</span><span class="operator">);</span>
+</pre>
+<pre>
+     <span class="keyword">if</span> <span class="operator">(</span><span class="variable">p</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">)</span>
+         <span class="variable">c</span> <span class="operator">=</span> <span class="string">'.'</span><span class="operator">;</span>
+     <span class="keyword">if</span> <span class="operator">(</span><span class="variable">p</span> <span class="operator">==</span> <span class="number">1</span><span class="operator">)</span>
+         <span class="variable">c</span> <span class="operator">=</span> <span class="string">'+'</span><span class="operator">;</span>
+     <span class="keyword">if</span> <span class="operator">(</span><span class="variable">p</span> <span class="operator">==</span> <span class="number">2</span><span class="operator">)</span>
+         <span class="variable">c</span> <span class="operator">=</span> <span class="string">'*'</span><span class="operator">;</span>
+     <span class="keyword">if</span> <span class="operator">(</span><span class="variable">p</span> <span class="operator">==</span> <span class="number">3</span><span class="operator">)</span>
+         <span class="variable">c</span> <span class="operator">=</span> <span class="string">'\n'</span><span class="operator">;</span>
+     <span class="variable">BIO_write</span><span class="operator">(</span><span class="variable">b</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">c</span><span class="operator">,</span> <span class="number">1</span><span class="operator">);</span>
+     <span class="operator">(</span><span class="variable">void</span><span class="operator">)</span><span class="variable">BIO_flush</span><span class="operator">(</span><span class="variable">b</span><span class="operator">);</span>
+     <span class="keyword">return</span> <span class="number">1</span><span class="operator">;</span>
+      <span class="operator">}</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_RSA_gen(3)</em>, <em>EVP_EC_gen(3)</em>,
+<em>EVP_PKEY_CTX_new(3)</em>,
+<em>EVP_PKEY_encrypt(3)</em>,
+<em>EVP_PKEY_decrypt(3)</em>,
+<em>EVP_PKEY_sign(3)</em>,
+<em>EVP_PKEY_verify(3)</em>,
+<em>EVP_PKEY_verify_recover(3)</em>,
+<em>EVP_PKEY_derive(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><code>EVP_PKEY_keygen_init()</code>, int <code>EVP_PKEY_paramgen_init()</code>, <code>EVP_PKEY_keygen()</code>,
+<code>EVP_PKEY_paramgen()</code>, <code>EVP_PKEY_gen_cb()</code>, <code>EVP_PKEY_CTX_set_cb()</code>,
+<code>EVP_PKEY_CTX_get_cb()</code>, <code>EVP_PKEY_CTX_get_keygen_info()</code>,
+<code>EVP_PKEY_CTX_set_app_data()</code> and <code>EVP_PKEY_CTX_get_app_data()</code> were added in
+OpenSSL 1.0.0.</p>
+<p><code>EVP_PKEY_Q_keygen()</code> and <code>EVP_PKEY_generate()</code> were added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2006-2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

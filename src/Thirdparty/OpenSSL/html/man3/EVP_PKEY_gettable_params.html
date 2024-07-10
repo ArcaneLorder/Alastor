@@ -1,0 +1,176 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_PKEY_gettable_params</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_PKEY_gettable_params, EVP_PKEY_get_params,
+EVP_PKEY_get_int_param, EVP_PKEY_get_size_t_param,
+EVP_PKEY_get_bn_param, EVP_PKEY_get_utf8_string_param,
+EVP_PKEY_get_octet_string_param
+- retrieve key parameters from a key</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*EVP_PKEY_gettable_params</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_get_params</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_get_int_param</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key_name</span><span class="operator">,</span>
+                            <span class="keyword">int</span> <span class="variable">*out</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_get_size_t_param</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key_name</span><span class="operator">,</span>
+                               <span class="variable">size_t</span> <span class="variable">*out</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_get_bn_param</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key_name</span><span class="operator">,</span>
+                           <span class="variable">BIGNUM</span> <span class="operator">**</span><span class="variable">bn</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_get_utf8_string_param</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key_name</span><span class="operator">,</span>
+                                    <span class="variable">char</span> <span class="variable">*str</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">max_buf_sz</span><span class="operator">,</span>
+                                    <span class="variable">size_t</span> <span class="variable">*out_len</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_get_octet_string_param</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key_name</span><span class="operator">,</span>
+                                     <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">max_buf_sz</span><span class="operator">,</span>
+                                     <span class="variable">size_t</span> <span class="variable">*out_len</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>See <em>OSSL_PARAM(3)</em> for information about parameters.</p>
+<p><code>EVP_PKEY_get_params()</code> retrieves parameters from the key <em>pkey</em>, according to
+the contents of <em>params</em>.</p>
+<p><code>EVP_PKEY_gettable_params()</code> returns a constant list of <em>params</em> indicating
+the names and types of key parameters that can be retrieved.</p>
+<p>An <em>OSSL_PARAM(3)</em> of type <strong>OSSL_PARAM_INTEGER</strong> or
+<strong>OSSL_PARAM_UNSIGNED_INTEGER</strong> is of arbitrary length. Such a parameter can be
+obtained using any of the functions <code>EVP_PKEY_get_int_param()</code>,
+<code>EVP_PKEY_get_size_t_param()</code> or <code>EVP_PKEY_get_bn_param()</code>. Attempting to
+obtain an integer value that does not fit into a native C <strong>int</strong> type will cause
+<code>EVP_PKEY_get_int_param()</code> to fail. Similarly attempting to obtain an integer
+value that is negative or does not fit into a native C <strong>size_t</strong> type using
+<code>EVP_PKEY_get_size_t_param()</code> will also fail.</p>
+<p><code>EVP_PKEY_get_int_param()</code> retrieves a key <em>pkey</em> integer value <em>*out</em>
+associated with a name of <em>key_name</em> if it fits into <code>int</code> type. For
+parameters that do not fit into <code>int</code> use <code>EVP_PKEY_get_bn_param()</code>.</p>
+<p><code>EVP_PKEY_get_size_t_param()</code> retrieves a key <em>pkey</em> size_t value <em>*out</em>
+associated with a name of <em>key_name</em> if it fits into <code>size_t</code> type. For
+parameters that do not fit into <code>size_t</code> use <code>EVP_PKEY_get_bn_param()</code>.</p>
+<p><code>EVP_PKEY_get_bn_param()</code> retrieves a key <em>pkey</em> BIGNUM value <em>**bn</em>
+associated with a name of <em>key_name</em>. If <em>*bn</em> is NULL then the BIGNUM
+is allocated by the method.</p>
+<p>EVP_PKEY_get_utf8_string_param() get a key <em>pkey</em> UTF8 string value into a
+buffer <em>str</em> of maximum size <em>max_buf_sz</em> associated with a name of
+<em>key_name</em>.  The maximum size must be large enough to accommodate the string
+value including a terminating NUL byte, or this function will fail.
+If <em>out_len</em> is not NULL, <em>*out_len</em> is set to the length of the string
+not including the terminating NUL byte. The required buffer size not including
+the terminating NUL byte can be obtained from <em>*out_len</em> by calling the
+function with <em>str</em> set to NULL.</p>
+<p><code>EVP_PKEY_get_octet_string_param()</code> get a key <em>pkey</em>'s octet string value into a
+buffer <em>buf</em> of maximum size <em>max_buf_sz</em> associated with a name of <em>key_name</em>.
+If <em>out_len</em> is not NULL, <em>*out_len</em> is set to the length of the contents.
+The required buffer size can be obtained from <em>*out_len</em> by calling the
+function with <em>buf</em> set to NULL.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>These functions only work for <strong>EVP_PKEY</strong>s that contain a provider side key.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>EVP_PKEY_gettable_params()</code> returns NULL on error or if it is not supported.</p>
+<p>All other methods return 1 if a value associated with the key's <em>key_name</em> was
+successfully returned, or 0 if there was an error.
+An error may be returned by methods EVP_PKEY_get_utf8_string_param() and
+<code>EVP_PKEY_get_octet_string_param()</code> if <em>max_buf_sz</em> is not big enough to hold the
+value.  If <em>out_len</em> is not NULL, <em>*out_len</em> will be assigned the required
+buffer size to hold the value.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">char</span> <span class="variable">curve_name</span><span class="operator">[</span><span class="number">64</span><span class="operator">]</span><span class="operator">;</span>
+ <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">pub</span><span class="operator">[</span><span class="number">256</span><span class="operator">]</span><span class="operator">;</span>
+ <span class="variable">BIGNUM</span> <span class="variable">*bn_priv</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+ /*
+  * NB: assumes 'key' is set up before the next step. In this example the key
+  * is an EC key.
+  */</pre>
+<pre>
+ <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">EVP_PKEY_get_utf8_string_param</span><span class="operator">(</span><span class="variable">key</span><span class="operator">,</span> <span class="variable">OSSL_PKEY_PARAM_GROUP_NAME</span><span class="operator">,</span>
+                                     <span class="variable">curve_name</span><span class="operator">,</span> <span class="variable">sizeof</span><span class="operator">(</span><span class="variable">curve_name</span><span class="operator">),</span> <span class="operator">&amp;</span><span class="variable">len</span><span class="operator">))</span> <span class="operator">{</span>
+   <span class="regex">/* Error */</span>
+ <span class="operator">}</span>
+ <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">EVP_PKEY_get_octet_string_param</span><span class="operator">(</span><span class="variable">key</span><span class="operator">,</span> <span class="variable">OSSL_PKEY_PARAM_PUB_KEY</span><span class="operator">,</span>
+                                      <span class="variable">pub</span><span class="operator">,</span> <span class="variable">sizeof</span><span class="operator">(</span><span class="variable">pub</span><span class="operator">),</span> <span class="operator">&amp;</span><span class="variable">len</span><span class="operator">))</span> <span class="operator">{</span>
+     <span class="regex">/* Error */</span>
+ <span class="operator">}</span>
+ <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">EVP_PKEY_get_bn_param</span><span class="operator">(</span><span class="variable">key</span><span class="operator">,</span> <span class="variable">OSSL_PKEY_PARAM_PRIV_KEY</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">bn_priv</span><span class="operator">))</span> <span class="operator">{</span>
+     <span class="regex">/* Error */</span>
+ <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="variable">BN_clear_free</span><span class="operator">(</span><span class="variable">bn_priv</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_PKEY_CTX_new(3)</em>, <em>provider-keymgmt(7)</em>, <em>OSSL_PARAM(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>These functions were added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2020-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

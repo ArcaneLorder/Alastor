@@ -1,0 +1,220 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ECDSA_sign</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#conforming_to">CONFORMING TO</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>ECDSA_size, ECDSA_sign, ECDSA_do_sign,
+ECDSA_verify, ECDSA_do_verify, ECDSA_sign_setup, ECDSA_sign_ex,
+ECDSA_do_sign_ex - deprecated low-level elliptic curve digital signature algorithm
+(ECDSA) functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/ecdsa.h&gt;</span>
+</pre>
+<p>The following functions have been deprecated since OpenSSL 3.0, and can be
+hidden entirely by defining <strong>OPENSSL_API_COMPAT</strong> with a suitable version value,
+see <em>openssl_user_macros(7)</em>:</p>
+<pre>
+ <span class="keyword">int</span> <span class="variable">ECDSA_size</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EC_KEY</span> <span class="variable">*eckey</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">ECDSA_sign</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">type</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*dgst</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">dgstlen</span><span class="operator">,</span>
+                <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*sig</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="keyword">int</span> <span class="variable">*siglen</span><span class="operator">,</span> <span class="variable">EC_KEY</span> <span class="variable">*eckey</span><span class="operator">);</span>
+ <span class="variable">ECDSA_SIG</span> <span class="variable">*ECDSA_do_sign</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*dgst</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">dgst_len</span><span class="operator">,</span>
+                          <span class="variable">EC_KEY</span> <span class="variable">*eckey</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">ECDSA_verify</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">type</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*dgst</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">dgstlen</span><span class="operator">,</span>
+                  <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*sig</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">siglen</span><span class="operator">,</span> <span class="variable">EC_KEY</span> <span class="variable">*eckey</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">ECDSA_do_verify</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*dgst</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">dgst_len</span><span class="operator">,</span>
+                     <span class="variable">const</span> <span class="variable">ECDSA_SIG</span> <span class="variable">*sig</span><span class="operator">,</span> <span class="variable">EC_KEY</span><span class="operator">*</span> <span class="variable">eckey</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">ECDSA_SIG</span> <span class="variable">*ECDSA_do_sign_ex</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*dgst</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">dgstlen</span><span class="operator">,</span>
+                             <span class="variable">const</span> <span class="variable">BIGNUM</span> <span class="variable">*kinv</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">BIGNUM</span> <span class="variable">*rp</span><span class="operator">,</span>
+                             <span class="variable">EC_KEY</span> <span class="variable">*eckey</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">ECDSA_sign_setup</span><span class="operator">(</span><span class="variable">EC_KEY</span> <span class="variable">*eckey</span><span class="operator">,</span> <span class="variable">BN_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">BIGNUM</span> <span class="operator">**</span><span class="variable">kinv</span><span class="operator">,</span> <span class="variable">BIGNUM</span> <span class="operator">**</span><span class="variable">rp</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">ECDSA_sign_ex</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">type</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*dgst</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">dgstlen</span><span class="operator">,</span>
+                   <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*sig</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="keyword">int</span> <span class="variable">*siglen</span><span class="operator">,</span>
+                   <span class="variable">const</span> <span class="variable">BIGNUM</span> <span class="variable">*kinv</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">BIGNUM</span> <span class="variable">*rp</span><span class="operator">,</span> <span class="variable">EC_KEY</span> <span class="variable">*eckey</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>See <em>ECDSA_SIG_new(3)</em> for a description of the <strong>ECDSA_SIG</strong> object.</p>
+<p>See <em>i2d_ECDSA_SIG(3)</em> and <em>d2i_ECDSA_SIG(3)</em> for information about encoding
+and decoding ECDSA signatures to/from DER.</p>
+<p>All of the functions described below are deprecated. Applications should
+use the higher level <strong>EVP</strong> interface such as <em>EVP_DigestSignInit(3)</em>
+or <em>EVP_DigestVerifyInit(3)</em> instead.</p>
+<p><code>ECDSA_size()</code> returns the maximum length of a DER encoded ECDSA signature
+created with the private EC key <em>eckey</em>. To obtain the actual signature
+size use <em>EVP_PKEY_sign(3)</em> with a NULL <em>sig</em> parameter.</p>
+<p><code>ECDSA_sign()</code> computes a digital signature of the <em>dgstlen</em> bytes hash value
+<em>dgst</em> using the private EC key <em>eckey</em>. The DER encoded signatures is
+stored in <em>sig</em> and its length is returned in <em>sig_len</em>. Note: <em>sig</em> must
+point to ECDSA_size(eckey) bytes of memory. The parameter <em>type</em> is currently
+ignored. <code>ECDSA_sign()</code> is wrapper function for <code>ECDSA_sign_ex()</code> with <em>kinv</em>
+and <em>rp</em> set to NULL.</p>
+<p><code>ECDSA_do_sign()</code> is similar to <code>ECDSA_sign()</code> except the signature is returned
+as a newly allocated <strong>ECDSA_SIG</strong> structure (or NULL on error). <code>ECDSA_do_sign()</code>
+is a wrapper function for <code>ECDSA_do_sign_ex()</code> with <em>kinv</em> and <em>rp</em> set to
+NULL.</p>
+<p><code>ECDSA_verify()</code> verifies that the signature in <em>sig</em> of size <em>siglen</em> is a
+valid ECDSA signature of the hash value <em>dgst</em> of size <em>dgstlen</em> using the
+public key <em>eckey</em>.  The parameter <em>type</em> is ignored.</p>
+<p><code>ECDSA_do_verify()</code> is similar to <code>ECDSA_verify()</code> except the signature is
+presented in the form of a pointer to an <strong>ECDSA_SIG</strong> structure.</p>
+<p>The remaining functions utilise the internal <em>kinv</em> and <em>r</em> values used
+during signature computation. Most applications will never need to call these
+and some external ECDSA ENGINE implementations may not support them at all if
+either <em>kinv</em> or <em>r</em> is not NULL.</p>
+<p><code>ECDSA_sign_setup()</code> may be used to precompute parts of the signing operation.
+<em>eckey</em> is the private EC key and <em>ctx</em> is a pointer to <strong>BN_CTX</strong> structure
+(or NULL). The precomputed values or returned in <em>kinv</em> and <em>rp</em> and can be
+used in a later call to <code>ECDSA_sign_ex()</code> or <code>ECDSA_do_sign_ex()</code>.</p>
+<p><code>ECDSA_sign_ex()</code> computes a digital signature of the <em>dgstlen</em> bytes hash value
+<em>dgst</em> using the private EC key <em>eckey</em> and the optional pre-computed values
+<em>kinv</em> and <em>rp</em>. The DER encoded signature is stored in <em>sig</em> and its
+length is returned in <em>sig_len</em>. Note: <em>sig</em> must point to ECDSA_size(eckey)
+bytes of memory. The parameter <em>type</em> is ignored.</p>
+<p><code>ECDSA_do_sign_ex()</code> is similar to <code>ECDSA_sign_ex()</code> except the signature is
+returned as a newly allocated <strong>ECDSA_SIG</strong> structure (or NULL on error).</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>ECDSA_size()</code> returns the maximum length signature or 0 on error.</p>
+<p><code>ECDSA_sign()</code>, <code>ECDSA_sign_ex()</code> and <code>ECDSA_sign_setup()</code> return 1 if successful
+or 0 on error.</p>
+<p><code>ECDSA_do_sign()</code> and <code>ECDSA_do_sign_ex()</code> return a pointer to an allocated
+<strong>ECDSA_SIG</strong> structure or NULL on error.</p>
+<p><code>ECDSA_verify()</code> and <code>ECDSA_do_verify()</code> return 1 for a valid
+signature, 0 for an invalid signature and -1 on error.
+The error codes can be obtained by <em>ERR_get_error(3)</em>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Creating an ECDSA signature of a given SHA-256 hash value using the
+named curve prime256v1 (aka P-256).
+This example uses deprecated functionality. See <a href="#description">DESCRIPTION</a>.</p>
+<p>First step: create an EC_KEY object (note: this part is <strong>not</strong> ECDSA
+specific)</p>
+<pre>
+ <span class="keyword">int</span> <span class="variable">ret</span><span class="operator">;</span>
+ <span class="variable">ECDSA_SIG</span> <span class="variable">*sig</span><span class="operator">;</span>
+ <span class="variable">EC_KEY</span> <span class="variable">*eckey</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">eckey</span> <span class="operator">=</span> <span class="variable">EC_KEY_new_by_curve_name</span><span class="operator">(</span><span class="variable">NID_X9_62_prime256v1</span><span class="operator">);</span>
+ <span class="keyword">if</span> <span class="operator">(</span><span class="variable">eckey</span> <span class="operator">==</span> <span class="variable">NULL</span><span class="operator">)</span>
+     <span class="operator">/*</span> <span class="variable">error</span> <span class="operator">*/</span>
+ <span class="keyword">if</span> <span class="operator">(</span><span class="variable">EC_KEY_generate_key</span><span class="operator">(</span><span class="variable">eckey</span><span class="operator">)</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">)</span>
+     <span class="operator">/*</span> <span class="variable">error</span> <span class="operator">*/</span>
+</pre>
+<p>Second step: compute the ECDSA signature of a SHA-256 hash value
+using ECDSA_do_sign():</p>
+<pre>
+ <span class="variable">sig</span> <span class="operator">=</span> <span class="variable">ECDSA_do_sign</span><span class="operator">(</span><span class="variable">digest</span><span class="operator">,</span> <span class="number">32</span><span class="operator">,</span> <span class="variable">eckey</span><span class="operator">);</span>
+ <span class="keyword">if</span> <span class="operator">(</span><span class="variable">sig</span> <span class="operator">==</span> <span class="variable">NULL</span><span class="operator">)</span>
+     <span class="operator">/*</span> <span class="variable">error</span> <span class="operator">*/</span>
+</pre>
+<p>or using ECDSA_sign():</p>
+<pre>
+ <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*buffer</span><span class="operator">,</span> <span class="variable">*pp</span><span class="operator">;</span>
+ <span class="keyword">int</span> <span class="variable">buf_len</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">buf_len</span> <span class="operator">=</span> <span class="variable">ECDSA_size</span><span class="operator">(</span><span class="variable">eckey</span><span class="operator">);</span>
+ <span class="variable">buffer</span> <span class="operator">=</span> <span class="variable">OPENSSL_malloc</span><span class="operator">(</span><span class="variable">buf_len</span><span class="operator">);</span>
+ <span class="variable">pp</span> <span class="operator">=</span> <span class="variable">buffer</span><span class="operator">;</span>
+ <span class="keyword">if</span> <span class="operator">(</span><span class="variable">ECDSA_sign</span><span class="operator">(</span><span class="number">0</span><span class="operator">,</span> <span class="variable">dgst</span><span class="operator">,</span> <span class="variable">dgstlen</span><span class="operator">,</span> <span class="variable">pp</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">buf_len</span><span class="operator">,</span> <span class="variable">eckey</span><span class="operator">)</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">)</span>
+     <span class="operator">/*</span> <span class="variable">error</span> <span class="operator">*/</span>
+</pre>
+<p>Third step: verify the created ECDSA signature using ECDSA_do_verify():</p>
+<pre>
+ <span class="variable">ret</span> <span class="operator">=</span> <span class="variable">ECDSA_do_verify</span><span class="operator">(</span><span class="variable">digest</span><span class="operator">,</span> <span class="number">32</span><span class="operator">,</span> <span class="variable">sig</span><span class="operator">,</span> <span class="variable">eckey</span><span class="operator">);</span>
+</pre>
+<p>or using ECDSA_verify():</p>
+<pre>
+ <span class="variable">ret</span> <span class="operator">=</span> <span class="variable">ECDSA_verify</span><span class="operator">(</span><span class="number">0</span><span class="operator">,</span> <span class="variable">digest</span><span class="operator">,</span> <span class="number">32</span><span class="operator">,</span> <span class="variable">buffer</span><span class="operator">,</span> <span class="variable">buf_len</span><span class="operator">,</span> <span class="variable">eckey</span><span class="operator">);</span>
+</pre>
+<p>and finally evaluate the return value:</p>
+<pre>
+ if (ret == 1)
+     /* signature ok */
+ else if (ret == 0)
+     /* incorrect signature */
+ else
+     /* error */</pre>
+<p>
+</p>
+<hr />
+<h1><a name="conforming_to">CONFORMING TO</a></h1>
+<p>ANSI X9.62, US Federal Information Processing Standard FIPS186-2
+(Digital Signature Standard, DSS)</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EC_KEY_new(3)</em>,
+<em>EVP_DigestSignInit(3)</em>,
+<em>EVP_DigestVerifyInit(3)</em>,
+<em>EVP_PKEY_sign(3)</em>
+<em>i2d_ECDSA_SIG(3)</em>,
+<em>d2i_ECDSA_SIG(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>All functionality described here was deprecated in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2004-2022 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

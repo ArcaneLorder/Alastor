@@ -1,0 +1,343 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>d2i_RSAPrivateKey</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#migration">Migration</a></li>
+		<ul>
+
+			<li><a href="#migrating_i2d_functions_to_ossl_encoder">Migrating <strong>i2d</strong> functions to <strong>OSSL_ENCODER</strong></a></li>
+		</ul>
+
+	</ul>
+
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>d2i_DSAPrivateKey,
+d2i_DSAPrivateKey_bio,
+d2i_DSAPrivateKey_fp,
+d2i_DSAPublicKey,
+d2i_DSA_PUBKEY,
+d2i_DSA_PUBKEY_bio,
+d2i_DSA_PUBKEY_fp,
+d2i_DSAparams,
+d2i_RSAPrivateKey,
+d2i_RSAPrivateKey_bio,
+d2i_RSAPrivateKey_fp,
+d2i_RSAPublicKey,
+d2i_RSAPublicKey_bio,
+d2i_RSAPublicKey_fp,
+d2i_RSA_PUBKEY,
+d2i_RSA_PUBKEY_bio,
+d2i_RSA_PUBKEY_fp,
+d2i_DHparams,
+d2i_DHparams_bio,
+d2i_DHparams_fp,
+d2i_ECParameters,
+d2i_ECPrivateKey,
+d2i_ECPrivateKey_bio,
+d2i_ECPrivateKey_fp,
+d2i_EC_PUBKEY,
+d2i_EC_PUBKEY_bio,
+d2i_EC_PUBKEY_fp,
+i2d_RSAPrivateKey,
+i2d_RSAPrivateKey_bio,
+i2d_RSAPrivateKey_fp,
+i2d_RSAPublicKey,
+i2d_RSAPublicKey_bio,
+i2d_RSAPublicKey_fp,
+i2d_RSA_PUBKEY,
+i2d_RSA_PUBKEY_bio,
+i2d_RSA_PUBKEY_fp,
+i2d_DHparams,
+i2d_DHparams_bio,
+i2d_DHparams_fp,
+i2d_DSAPrivateKey,
+i2d_DSAPrivateKey_bio,
+i2d_DSAPrivateKey_fp,
+i2d_DSAPublicKey,
+i2d_DSA_PUBKEY,
+i2d_DSA_PUBKEY_bio,
+i2d_DSA_PUBKEY_fp,
+i2d_DSAparams,
+i2d_ECParameters,
+i2d_ECPrivateKey,
+i2d_ECPrivateKey_bio,
+i2d_ECPrivateKey_fp,
+i2d_EC_PUBKEY,
+i2d_EC_PUBKEY_bio,
+i2d_EC_PUBKEY_fp
+- DEPRECATED</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>The following functions have been deprecated since OpenSSL 3.0, and can be
+hidden entirely by defining <strong>OPENSSL_API_COMPAT</strong> with a suitable version value,
+see <em>openssl_user_macros(7)</em>:</p>
+<pre>
+ <span class="variable">TYPE</span> <span class="variable">*d2i_TYPEPrivateKey</span><span class="operator">(</span><span class="variable">TYPE</span> <span class="operator">**</span><span class="variable">a</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppin</span><span class="operator">,</span> <span class="variable">long</span> <span class="keyword">length</span><span class="operator">);</span>
+ <span class="variable">TYPE</span> <span class="variable">*d2i_TYPEPrivateKey_bio</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="operator">**</span><span class="variable">a</span><span class="operator">);</span>
+ <span class="variable">TYPE</span> <span class="variable">*d2i_TYPEPrivateKey_fp</span><span class="operator">(</span><span class="variable">FILE</span> <span class="variable">*fp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="operator">**</span><span class="variable">a</span><span class="operator">);</span>
+ <span class="variable">TYPE</span> <span class="variable">*d2i_TYPEPublicKey</span><span class="operator">(</span><span class="variable">TYPE</span> <span class="operator">**</span><span class="variable">a</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppin</span><span class="operator">,</span> <span class="variable">long</span> <span class="keyword">length</span><span class="operator">);</span>
+ <span class="variable">TYPE</span> <span class="variable">*d2i_TYPEPublicKey_bio</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="operator">**</span><span class="variable">a</span><span class="operator">);</span>
+ <span class="variable">TYPE</span> <span class="variable">*d2i_TYPEPublicKey_fp</span><span class="operator">(</span><span class="variable">FILE</span> <span class="variable">*fp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="operator">**</span><span class="variable">a</span><span class="operator">);</span>
+ <span class="variable">TYPE</span> <span class="variable">*d2i_TYPEparams</span><span class="operator">(</span><span class="variable">TYPE</span> <span class="operator">**</span><span class="variable">a</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppin</span><span class="operator">,</span> <span class="variable">long</span> <span class="keyword">length</span><span class="operator">);</span>
+ <span class="variable">TYPE</span> <span class="variable">*d2i_TYPEparams_bio</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="operator">**</span><span class="variable">a</span><span class="operator">);</span>
+ <span class="variable">TYPE</span> <span class="variable">*d2i_TYPEparams_fp</span><span class="operator">(</span><span class="variable">FILE</span> <span class="variable">*fp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="operator">**</span><span class="variable">a</span><span class="operator">);</span>
+ <span class="variable">TYPE</span> <span class="variable">*d2i_TYPE_PUBKEY</span><span class="operator">(</span><span class="variable">TYPE</span> <span class="operator">**</span><span class="variable">a</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppin</span><span class="operator">,</span> <span class="variable">long</span> <span class="keyword">length</span><span class="operator">);</span>
+ <span class="variable">TYPE</span> <span class="variable">*d2i_TYPE_PUBKEY_bio</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="operator">**</span><span class="variable">a</span><span class="operator">);</span>
+ <span class="variable">TYPE</span> <span class="variable">*d2i_TYPE_PUBKEY_fp</span><span class="operator">(</span><span class="variable">FILE</span> <span class="variable">*fp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="operator">**</span><span class="variable">a</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEPrivateKey</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppout</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEPrivateKey</span><span class="operator">(</span><span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppout</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEPrivateKey_fp</span><span class="operator">(</span><span class="variable">FILE</span> <span class="variable">*fp</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEPrivateKey_fp</span><span class="operator">(</span><span class="variable">FILE</span> <span class="variable">*fp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEPrivateKey_bio</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bp</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEPrivateKey_bio</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEPublicKey</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppout</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEPublicKey</span><span class="operator">(</span><span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppout</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEPublicKey_fp</span><span class="operator">(</span><span class="variable">FILE</span> <span class="variable">*fp</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEPublicKey_fp</span><span class="operator">(</span><span class="variable">FILE</span> <span class="variable">*fp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEPublicKey_bio</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bp</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEPublicKey_bio</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEparams</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppout</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEparams</span><span class="operator">(</span><span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppout</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEparams_fp</span><span class="operator">(</span><span class="variable">FILE</span> <span class="variable">*fp</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEparams_fp</span><span class="operator">(</span><span class="variable">FILE</span> <span class="variable">*fp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEparams_bio</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bp</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPEparams_bio</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPE_PUBKEY</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppout</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPE_PUBKEY</span><span class="operator">(</span><span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppout</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPE_PUBKEY_fp</span><span class="operator">(</span><span class="variable">FILE</span> <span class="variable">*fp</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPE_PUBKEY_fp</span><span class="operator">(</span><span class="variable">FILE</span> <span class="variable">*fp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPE_PUBKEY_bio</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bp</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">i2d_TYPE_PUBKEY_bio</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bp</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="variable">*a</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>All functions described here are deprecated.  Please use <em>OSSL_DECODER(3)</em>
+instead of the <strong>d2i</strong> functions and <em>OSSL_ENCODER(3)</em> instead of the <strong>i2d</strong>
+functions.  See <a href="#migration">Migration</a> below.</p>
+<p>In the description here, <strong><em>TYPE</em></strong> is used a placeholder for any of the
+OpenSSL datatypes, such as <strong>RSA</strong>.
+The function parameters <em>ppin</em> and <em>ppout</em> are generally either both named
+<em>pp</em> in the headers, or <em>in</em> and <em>out</em>.</p>
+<p>All the functions here behave the way that's described in <em>d2i_X509(3)</em>.</p>
+<p>Please note that not all functions in the synopsis are available for all key
+types.  For example, there are no d2i_RSAparams() or i2d_RSAparams(),
+because the PKCS#1 <strong>RSA</strong> structure doesn't include any key parameters.</p>
+<p><strong>d2i_<em>TYPE</em>PrivateKey</strong>() and derivates thereof decode DER encoded
+<strong><em>TYPE</em></strong> private key data organized in a type specific structure.</p>
+<p><strong>d2i_<em>TYPE</em>PublicKey</strong>() and derivates thereof decode DER encoded
+<strong><em>TYPE</em></strong> public key data organized in a type specific structure.</p>
+<p><strong>d2i_<em>TYPE</em>params</strong>() and derivates thereof decode DER encoded <strong><em>TYPE</em></strong>
+key parameters organized in a type specific structure.</p>
+<p><strong>d2i_<em>TYPE</em>_PUBKEY</strong>() and derivates thereof decode DER encoded <strong><em>TYPE</em></strong>
+public key data organized in a <strong>SubjectPublicKeyInfo</strong> structure.</p>
+<p><strong>i2d_<em>TYPE</em>PrivateKey</strong>() and derivates thereof encode the private key
+<strong><em>TYPE</em></strong> data into a type specific DER encoded structure.</p>
+<p><strong>i2d_<em>TYPE</em>PublicKey</strong>() and derivates thereof encode the public key
+<strong><em>TYPE</em></strong> data into a type specific DER encoded structure.</p>
+<p><strong>i2d_<em>TYPE</em>params</strong>() and derivates thereof encode the <strong><em>TYPE</em></strong> key
+parameters data into a type specific DER encoded structure.</p>
+<p><strong>i2d_<em>TYPE</em>_PUBKEY</strong>() and derivates thereof encode the public key
+<strong><em>TYPE</em></strong> data into a DER encoded <strong>SubjectPublicKeyInfo</strong> structure.</p>
+<p>For example, d2i_RSAPrivateKey() and d2i_RSAPublicKey() expects the
+structure defined by PKCS#1.
+Similarly, i2d_RSAPrivateKey() and  i2d_RSAPublicKey() produce DER encoded
+string organized according to PKCS#1.</p>
+<p>
+</p>
+<h2><a name="migration">Migration</a></h2>
+<p>Migration from the diverse <strong><em>TYPE</em></strong>s requires using corresponding new
+OpenSSL types.  For all <strong><em>TYPE</em></strong>s described here, the corresponding new
+type is <strong>EVP_PKEY</strong>.  The rest of this section assumes that this has been
+done, exactly how to do that is described elsewhere.</p>
+<p>There are two migration paths:</p>
+<ul>
+<li>
+<p>Replace
+b&lt;d2i_<em>TYPE</em>PrivateKey()&gt; with <em>d2i_PrivateKey(3)</em>,
+b&lt;d2i_<em>TYPE</em>PublicKey()&gt; with <em>d2i_PublicKey(3)</em>,
+b&lt;d2i_<em>TYPE</em>params()&gt; with <em>d2i_KeyParams(3)</em>,
+b&lt;d2i_<em>TYPE</em>_PUBKEY()&gt; with <em>d2i_PUBKEY(3)</em>,
+b&lt;i2d_<em>TYPE</em>PrivateKey()&gt; with <em>i2d_PrivateKey(3)</em>,
+b&lt;i2d_<em>TYPE</em>PublicKey()&gt; with <em>i2d_PublicKey(3)</em>,
+b&lt;i2d_<em>TYPE</em>params()&gt; with <em>i2d_KeyParams(3)</em>,
+b&lt;i2d_<em>TYPE</em>_PUBKEY()&gt; with <em>i2d_PUBKEY(3)</em>.
+A caveat is that <em>i2d_PrivateKey(3)</em> may output a DER encoded PKCS#8
+outermost structure instead of the type specific structure, and that
+<em>d2i_PrivateKey(3)</em> recognises and unpacks a PKCS#8 structures.</p>
+</li>
+<li>
+<p>Use <em>OSSL_DECODER(3)</em> and <em>OSSL_ENCODER(3)</em>.  How to migrate is described
+below.  All those descriptions assume that the key to be encoded is in the
+variable <em>pkey</em>.</p>
+</li>
+</ul>
+<p>
+</p>
+<h3><a name="migrating_i2d_functions_to_ossl_encoder">Migrating <strong>i2d</strong> functions to <strong>OSSL_ENCODER</strong></a></h3>
+<p>The exact <em>OSSL_ENCODER(3)</em> output is driven by arguments rather than by
+function names.  The sample code to get DER encoded output in a type
+specific structure is uniform, the only things that vary are the selection
+of what part of the <strong>EVP_PKEY</strong> should be output, and the structure.  The
+<strong>i2d</strong> functions names can therefore be translated into two variables,
+<em>selection</em> and <em>structure</em> as follows:</p>
+<dl>
+<dt><strong><a name="i2d_typeprivatekey" class="item"><strong>i2d_<em>TYPE</em>PrivateKey</strong>() translates into:</a></strong></dt>
+
+<dd>
+<pre>
+ <span class="keyword">int</span> <span class="variable">selection</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_KEYPAIR</span><span class="operator">;</span>
+ <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*structure</span> <span class="operator">=</span> <span class="string">"type-specific"</span><span class="operator">;</span>
+</pre>
+</dd>
+<dt><strong><a name="i2d_typepublickey" class="item"><strong>i2d_<em>TYPE</em>PublicKey</strong>() translates into:</a></strong></dt>
+
+<dd>
+<pre>
+ <span class="keyword">int</span> <span class="variable">selection</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_PUBLIC_KEY</span><span class="operator">;</span>
+ <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*structure</span> <span class="operator">=</span> <span class="string">"type-specific"</span><span class="operator">;</span>
+</pre>
+</dd>
+<dt><strong><a name="i2d_typeparams" class="item"><strong>i2d_<em>TYPE</em>params</strong>() translates into:</a></strong></dt>
+
+<dd>
+<pre>
+ <span class="keyword">int</span> <span class="variable">selection</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_PARAMETERS</span><span class="operator">;</span>
+ <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*structure</span> <span class="operator">=</span> <span class="string">"type-specific"</span><span class="operator">;</span>
+</pre>
+</dd>
+<dt><strong><a name="i2d_type_pubkey" class="item"><strong>i2d_<em>TYPE</em>_PUBKEY</strong>() translates into:</a></strong></dt>
+
+<dd>
+<pre>
+ <span class="keyword">int</span> <span class="variable">selection</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_PUBLIC_KEY</span><span class="operator">;</span>
+ <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*structure</span> <span class="operator">=</span> <span class="string">"SubjectPublicKeyInfo"</span><span class="operator">;</span>
+</pre>
+</dd>
+</dl>
+<p>The following sample code does the rest of the work:</p>
+<pre>
+ <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*p</span> <span class="operator">=</span> <span class="variable">buffer</span><span class="operator">;</span>     <span class="regex">/* |buffer| is supplied by the caller */</span>
+ <span class="variable">size_t</span> <span class="variable">len</span> <span class="operator">=</span> <span class="variable">buffer_size</span><span class="operator">;</span>      <span class="regex">/* assumed be the size of |buffer| */</span>
+ <span class="variable">OSSL_ENCODER_CTX</span> <span class="variable">*ctx</span> <span class="operator">=</span>
+     <span class="variable">OSSL_ENCODER_CTX_new_for_pkey</span><span class="operator">(</span><span class="variable">pkey</span><span class="operator">,</span> <span class="variable">selection</span><span class="operator">,</span> <span class="string">"DER"</span><span class="operator">,</span> <span class="variable">structure</span><span class="operator">,</span>
+                                   <span class="variable">NULL</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+ <span class="keyword">if</span> <span class="operator">(</span><span class="variable">ctx</span> <span class="operator">==</span> <span class="variable">NULL</span><span class="operator">)</span> <span class="operator">{</span>
+     <span class="regex">/* fatal error handling */</span>
+ <span class="operator">}</span>
+ <span class="keyword">if</span> <span class="operator">(</span><span class="variable">OSSL_ENCODER_CTX_get_num_encoders</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">)</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">)</span> <span class="operator">{</span>
+     <span class="variable">OSSL_ENCODER_CTX_free</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">);</span>
+     <span class="regex">/* non-fatal error handling */</span>
+ <span class="operator">}</span>
+ <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">OSSL_ENCODER_to_data</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">p</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">len</span><span class="operator">))</span> <span class="operator">{</span>
+     <span class="variable">OSSL_ENCODER_CTX_free</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">);</span>
+     <span class="regex">/* error handling */</span>
+ <span class="operator">}</span>
+ <span class="variable">OSSL_ENCODER_CTX_free</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The letters <strong>i</strong> and <strong>d</strong> in <strong>i2d_<em>TYPE</em></strong>() stand for
+&quot;internal&quot; (that is, an internal C structure) and &quot;DER&quot; respectively.
+So <strong>i2d_<em>TYPE</em></strong>() converts from internal to DER.</p>
+<p>The functions can also understand <strong>BER</strong> forms.</p>
+<p>The actual TYPE structure passed to <strong>i2d_<em>TYPE</em></strong>() must be a valid
+populated <strong><em>TYPE</em></strong> structure -- it <strong>cannot</strong> simply be fed with an
+empty structure such as that returned by <code>TYPE_new()</code>.</p>
+<p>The encoded data is in binary form and may contain embedded zeros.
+Therefore, any FILE pointers or BIOs should be opened in binary mode.
+Functions such as <code>strlen()</code> will <strong>not</strong> return the correct length
+of the encoded structure.</p>
+<p>The ways that <em>*ppin</em> and <em>*ppout</em> are incremented after the operation
+can trap the unwary. See the <strong>WARNINGS</strong> section in <em>d2i_X509(3)</em> for some
+common errors.
+The reason for this-auto increment behaviour is to reflect a typical
+usage of ASN1 functions: after one structure is encoded or decoded
+another will be processed after it.</p>
+<p>The following points about the data types might be useful:</p>
+<dl>
+<dt><strong><a name="dsa_pubkey" class="item"><strong>DSA_PUBKEY</strong></a></strong></dt>
+
+<dd>
+<p>Represents a DSA public key using a <strong>SubjectPublicKeyInfo</strong> structure.</p>
+</dd>
+<dt><strong><a name="dsapublickey_dsaprivatekey" class="item"><strong>DSAPublicKey</strong>, <strong>DSAPrivateKey</strong></a></strong></dt>
+
+<dd>
+<p>Use a non-standard OpenSSL format and should be avoided; use <strong>DSA_PUBKEY</strong>,
+<em>PEM_write_PrivateKey(3)</em>, or similar instead.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><strong>d2i_<em>TYPE</em></strong>(), <strong>d2i_<em>TYPE</em>_bio</strong>() and <strong>d2i_<em>TYPE</em>_fp</strong>() return a valid
+<strong><em>TYPE</em></strong> structure or NULL if an error occurs.  If the &quot;reuse&quot; capability has
+been used with a valid structure being passed in via <em>a</em>, then the object is
+freed in the event of error and <em>*a</em> is set to NULL.</p>
+<p><strong>i2d_<em>TYPE</em></strong>() returns the number of bytes successfully encoded or a negative
+value if an error occurs.</p>
+<p><strong>i2d_<em>TYPE</em>_bio</strong>() and <strong>i2d_<em>TYPE</em>_fp</strong>() return 1 for success and 0 if an
+error occurs.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>OSSL_ENCODER(3)</em>, <em>OSSL_DECODER(3)</em>,
+<em>d2i_PrivateKey(3)</em>, <em>d2i_PublicKey(3)</em>, <em>d2i_KeyParams(3)</em>,
+<em>d2i_PUBKEY(3)</em>,
+<em>i2d_PrivateKey(3)</em>, <em>i2d_PublicKey(3)</em>, <em>i2d_KeyParams(3)</em>,
+<em>i2d_PUBKEY(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2020-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

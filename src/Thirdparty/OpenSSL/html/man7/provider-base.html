@@ -1,0 +1,886 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>provider-base</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#core_functions">Core functions</a></li>
+		<li><a href="#provider_functions">Provider functions</a></li>
+		<li><a href="#provider_parameters">Provider parameters</a></li>
+		<li><a href="#core_parameters">Core parameters</a></li>
+	</ul>
+
+	<li><a href="#capabilities">CAPABILITIES</a></li>
+	<ul>
+
+		<ul>
+
+			<li><a href="#tls_group_capability">&quot;TLS-GROUP&quot; Capability</a></li>
+		</ul>
+
+	</ul>
+
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>provider-base
+- The basic OpenSSL library &lt;-&gt; provider functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/core_dispatch.h&gt;</span>
+</pre>
+<pre>
+ /*
+  * None of these are actual functions, but are displayed like this for
+  * the function signatures for functions that are offered as function
+  * pointers in OSSL_DISPATCH arrays.
+  */</pre>
+<pre>
+ <span class="regex">/* Functions offered by libcrypto to the providers */</span>
+ <span class="variable">const</span> <span class="variable">OSSL_ITEM</span> <span class="variable">*core_gettable_params</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">core_get_params</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">,</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">typedef</span> <span class="variable">void</span> <span class="operator">(</span><span class="variable">*OSSL_thread_stop_handler_fn</span><span class="operator">)(</span><span class="variable">void</span> <span class="variable">*arg</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">core_thread_start</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">,</span>
+                       <span class="variable">OSSL_thread_stop_handler_fn</span> <span class="variable">handfn</span><span class="operator">,</span>
+                       <span class="variable">void</span> <span class="variable">*arg</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">OPENSSL_CORE_CTX</span> <span class="variable">*core_get_libctx</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">core_new_error</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">core_set_error_debug</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">,</span>
+                           <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*file</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">line</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*func</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">core_vset_error</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">,</span>
+                      <span class="variable">uint32_t</span> <span class="variable">reason</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*fmt</span><span class="operator">,</span> <span class="variable">va_list</span> <span class="variable">args</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">core_obj_add_sigid</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*prov</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span>  <span class="variable">*sign_name</span><span class="operator">,</span>
+                        <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*digest_name</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*pkey_name</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">core_obj_create</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*oid</span><span class="operator">,</span>
+                     <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*sn</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*ln</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/*
+  * Some OpenSSL functionality is directly offered to providers via
+  * dispatch
+  */</span>
+ <span class="variable">void</span> <span class="variable">*CRYPTO_malloc</span><span class="operator">(</span><span class="variable">size_t</span> <span class="variable">num</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*file</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">line</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">*CRYPTO_zalloc</span><span class="operator">(</span><span class="variable">size_t</span> <span class="variable">num</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*file</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">line</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">CRYPTO_free</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*ptr</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*file</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">line</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">CRYPTO_clear_free</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*ptr</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">num</span><span class="operator">,</span>
+                        <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*file</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">line</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">*CRYPTO_realloc</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*addr</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">num</span><span class="operator">,</span>
+                      <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*file</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">line</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">*CRYPTO_clear_realloc</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*addr</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">old_num</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">num</span><span class="operator">,</span>
+                            <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*file</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">line</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">*CRYPTO_secure_malloc</span><span class="operator">(</span><span class="variable">size_t</span> <span class="variable">num</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*file</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">line</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">*CRYPTO_secure_zalloc</span><span class="operator">(</span><span class="variable">size_t</span> <span class="variable">num</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*file</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">line</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">CRYPTO_secure_free</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*ptr</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*file</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">line</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">CRYPTO_secure_clear_free</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*ptr</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">num</span><span class="operator">,</span>
+                               <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*file</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">line</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">CRYPTO_secure_allocated</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">void</span> <span class="variable">*ptr</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">OPENSSL_cleanse</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*ptr</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">len</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*OPENSSL_hexstr2buf</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*str</span><span class="operator">,</span> <span class="variable">long</span> <span class="variable">*buflen</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">OSSL_CORE_BIO</span> <span class="variable">*BIO_new_file</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*filename</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*mode</span><span class="operator">);</span>
+ <span class="variable">OSSL_CORE_BIO</span> <span class="variable">*BIO_new_membuf</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">void</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">len</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_read_ex</span><span class="operator">(</span><span class="variable">OSSL_CORE_BIO</span> <span class="variable">*bio</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*data</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">data_len</span><span class="operator">,</span>
+                 <span class="variable">size_t</span> <span class="variable">*bytes_read</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_write_ex</span><span class="operator">(</span><span class="variable">OSSL_CORE_BIO</span> <span class="variable">*bio</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">void</span> <span class="variable">*data</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">data_len</span><span class="operator">,</span>
+                  <span class="variable">size_t</span> <span class="variable">*written</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_up_ref</span><span class="operator">(</span><span class="variable">OSSL_CORE_BIO</span> <span class="variable">*bio</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_free</span><span class="operator">(</span><span class="variable">OSSL_CORE_BIO</span> <span class="variable">*bio</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_vprintf</span><span class="operator">(</span><span class="variable">OSSL_CORE_BIO</span> <span class="variable">*bio</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*format</span><span class="operator">,</span> <span class="variable">va_list</span> <span class="variable">args</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_vsnprintf</span><span class="operator">(</span><span class="variable">char</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">n</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*fmt</span><span class="operator">,</span> <span class="variable">va_list</span> <span class="variable">args</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">void</span> <span class="variable">OSSL_SELF_TEST_set_callback</span><span class="operator">(</span><span class="variable">OSSL_LIB_CTX</span> <span class="variable">*libctx</span><span class="operator">,</span> <span class="variable">OSSL_CALLBACK</span> <span class="variable">*cb</span><span class="operator">,</span>
+                                  <span class="variable">void</span> <span class="variable">*cbarg</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">size_t</span> <span class="variable">get_entropy</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">,</span>
+                    <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">pout</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">entropy</span><span class="operator">,</span>
+                    <span class="variable">size_t</span> <span class="variable">min_len</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">max_len</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">cleanup_entropy</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">,</span>
+                      <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">len</span><span class="operator">);</span>
+ <span class="variable">size_t</span> <span class="variable">get_nonce</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">,</span>
+                  <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">pout</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">min_len</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">max_len</span><span class="operator">,</span>
+                  <span class="variable">const</span> <span class="variable">void</span> <span class="variable">*salt</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">salt_len</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">cleanup_nonce</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">,</span>
+                    <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">len</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* Functions for querying the providers in the application library context */</span>
+ <span class="keyword">int</span> <span class="variable">provider_register_child_cb</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">,</span>
+                     <span class="keyword">int</span> <span class="operator">(</span><span class="variable">*create_cb</span><span class="operator">)(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*provider</span><span class="operator">,</span>
+                                      <span class="variable">void</span> <span class="variable">*cbdata</span><span class="operator">),</span>
+                     <span class="keyword">int</span> <span class="operator">(</span><span class="variable">*remove_cb</span><span class="operator">)(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*provider</span><span class="operator">,</span>
+                                      <span class="variable">void</span> <span class="variable">*cbdata</span><span class="operator">),</span>
+                     <span class="keyword">int</span> <span class="operator">(</span><span class="variable">*global_props_cb</span><span class="operator">)(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*props</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*cbdata</span><span class="operator">),</span>
+                     <span class="variable">void</span> <span class="variable">*cbdata</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">provider_deregister_child_cb</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*provider_name</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*prov</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">*provider_get0_provider_ctx</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*prov</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="variable">*provider_get0_dispatch</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*prov</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">provider_up_ref</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*prov</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">activate</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">provider_free</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*prov</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">deactivate</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* Functions offered by the provider to libcrypto */</span>
+ <span class="variable">void</span> <span class="variable">provider_teardown</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_ITEM</span> <span class="variable">*provider_gettable_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">provider_get_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">,</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_ALGORITHM</span> <span class="variable">*provider_query_operation</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">,</span>
+                                                <span class="keyword">int</span> <span class="variable">operation_id</span><span class="operator">,</span>
+                                                <span class="variable">const</span> <span class="keyword">int</span> <span class="variable">*no_store</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">provider_unquery_operation</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">operation_id</span><span class="operator">,</span>
+                                 <span class="variable">const</span> <span class="variable">OSSL_ALGORITHM</span> <span class="variable">*algs</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_ITEM</span> <span class="variable">*provider_get_reason_strings</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">provider_get_capabilities</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*capability</span><span class="operator">,</span>
+                               <span class="variable">OSSL_CALLBACK</span> <span class="variable">*cb</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*arg</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">provider_self_test</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>All &quot;functions&quot; mentioned here are passed as function pointers between
+<em class="file">libcrypto</em> and the provider in <em>OSSL_DISPATCH(3)</em> arrays, in the call
+of the provider initialization function.  See <em>provider(7)/Provider</em>
+for a description of the initialization function. They are known as &quot;upcalls&quot;.</p>
+<p>All these &quot;functions&quot; have a corresponding function type definition
+named <strong>OSSL_FUNC_{name}_fn</strong>, and a helper function to retrieve the
+function pointer from a <em>OSSL_DISPATCH(3)</em> element named
+<strong>OSSL_FUNC_{name}</strong>.
+For example, the &quot;function&quot; <code>core_gettable_params()</code> has these:</p>
+<pre>
+ <span class="variable">typedef</span> <span class="variable">OSSL_PARAM</span> <span class="operator">*</span>
+     <span class="operator">(</span><span class="variable">OSSL_FUNC_core_gettable_params_fn</span><span class="operator">)(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">);</span>
+ <span class="variable">static</span> <span class="variable">ossl_inline</span> <span class="variable">OSSL_NAME_core_gettable_params_fn</span>
+     <span class="variable">OSSL_FUNC_core_gettable_params</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="variable">*opf</span><span class="operator">);</span>
+</pre>
+<p><em>OSSL_DISPATCH(3)</em> arrays are indexed by numbers that are provided as
+macros in <em>openssl-core_dispatch.h(7)</em>, as follows:</p>
+<p>For <em>in</em> (the <em>OSSL_DISPATCH(3)</em> array passed from <em class="file">libcrypto</em> to the
+provider):</p>
+<pre>
+ core_gettable_params           OSSL_FUNC_CORE_GETTABLE_PARAMS
+ core_get_params                OSSL_FUNC_CORE_GET_PARAMS
+ core_thread_start              OSSL_FUNC_CORE_THREAD_START
+ core_get_libctx                OSSL_FUNC_CORE_GET_LIBCTX
+ core_new_error                 OSSL_FUNC_CORE_NEW_ERROR
+ core_set_error_debug           OSSL_FUNC_CORE_SET_ERROR_DEBUG
+ core_vset_error                OSSL_FUNC_CORE_VSET_ERROR
+ core_obj_add_sigid             OSSL_FUNC_CORE_OBJ_ADD_SIGID
+ core_obj_create                OSSL_FUNC_CORE_OBJ_CREATE
+ CRYPTO_malloc                  OSSL_FUNC_CRYPTO_MALLOC
+ CRYPTO_zalloc                  OSSL_FUNC_CRYPTO_ZALLOC
+ CRYPTO_free                    OSSL_FUNC_CRYPTO_FREE
+ CRYPTO_clear_free              OSSL_FUNC_CRYPTO_CLEAR_FREE
+ CRYPTO_realloc                 OSSL_FUNC_CRYPTO_REALLOC
+ CRYPTO_clear_realloc           OSSL_FUNC_CRYPTO_CLEAR_REALLOC
+ CRYPTO_secure_malloc           OSSL_FUNC_CRYPTO_SECURE_MALLOC
+ CRYPTO_secure_zalloc           OSSL_FUNC_CRYPTO_SECURE_ZALLOC
+ CRYPTO_secure_free             OSSL_FUNC_CRYPTO_SECURE_FREE
+ CRYPTO_secure_clear_free       OSSL_FUNC_CRYPTO_SECURE_CLEAR_FREE
+ CRYPTO_secure_allocated        OSSL_FUNC_CRYPTO_SECURE_ALLOCATED
+ BIO_new_file                   OSSL_FUNC_BIO_NEW_FILE
+ BIO_new_mem_buf                OSSL_FUNC_BIO_NEW_MEMBUF
+ BIO_read_ex                    OSSL_FUNC_BIO_READ_EX
+ BIO_write_ex                   OSSL_FUNC_BIO_WRITE_EX
+ BIO_up_ref                     OSSL_FUNC_BIO_UP_REF
+ BIO_free                       OSSL_FUNC_BIO_FREE
+ BIO_vprintf                    OSSL_FUNC_BIO_VPRINTF
+ BIO_vsnprintf                  OSSL_FUNC_BIO_VSNPRINTF
+ BIO_puts                       OSSL_FUNC_BIO_PUTS
+ BIO_gets                       OSSL_FUNC_BIO_GETS
+ BIO_ctrl                       OSSL_FUNC_BIO_CTRL
+ OPENSSL_cleanse                OSSL_FUNC_OPENSSL_CLEANSE
+ OSSL_SELF_TEST_set_callback    OSSL_FUNC_SELF_TEST_CB
+ ossl_rand_get_entropy          OSSL_FUNC_GET_ENTROPY
+ ossl_rand_cleanup_entropy      OSSL_FUNC_CLEANUP_ENTROPY
+ ossl_rand_get_nonce            OSSL_FUNC_GET_NONCE
+ ossl_rand_cleanup_nonce        OSSL_FUNC_CLEANUP_NONCE
+ provider_register_child_cb     OSSL_FUNC_PROVIDER_REGISTER_CHILD_CB
+ provider_deregister_child_cb   OSSL_FUNC_PROVIDER_DEREGISTER_CHILD_CB
+ provider_name                  OSSL_FUNC_PROVIDER_NAME
+ provider_get0_provider_ctx     OSSL_FUNC_PROVIDER_GET0_PROVIDER_CTX
+ provider_get0_dispatch         OSSL_FUNC_PROVIDER_GET0_DISPATCH
+ provider_up_ref                OSSL_FUNC_PROVIDER_UP_REF
+ provider_free                  OSSL_FUNC_PROVIDER_FREE</pre>
+<p>For <em>*out</em> (the <em>OSSL_DISPATCH(3)</em> array passed from the provider to
+<em class="file">libcrypto</em>):</p>
+<pre>
+ provider_teardown              OSSL_FUNC_PROVIDER_TEARDOWN
+ provider_gettable_params       OSSL_FUNC_PROVIDER_GETTABLE_PARAMS
+ provider_get_params            OSSL_FUNC_PROVIDER_GET_PARAMS
+ provider_query_operation       OSSL_FUNC_PROVIDER_QUERY_OPERATION
+ provider_unquery_operation     OSSL_FUNC_PROVIDER_UNQUERY_OPERATION
+ provider_get_reason_strings    OSSL_FUNC_PROVIDER_GET_REASON_STRINGS
+ provider_get_capabilities      OSSL_FUNC_PROVIDER_GET_CAPABILITIES
+ provider_self_test             OSSL_FUNC_PROVIDER_SELF_TEST</pre>
+<p>
+</p>
+<h2><a name="core_functions">Core functions</a></h2>
+<p><code>core_gettable_params()</code> returns a constant array of descriptor
+<em>OSSL_PARAM(3)</em>, for parameters that <code>core_get_params()</code> can handle.</p>
+<p><code>core_get_params()</code> retrieves parameters from the core for the given <em>handle</em>.
+See <a href="#core_parameters">Core parameters</a> below for a description of currently known
+parameters.</p>
+<p>The <code>core_thread_start()</code> function informs the core that the provider has stated
+an interest in the current thread. The core will inform the provider when the
+thread eventually stops. It must be passed the <em>handle</em> for this provider, as
+well as a callback <em>handfn</em> which will be called when the thread stops. The
+callback will subsequently be called, with the supplied argument <em>arg</em>, from
+the thread that is stopping and gets passed the provider context as an
+argument. This may be useful to perform thread specific clean up such as
+freeing thread local variables.</p>
+<p><code>core_get_libctx()</code> retrieves the core context in which the library
+object for the current provider is stored, accessible through the <em>handle</em>.
+This function is useful only for built-in providers such as the default
+provider. Never cast this to OSSL_LIB_CTX in a provider that is not
+built-in as the OSSL_LIB_CTX of the library loading the provider might be
+a completely different structure than the OSSL_LIB_CTX of the library the
+provider is linked to. Use  <em>OSSL_LIB_CTX_new_child(3)</em> instead to obtain
+a proper library context that is linked to the application library context.</p>
+<p><a href="#core_new_error"><code>core_new_error()</code></a>, <a href="#core_set_error_debug"><code>core_set_error_debug()</code></a> and <a href="#core_vset_error"><code>core_vset_error()</code></a> are
+building blocks for reporting an error back to the core, with
+reference to the <em>handle</em>.</p>
+<dl>
+<dt><strong><a name="core_new_error" class="item"><code>core_new_error()</code></a></strong></dt>
+
+<dd>
+<p>allocates a new thread specific error record.</p>
+<p>This corresponds to the OpenSSL function <em>ERR_new(3)</em>.</p>
+</dd>
+<dt><strong><a name="core_set_error_debug" class="item"><code>core_set_error_debug()</code></a></strong></dt>
+
+<dd>
+<p>sets debugging information in the current thread specific error
+record.
+The debugging information includes the name of the file <em>file</em>, the
+line <em>line</em> and the function name <em>func</em> where the error occurred.</p>
+<p>This corresponds to the OpenSSL function <em>ERR_set_debug(3)</em>.</p>
+</dd>
+<dt><strong><a name="core_vset_error" class="item"><code>core_vset_error()</code></a></strong></dt>
+
+<dd>
+<p>sets the <em>reason</em> for the error, along with any addition data.
+The <em>reason</em> is a number defined by the provider and used to index
+the reason strings table that's returned by
+<code>provider_get_reason_strings()</code>.
+The additional data is given as a format string <em>fmt</em> and a set of
+arguments <em>args</em>, which are treated in the same manner as with
+<code>BIO_vsnprintf()</code>.
+<em>file</em> and <em>line</em> may also be passed to indicate exactly where the
+error occurred or was reported.</p>
+<p>This corresponds to the OpenSSL function <em>ERR_vset_error(3)</em>.</p>
+</dd>
+</dl>
+<p>The <code>core_obj_create()</code> function registers a new OID and associated short name
+<em>sn</em> and long name <em>ln</em> for the given <em>handle</em>. It is similar to the OpenSSL
+function <em>OBJ_create(3)</em> except that it returns 1 on success or 0 on failure.
+It will treat as success the case where the OID already exists (even if the
+short name <em>sn</em> or long name <em>ln</em> provided as arguments differ from those
+associated with the existing OID, in which case the new names are not
+associated).
+This function is not thread safe.</p>
+<p>The <code>core_obj_add_sigid()</code> function registers a new composite signature algorithm
+(<em>sign_name</em>) consisting of an underlying signature algorithm (<em>pkey_name</em>)
+and digest algorithm (<em>digest_name</em>) for the given <em>handle</em>. It assumes that
+the OIDs for the composite signature algorithm as well as for the underlying
+signature and digest algorithms are either already known to OpenSSL or have been
+registered via a call to <code>core_obj_create()</code>. It corresponds to the OpenSSL
+function <em>OBJ_add_sigid(3)</em>, except that the objects are identified by name
+rather than a numeric NID. Any name (OID, short name or long name) can be used
+to identify the object. It will treat as success the case where the composite
+signature algorithm already exists (even if registered against a different
+underlying signature or digest algorithm). For <em>digest_name</em>, NULL or an
+empty string is permissible for signature algorithms that do not need a digest
+to operate correctly. The function returns 1 on success or 0 on failure.
+This function is not thread safe.</p>
+<p><code>CRYPTO_malloc()</code>, <code>CRYPTO_zalloc()</code>, <code>CRYPTO_free()</code>, <code>CRYPTO_clear_free()</code>,
+<code>CRYPTO_realloc()</code>, <code>CRYPTO_clear_realloc()</code>, <code>CRYPTO_secure_malloc()</code>,
+<code>CRYPTO_secure_zalloc()</code>, <code>CRYPTO_secure_free()</code>,
+<code>CRYPTO_secure_clear_free()</code>, <code>CRYPTO_secure_allocated()</code>,
+<code>BIO_new_file()</code>, <code>BIO_new_mem_buf()</code>, <code>BIO_read_ex()</code>, <code>BIO_write_ex()</code>, <code>BIO_up_ref()</code>,
+<code>BIO_free()</code>, <code>BIO_vprintf()</code>, <code>BIO_vsnprintf()</code>, <code>BIO_gets()</code>, <code>BIO_puts()</code>,
+<code>BIO_ctrl()</code>, <code>OPENSSL_cleanse()</code> and
+OPENSSL_hexstr2buf() correspond exactly to the public functions with
+the same name.  As a matter of fact, the pointers in the <em>OSSL_DISPATCH(3)</em>
+array are typically direct pointers to those public functions. Note that the BIO
+functions take an <strong>OSSL_CORE_BIO</strong> type rather than the standard <strong>BIO</strong>
+type. This is to ensure that a provider does not mix BIOs from the core
+with BIOs used on the provider side (the two are not compatible).
+<code>OSSL_SELF_TEST_set_callback()</code> is used to set an optional callback that can be
+passed into a provider. This may be ignored by a provider.</p>
+<p><code>get_entropy()</code> retrieves seeding material from the operating system.
+The seeding material will have at least <em>entropy</em> bytes of randomness and the
+output will have at least <em>min_len</em> and at most <em>max_len</em> bytes.
+The buffer address is stored in <em>*pout</em> and the buffer length is
+returned to the caller.  On error, zero is returned.</p>
+<p><code>cleanup_entropy()</code> is used to clean up and free the buffer returned by
+<code>get_entropy()</code>.  The entropy pointer returned by <code>get_entropy()</code> is passed in
+<strong>buf</strong> and its length in <strong>len</strong>.</p>
+<p><code>get_nonce()</code> retrieves a nonce using the passed <em>salt</em> parameter
+of length <em>salt_len</em> and operating system specific information.
+The <em>salt</em> should contain uniquely identifying information and this is
+included, in an unspecified manner, as part of the output.
+The output is stored in a buffer which contains at least <em>min_len</em> and at
+most <em>max_len</em> bytes.  The buffer address is stored in <em>*pout</em> and the
+buffer length returned to the caller.  On error, zero is returned.</p>
+<p><code>cleanup_nonce()</code> is used to clean up and free the buffer returned by
+<code>get_nonce()</code>.  The nonce pointer returned by <code>get_nonce()</code> is passed in
+<strong>buf</strong> and its length in <strong>len</strong>.</p>
+<p><code>provider_register_child_cb()</code> registers callbacks for being informed about the
+loading and unloading of providers in the application's library context.
+<em>handle</em> is this provider's handle and <em>cbdata</em> is this provider's data
+that will be passed back to the callbacks. It returns 1 on success or 0
+otherwise. These callbacks may be called while holding locks in libcrypto. In
+order to avoid deadlocks the callback implementation must not be long running
+and must not call other OpenSSL API functions or upcalls.</p>
+<p><em>create_cb</em> is a callback that will be called when a new provider is loaded
+into the application's library context. It is also called for any providers that
+are already loaded at the point that this callback is registered. The callback
+is passed the handle being used for the new provider being loadded and this
+provider's data in <em>cbdata</em>. It should return 1 on success or 0 on failure.</p>
+<p><em>remove_cb</em> is a callback that will be called when a new provider is unloaded
+from the application's library context. It is passed the handle being used for
+the provider being unloaded and this provider's data in <em>cbdata</em>. It should
+return 1 on success or 0 on failure.</p>
+<p><em>global_props_cb</em> is a callback that will be called when the global properties
+from the parent library context are changed. It should return 1 on success
+or 0 on failure.</p>
+<p><code>provider_deregister_child_cb()</code> unregisters callbacks previously registered via
+<code>provider_register_child_cb()</code>. If <code>provider_register_child_cb()</code> has been called
+then <code>provider_deregister_child_cb()</code> should be called at or before the point that
+this provider's teardown function is called.</p>
+<p><code>provider_name()</code> returns a string giving the name of the provider identified by
+<em>handle</em>.</p>
+<p>provider_get0_provider_ctx() returns the provider context that is associated
+with the provider identified by <em>prov</em>.</p>
+<p>provider_get0_dispatch() gets the dispatch table registered by the provider
+identified by <em>prov</em> when it initialised.</p>
+<p><code>provider_up_ref()</code> increments the reference count on the provider <em>prov</em>. If
+<em>activate</em> is nonzero then the provider is also loaded if it is not already
+loaded. It returns 1 on success or 0 on failure.</p>
+<p><code>provider_free()</code> decrements the reference count on the provider <em>prov</em>. If
+<em>deactivate</em> is nonzero then the provider is also unloaded if it is not
+already loaded. It returns 1 on success or 0 on failure.</p>
+<p>
+</p>
+<h2><a name="provider_functions">Provider functions</a></h2>
+<p><code>provider_teardown()</code> is called when a provider is shut down and removed
+from the core's provider store.
+It must free the passed <em>provctx</em>.</p>
+<p><code>provider_gettable_params()</code> should return a constant array of
+descriptor <em>OSSL_PARAM(3)</em>, for parameters that <code>provider_get_params()</code>
+can handle.</p>
+<p><code>provider_get_params()</code> should process the <em>OSSL_PARAM(3)</em> array
+<em>params</em>, setting the values of the parameters it understands.</p>
+<p><code>provider_query_operation()</code> should return a constant <em>OSSL_ALGORITHM(3)</em>
+that corresponds to the given <em>operation_id</em>.
+It should indicate if the core may store a reference to this array by
+setting <em>*no_store</em> to 0 (core may store a reference) or 1 (core may
+not store a reference).</p>
+<p><code>provider_unquery_operation()</code> informs the provider that the result of a
+<code>provider_query_operation()</code> is no longer directly required and that the function
+pointers have been copied.  The <em>operation_id</em> should match that passed to
+<code>provider_query_operation()</code> and <em>algs</em> should be its return value.</p>
+<p><code>provider_get_reason_strings()</code> should return a constant <em>OSSL_ITEM(3)</em>
+array that provides reason strings for reason codes the provider may
+use when reporting errors using <code>core_put_error()</code>.</p>
+<p>The <code>provider_get_capabilities()</code> function should call the callback <em>cb</em> passing
+it a set of <em>OSSL_PARAM(3)</em>s and the caller supplied argument <em>arg</em>. The
+<em>OSSL_PARAM(3)</em>s should provide details about the capability with the name given
+in the <em>capability</em> argument relevant for the provider context <em>provctx</em>. If a
+provider supports multiple capabilities with the given name then it may call the
+callback multiple times (one for each capability). Capabilities can be useful for
+describing the services that a provider can offer. For further details see the
+<a href="#capabilities">CAPABILITIES</a> section below. It should return 1 on success or 0 on error.</p>
+<p>The <code>provider_self_test()</code> function should perform known answer tests on a subset
+of the algorithms that it uses, and may also verify the integrity of the
+provider module. It should return 1 on success or 0 on error. It will return 1
+if this function is not used.</p>
+<p>None of these functions are mandatory, but a provider is fairly
+useless without at least <code>provider_query_operation()</code>, and
+<code>provider_gettable_params()</code> is fairly useless if not accompanied by
+<code>provider_get_params()</code>.</p>
+<p>
+</p>
+<h2><a name="provider_parameters">Provider parameters</a></h2>
+<p><code>provider_get_params()</code> can return the following provider parameters to the core:</p>
+<dl>
+<dt><strong><a name="name_ossl_prov_param_name_utf8_ptr" class="item">&quot;name&quot; (<strong>OSSL_PROV_PARAM_NAME</strong>) &lt;UTF8 ptr&gt;</a></strong></dt>
+
+<dd>
+<p>This points to a string that should give a unique name for the provider.</p>
+</dd>
+<dt><strong><a name="version_ossl_prov_param_version_utf8_ptr" class="item">&quot;version&quot; (<strong>OSSL_PROV_PARAM_VERSION</strong>) &lt;UTF8 ptr&gt;</a></strong></dt>
+
+<dd>
+<p>This points to a string that is a version number associated with this provider.
+OpenSSL in-built providers use OPENSSL_VERSION_STR, but this may be different
+for any third party provider. This string is for informational purposes only.</p>
+</dd>
+<dt><strong><a name="buildinfo_ossl_prov_param_buildinfo_utf8_ptr" class="item">&quot;buildinfo&quot; (<strong>OSSL_PROV_PARAM_BUILDINFO</strong>) &lt;UTF8 ptr&gt;</a></strong></dt>
+
+<dd>
+<p>This points to a string that is a build information associated with this provider.
+OpenSSL in-built providers use OPENSSL_FULL_VERSION_STR, but this may be
+different for any third party provider.</p>
+</dd>
+<dt><strong><a name="status_ossl_prov_param_status_unsigned_integer" class="item">&quot;status&quot; (<strong>OSSL_PROV_PARAM_STATUS</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>This returns 0 if the provider has entered an error state, otherwise it returns
+1.</p>
+</dd>
+</dl>
+<p><code>provider_gettable_params()</code> should return the above parameters.</p>
+<p>
+</p>
+<h2><a name="core_parameters">Core parameters</a></h2>
+<p><code>core_get_params()</code> can retrieve the following core parameters for each provider:</p>
+<dl>
+<dt><strong><a name="openssl_version_ossl_prov_param_core_version_utf8_string_ptr" class="item">&quot;openssl-version&quot; (<strong>OSSL_PROV_PARAM_CORE_VERSION</strong>) &lt;UTF8 string ptr&gt;</a></strong></dt>
+
+<dd>
+<p>This points to the OpenSSL libraries' full version string, i.e. the string
+expanded from the macro <strong>OPENSSL_VERSION_STR</strong>.</p>
+</dd>
+<dt><strong><a name="provider_name_ossl_prov_param_core_prov_name_utf8_string_ptr" class="item">&quot;provider-name&quot; (<strong>OSSL_PROV_PARAM_CORE_PROV_NAME</strong>) &lt;UTF8 string ptr&gt;</a></strong></dt>
+
+<dd>
+<p>This points to the OpenSSL libraries' idea of what the calling provider is named.</p>
+</dd>
+<dt><strong><a name="module_filename_ossl_prov_param_core_module_filename_utf8_string_ptr" class="item">&quot;module-filename&quot; (<strong>OSSL_PROV_PARAM_CORE_MODULE_FILENAME</strong>) &lt;UTF8 string ptr&gt;</a></strong></dt>
+
+<dd>
+<p>This points to a string containing the full filename of the providers
+module file.</p>
+</dd>
+</dl>
+<p>Additionally, provider specific configuration parameters from the
+config file are available, in dotted name form.
+The dotted name form is a concatenation of section names and final
+config command name separated by periods.</p>
+<p>For example, let's say we have the following config example:</p>
+<pre>
+ config_diagnostics = 1
+ openssl_conf = openssl_init</pre>
+<pre>
+ [openssl_init]
+ providers = providers_sect</pre>
+<pre>
+ [providers_sect]
+ foo = foo_sect</pre>
+<pre>
+ [foo_sect]
+ activate = 1
+ data1 = 2
+ data2 = str
+ more = foo_more</pre>
+<pre>
+ [foo_more]
+ data3 = foo,bar</pre>
+<p>The provider will have these additional parameters available:</p>
+<dl>
+<dt><strong><a name="activate" class="item">&quot;activate&quot;</a></strong></dt>
+
+<dd>
+<p>pointing at the string &quot;1&quot;</p>
+</dd>
+<dt><strong><a name="data1" class="item">&quot;data1&quot;</a></strong></dt>
+
+<dd>
+<p>pointing at the string &quot;2&quot;</p>
+</dd>
+<dt><strong><a name="data2" class="item">&quot;data2&quot;</a></strong></dt>
+
+<dd>
+<p>pointing at the string &quot;str&quot;</p>
+</dd>
+<dt><strong><a name="more_data3" class="item">&quot;more.data3&quot;</a></strong></dt>
+
+<dd>
+<p>pointing at the string &quot;foo,bar&quot;</p>
+</dd>
+</dl>
+<p>For more information on handling parameters, see <em>OSSL_PARAM(3)</em> as
+<em>OSSL_PARAM_int(3)</em>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="capabilities">CAPABILITIES</a></h1>
+<p>Capabilities describe some of the services that a provider can offer.
+Applications can query the capabilities to discover those services.</p>
+<p>
+</p>
+<h3><a name="tls_group_capability">&quot;TLS-GROUP&quot; Capability</a></h3>
+<p>The &quot;TLS-GROUP&quot; capability can be queried by libssl to discover the list of
+TLS groups that a provider can support. Each group supported can be used for
+<em>key exchange</em> (KEX) or <em>key encapsulation method</em> (KEM) during a TLS
+handshake.
+TLS clients can advertise the list of TLS groups they support in the
+supported_groups extension, and TLS servers can select a group from the offered
+list that they also support. In this way a provider can add to the list of
+groups that libssl already supports with additional ones.</p>
+<p>Each TLS group that a provider supports should be described via the callback
+passed in through the provider_get_capabilities function. Each group should have
+the following details supplied (all are mandatory, except
+<strong>OSSL_CAPABILITY_TLS_GROUP_IS_KEM</strong>):</p>
+<dl>
+<dt><strong><a name="tls_group_name_ossl_capability_tls_group_name_utf8_string" class="item">&quot;tls-group-name&quot; (<strong>OSSL_CAPABILITY_TLS_GROUP_NAME</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>The name of the group as given in the IANA TLS Supported Groups registry
+<a href="https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-8">https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-8</a>.</p>
+</dd>
+<dt><strong><a name="tls_group_name_internal_ossl_capability_tls_group_name_internal_utf8_string" class="item">&quot;tls-group-name-internal&quot; (<strong>OSSL_CAPABILITY_TLS_GROUP_NAME_INTERNAL</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>The name of the group as known by the provider. This could be the same as the
+&quot;tls-group-name&quot;, but does not have to be.</p>
+</dd>
+<dt><strong><a name="tls_group_id_ossl_capability_tls_group_id_unsigned_integer" class="item">&quot;tls-group-id&quot; (<strong>OSSL_CAPABILITY_TLS_GROUP_ID</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>The TLS group id value as given in the IANA TLS Supported Groups registry.</p>
+</dd>
+<dt><strong><a name="tls_group_alg_ossl_capability_tls_group_alg_utf8_string" class="item">&quot;tls-group-alg&quot; (<strong>OSSL_CAPABILITY_TLS_GROUP_ALG</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>The name of a Key Management algorithm that the provider offers and that should
+be used with this group. Keys created should be able to support <em>key exchange</em>
+or <em>key encapsulation method</em> (KEM), as implied by the optional
+<strong>OSSL_CAPABILITY_TLS_GROUP_IS_KEM</strong> flag.
+The algorithm must support key and parameter generation as well as the
+key/parameter generation parameter, <strong>OSSL_PKEY_PARAM_GROUP_NAME</strong>. The group
+name given via &quot;tls-group-name-internal&quot; above will be passed via
+<strong>OSSL_PKEY_PARAM_GROUP_NAME</strong> when libssl wishes to generate keys/parameters.</p>
+</dd>
+<dt><strong><a name="tls_group_sec_bits_ossl_capability_tls_group_security_bits_unsigned_integer" class="item">&quot;tls-group-sec-bits&quot; (<strong>OSSL_CAPABILITY_TLS_GROUP_SECURITY_BITS</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>The number of bits of security offered by keys in this group. The number of bits
+should be comparable with the ones given in table 2 and 3 of the NIST SP800-57
+document.</p>
+</dd>
+<dt><strong><a name="tls_group_is_kem_ossl_capability_tls_group_is_kem_unsigned_integer" class="item">&quot;tls-group-is-kem&quot; (<strong>OSSL_CAPABILITY_TLS_GROUP_IS_KEM</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>Boolean flag to describe if the group should be used in <em>key exchange</em> (KEX)
+mode (0, default) or in <em>key encapsulation method</em> (KEM) mode (1).</p>
+<p>This parameter is optional: if not specified, KEX mode is assumed as the default
+mode for the group.</p>
+<p>In KEX mode, in a typical Diffie-Hellman fashion, both sides execute <em>keygen</em>
+then <em>derive</em> against the peer public key. To operate in KEX mode, the group
+implementation must support the provider functions as described in
+<em>provider-keyexch(7)</em>.</p>
+<p>In KEM mode, the client executes <em>keygen</em> and sends its public key, the server
+executes <em>encapsulate</em> using the client's public key and sends back the
+resulting <em>ciphertext</em>, finally the client executes <em>decapsulate</em> to retrieve
+the same <em>shared secret</em> generated by the server's <em>encapsulate</em>. To operate
+in KEM mode, the group implementation must support the provider functions as
+described in <em>provider-kem(7)</em>.</p>
+<p>Both in KEX and KEM mode, the resulting <em>shared secret</em> is then used according
+to the protocol specification.</p>
+</dd>
+<dt><strong><a name="tls_min_tls_ossl_capability_tls_group_min_tls_integer" class="item">&quot;tls-min-tls&quot; (<strong>OSSL_CAPABILITY_TLS_GROUP_MIN_TLS</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dt><strong><a name="tls_max_tls_ossl_capability_tls_group_max_tls_integer" class="item">&quot;tls-max-tls&quot; (<strong>OSSL_CAPABILITY_TLS_GROUP_MAX_TLS</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dt><strong><a name="tls_min_dtls_ossl_capability_tls_group_min_dtls_integer" class="item">&quot;tls-min-dtls&quot; (<strong>OSSL_CAPABILITY_TLS_GROUP_MIN_DTLS</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dt><strong><a name="tls_max_dtls_ossl_capability_tls_group_max_dtls_integer" class="item">&quot;tls-max-dtls&quot; (<strong>OSSL_CAPABILITY_TLS_GROUP_MAX_DTLS</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>These parameters can be used to describe the minimum and maximum TLS and DTLS
+versions supported by the group. The values equate to the on-the-wire encoding
+of the various TLS versions. For example TLSv1.3 is 0x0304 (772 decimal), and
+TLSv1.2 is 0x0303 (771 decimal). A 0 indicates that there is no defined minimum
+or maximum. A -1 indicates that the group should not be used in that protocol.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>This is an example of a simple provider made available as a
+dynamically loadable module.
+It implements the fictitious algorithm <code>FOO</code> for the fictitious
+operation <code>BAR</code>.</p>
+<pre>
+ <span class="comment">#include &lt;malloc.h&gt;</span>
+ <span class="comment">#include &lt;openssl/core.h&gt;</span>
+ <span class="comment">#include &lt;openssl/core_dispatch.h&gt;</span>
+</pre>
+<pre>
+ /* Errors used in this provider */
+ #define E_MALLOC       1</pre>
+<pre>
+ <span class="variable">static</span> <span class="variable">const</span> <span class="variable">OSSL_ITEM</span> <span class="variable">reasons</span><span class="operator">[]</span> <span class="operator">=</span> <span class="operator">{</span>
+     <span class="operator">{</span> <span class="variable">E_MALLOC</span><span class="operator">,</span> <span class="string">"memory allocation failure"</span> <span class="operator">}</span><span class="operator">.</span>
+     <span class="operator">{</span> <span class="number">0</span><span class="operator">,</span> <span class="variable">NULL</span> <span class="operator">}</span> <span class="operator">/*</span> <span class="variable">Termination</span> <span class="operator">*/</span>
+ <span class="operator">}</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="regex">/*
+  * To ensure we get the function signature right, forward declare
+  * them using function types provided by openssl/core</span><span class="variable">_dispatch</span><span class="operator">.</span><span class="variable">h</span>
+  <span class="operator">*/</span>
+ <span class="variable">OSSL_FUNC_bar_newctx_fn</span> <span class="variable">foo_newctx</span><span class="operator">;</span>
+ <span class="variable">OSSL_FUNC_bar_freectx_fn</span> <span class="variable">foo_freectx</span><span class="operator">;</span>
+ <span class="variable">OSSL_FUNC_bar_init_fn</span> <span class="variable">foo_init</span><span class="operator">;</span>
+ <span class="variable">OSSL_FUNC_bar_update_fn</span> <span class="variable">foo_update</span><span class="operator">;</span>
+ <span class="variable">OSSL_FUNC_bar_final_fn</span> <span class="variable">foo_final</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">OSSL_FUNC_provider_query_operation_fn</span> <span class="variable">p_query</span><span class="operator">;</span>
+ <span class="variable">OSSL_FUNC_provider_get_reason_strings_fn</span> <span class="variable">p_reasons</span><span class="operator">;</span>
+ <span class="variable">OSSL_FUNC_provider_teardown_fn</span> <span class="variable">p_teardown</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">OSSL_provider_init_fn</span> <span class="variable">OSSL_provider_init</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">OSSL_FUNC_core_put_error</span> <span class="variable">*c_put_error</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="regex">/* Provider context */</span>
+ <span class="variable">struct</span> <span class="variable">prov_ctx_st</span> <span class="operator">{</span>
+     <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">;</span>
+ <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="regex">/* operation context for the algorithm FOO */</span>
+ <span class="variable">struct</span> <span class="variable">foo_ctx_st</span> <span class="operator">{</span>
+     <span class="variable">struct</span> <span class="variable">prov_ctx_st</span> <span class="variable">*provctx</span><span class="operator">;</span>
+     <span class="keyword">int</span> <span class="variable">b</span><span class="operator">;</span>
+ <span class="operator">};</span>
+</pre>
+<pre>
+ <span class="variable">static</span> <span class="variable">void</span> <span class="variable">*foo_newctx</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">)</span>
+ <span class="operator">{</span>
+     <span class="variable">struct</span> <span class="variable">foo_ctx_st</span> <span class="variable">*fooctx</span> <span class="operator">=</span> <span class="variable">malloc</span><span class="operator">(</span><span class="variable">sizeof</span><span class="operator">(</span><span class="variable">*fooctx</span><span class="operator">));</span>
+</pre>
+<pre>
+     <span class="keyword">if</span> <span class="operator">(</span><span class="variable">fooctx</span> <span class="operator">!=</span> <span class="variable">NULL</span><span class="operator">)</span>
+         <span class="variable">fooctx</span><span class="operator">-&gt;</span><span class="variable">provctx</span> <span class="operator">=</span> <span class="variable">provctx</span><span class="operator">;</span>
+     <span class="keyword">else</span>
+         <span class="variable">c_put_error</span><span class="operator">(</span><span class="variable">provctx</span><span class="operator">-&gt;</span><span class="variable">handle</span><span class="operator">,</span> <span class="variable">E_MALLOC</span><span class="operator">,</span> <span class="keyword">__FILE__</span><span class="operator">,</span> <span class="keyword">__LINE__</span><span class="operator">);</span>
+     <span class="keyword">return</span> <span class="variable">fooctx</span><span class="operator">;</span>
+      <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="variable">static</span> <span class="variable">void</span> <span class="variable">foo_freectx</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*fooctx</span><span class="operator">)</span>
+ <span class="operator">{</span>
+     <span class="variable">free</span><span class="operator">(</span><span class="variable">fooctx</span><span class="operator">);</span>
+ <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="variable">static</span> <span class="keyword">int</span> <span class="variable">foo_init</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*vfooctx</span><span class="operator">)</span>
+ <span class="operator">{</span>
+     <span class="variable">struct</span> <span class="variable">foo_ctx_st</span> <span class="variable">*fooctx</span> <span class="operator">=</span> <span class="variable">vfooctx</span><span class="operator">;</span>
+</pre>
+<pre>
+     <span class="variable">fooctx</span><span class="operator">-&gt;</span>b <span class="operator">=</span> <span class="number">0x33</span><span class="operator">;</span>
+      <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="variable">static</span> <span class="keyword">int</span> <span class="variable">foo_update</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*vfooctx</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*in</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">inl</span><span class="operator">)</span>
+ <span class="operator">{</span>
+     <span class="variable">struct</span> <span class="variable">foo_ctx_st</span> <span class="variable">*fooctx</span> <span class="operator">=</span> <span class="variable">vfooctx</span><span class="operator">;</span>
+</pre>
+<pre>
+     <span class="regex">/* did you expect something serious? */</span>
+     <span class="keyword">if</span> <span class="operator">(</span><span class="variable">inl</span> <span class="operator">==</span> <span class="number">0</span><span class="operator">)</span>
+         <span class="keyword">return</span> <span class="number">1</span><span class="operator">;</span>
+     <span class="keyword">for</span> <span class="operator">(;</span> <span class="variable">inl</span><span class="operator">--</span> <span class="operator">&gt;</span> <span class="number">0</span><span class="operator">;</span> <span class="variable">in</span><span class="operator">++)</span>
+         <span class="variable">*in</span> <span class="operator">^=</span> <span class="variable">fooctx</span><span class="operator">-&gt;</span>b<span class="operator">;</span>
+     <span class="keyword">return</span> <span class="number">1</span><span class="operator">;</span>
+      <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="variable">static</span> <span class="keyword">int</span> <span class="variable">foo_final</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*vfooctx</span><span class="operator">)</span>
+ <span class="operator">{</span>
+     <span class="variable">struct</span> <span class="variable">foo_ctx_st</span> <span class="variable">*fooctx</span> <span class="operator">=</span> <span class="variable">vfooctx</span><span class="operator">;</span>
+</pre>
+<pre>
+     <span class="variable">fooctx</span><span class="operator">-&gt;</span>b <span class="operator">=</span> <span class="number">0x66</span><span class="operator">;</span>
+      <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="variable">static</span> <span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="variable">foo_fns</span><span class="operator">[]</span> <span class="operator">=</span> <span class="operator">{</span>
+     <span class="operator">{</span> <span class="variable">OSSL_FUNC_BAR_NEWCTX</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">void</span> <span class="operator">(*)(</span><span class="variable">void</span><span class="operator">))</span><span class="variable">foo_newctx</span> <span class="operator">}</span><span class="operator">,</span>
+     <span class="operator">{</span> <span class="variable">OSSL_FUNC_BAR_FREECTX</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">void</span> <span class="operator">(*)(</span><span class="variable">void</span><span class="operator">))</span><span class="variable">foo_freectx</span> <span class="operator">}</span><span class="operator">,</span>
+     <span class="operator">{</span> <span class="variable">OSSL_FUNC_BAR_INIT</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">void</span> <span class="operator">(*)(</span><span class="variable">void</span><span class="operator">))</span><span class="variable">foo_init</span> <span class="operator">}</span><span class="operator">,</span>
+     <span class="operator">{</span> <span class="variable">OSSL_FUNC_BAR_UPDATE</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">void</span> <span class="operator">(*)(</span><span class="variable">void</span><span class="operator">))</span><span class="variable">foo_update</span> <span class="operator">}</span><span class="operator">,</span>
+     <span class="operator">{</span> <span class="variable">OSSL_FUNC_BAR_FINAL</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">void</span> <span class="operator">(*)(</span><span class="variable">void</span><span class="operator">))</span><span class="variable">foo_final</span> <span class="operator">}</span><span class="operator">,</span>
+     <span class="operator">{</span> <span class="number">0</span><span class="operator">,</span> <span class="variable">NULL</span> <span class="operator">}</span>
+ <span class="operator">}</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">static</span> <span class="variable">const</span> <span class="variable">OSSL_ALGORITHM</span> <span class="variable">bars</span><span class="operator">[]</span> <span class="operator">=</span> <span class="operator">{</span>
+     <span class="operator">{</span> <span class="string">"FOO"</span><span class="operator">,</span> <span class="string">"provider=chumbawamba"</span><span class="operator">,</span> <span class="variable">foo_fns</span> <span class="operator">}</span><span class="operator">,</span>
+     <span class="operator">{</span> <span class="variable">NULL</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">,</span> <span class="variable">NULL</span> <span class="operator">}</span>
+ <span class="operator">}</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">static</span> <span class="variable">const</span> <span class="variable">OSSL_ALGORITHM</span> <span class="variable">*p_query</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">operation_id</span><span class="operator">,</span>
+                                      <span class="keyword">int</span> <span class="variable">*no_store</span><span class="operator">)</span>
+ <span class="operator">{</span>
+     <span class="variable">switch</span> <span class="operator">(</span><span class="variable">operation_id</span><span class="operator">)</span> <span class="operator">{</span>
+     <span class="variable">case</span> <span class="variable">OSSL_OP_BAR</span><span class="operator">:</span>
+         <span class="keyword">return</span> <span class="variable">bars</span><span class="operator">;</span>
+     <span class="operator">}</span>
+     <span class="keyword">return</span> <span class="variable">NULL</span><span class="operator">;</span>
+ <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="variable">static</span> <span class="variable">const</span> <span class="variable">OSSL_ITEM</span> <span class="variable">*p_reasons</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">)</span>
+ <span class="operator">{</span>
+     <span class="keyword">return</span> <span class="variable">reasons</span><span class="operator">;</span>
+ <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="variable">static</span> <span class="variable">void</span> <span class="variable">p_teardown</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">)</span>
+ <span class="operator">{</span>
+     <span class="variable">free</span><span class="operator">(</span><span class="variable">provctx</span><span class="operator">);</span>
+ <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="variable">static</span> <span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="variable">prov_fns</span><span class="operator">[]</span> <span class="operator">=</span> <span class="operator">{</span>
+     <span class="operator">{</span> <span class="variable">OSSL_FUNC_PROVIDER_TEARDOWN</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">void</span> <span class="operator">(*)(</span><span class="variable">void</span><span class="operator">))</span><span class="variable">p_teardown</span> <span class="operator">}</span><span class="operator">,</span>
+     <span class="operator">{</span> <span class="variable">OSSL_FUNC_PROVIDER_QUERY_OPERATION</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">void</span> <span class="operator">(*)(</span><span class="variable">void</span><span class="operator">))</span><span class="variable">p_query</span> <span class="operator">}</span><span class="operator">,</span>
+     <span class="operator">{</span> <span class="variable">OSSL_FUNC_PROVIDER_GET_REASON_STRINGS</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">void</span> <span class="operator">(*)(</span><span class="variable">void</span><span class="operator">))</span><span class="variable">p_reasons</span> <span class="operator">}</span><span class="operator">,</span>
+     <span class="operator">{</span> <span class="number">0</span><span class="operator">,</span> <span class="variable">NULL</span> <span class="operator">}</span>
+ <span class="operator">}</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OSSL_provider_init</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CORE_HANDLE</span> <span class="variable">*handle</span><span class="operator">,</span>
+                        <span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="variable">*in</span><span class="operator">,</span>
+                        <span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="operator">**</span><span class="variable">out</span><span class="operator">,</span>
+                        <span class="variable">void</span> <span class="operator">**</span><span class="variable">provctx</span><span class="operator">)</span>
+ <span class="operator">{</span>
+     <span class="variable">struct</span> <span class="variable">prov_ctx_st</span> <span class="variable">*pctx</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+     <span class="keyword">for</span> <span class="operator">(;</span> <span class="variable">in</span><span class="operator">-&gt;</span><span class="variable">function_id</span> <span class="operator">!=</span> <span class="number">0</span><span class="operator">;</span> <span class="variable">in</span><span class="operator">++)</span>
+         <span class="variable">switch</span> <span class="operator">(</span><span class="variable">in</span><span class="operator">-&gt;</span><span class="variable">function_id</span><span class="operator">)</span> <span class="operator">{</span>
+         <span class="variable">case</span> <span class="variable">OSSL_FUNC_CORE_PUT_ERROR</span><span class="operator">:</span>
+             <span class="variable">c_put_error</span> <span class="operator">=</span> <span class="variable">OSSL_FUNC_core_put_error</span><span class="operator">(</span><span class="variable">in</span><span class="operator">);</span>
+             <span class="keyword">break</span><span class="operator">;</span>
+         <span class="operator">}</span>
+</pre>
+<pre>
+     <span class="variable">*out</span> <span class="operator">=</span> <span class="variable">prov_fns</span><span class="operator">;</span>
+</pre>
+<pre>
+     <span class="keyword">if</span> <span class="operator">((</span><span class="variable">pctx</span> <span class="operator">=</span> <span class="variable">malloc</span><span class="operator">(</span><span class="variable">sizeof</span><span class="operator">(</span><span class="variable">*pctx</span><span class="operator">)))</span> <span class="operator">==</span> <span class="variable">NULL</span><span class="operator">)</span> <span class="operator">{</span>
+         <span class="regex">/*
+          * ALEA IACTA EST, if the core retrieves the reason table
+          * regardless, that string will be displayed, otherwise not.
+          */</span>
+         <span class="variable">c_put_error</span><span class="operator">(</span><span class="variable">handle</span><span class="operator">,</span> <span class="variable">E_MALLOC</span><span class="operator">,</span> <span class="keyword">__FILE__</span><span class="operator">,</span> <span class="keyword">__LINE__</span><span class="operator">);</span>
+         <span class="keyword">return</span> <span class="number">0</span><span class="operator">;</span>
+     <span class="operator">}</span>
+     <span class="variable">pctx</span><span class="operator">-&gt;</span><span class="variable">handle</span> <span class="operator">=</span> <span class="variable">handle</span><span class="operator">;</span>
+     <span class="keyword">return</span> <span class="number">1</span><span class="operator">;</span>
+      <span class="operator">}</span>
+</pre>
+<p>This relies on a few things existing in <em class="file">openssl/core_dispatch.h</em>:</p>
+<pre>
+ <span class="comment">#define OSSL_OP_BAR            4711</span>
+</pre>
+<pre>
+ <span class="comment">#define OSSL_FUNC_BAR_NEWCTX      1</span>
+ <span class="variable">typedef</span> <span class="variable">void</span> <span class="operator">*(</span><span class="variable">OSSL_FUNC_bar_newctx_fn</span><span class="operator">)(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="variable">static</span> <span class="variable">ossl_inline</span> <span class="variable">OSSL_FUNC_bar_newctx</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="variable">*opf</span><span class="operator">)</span>
+ <span class="operator">{</span> <span class="keyword">return</span> <span class="operator">(</span><span class="variable">OSSL_FUNC_bar_newctx_fn</span> <span class="operator">*)</span><span class="variable">opf</span><span class="operator">-&gt;</span><span class="variable">function</span><span class="operator">;</span> <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="comment">#define OSSL_FUNC_BAR_FREECTX     2</span>
+ <span class="variable">typedef</span> <span class="variable">void</span> <span class="operator">(</span><span class="variable">OSSL_FUNC_bar_freectx_fn</span><span class="operator">)(</span><span class="variable">void</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="variable">static</span> <span class="variable">ossl_inline</span> <span class="variable">OSSL_FUNC_bar_freectx</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="variable">*opf</span><span class="operator">)</span>
+ <span class="operator">{</span> <span class="keyword">return</span> <span class="operator">(</span><span class="variable">OSSL_FUNC_bar_freectx_fn</span> <span class="operator">*)</span><span class="variable">opf</span><span class="operator">-&gt;</span><span class="variable">function</span><span class="operator">;</span> <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="comment">#define OSSL_FUNC_BAR_INIT        3</span>
+ <span class="variable">typedef</span> <span class="variable">void</span> <span class="operator">*(</span><span class="variable">OSSL_FUNC_bar_init_fn</span><span class="operator">)(</span><span class="variable">void</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="variable">static</span> <span class="variable">ossl_inline</span> <span class="variable">OSSL_FUNC_bar_init</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="variable">*opf</span><span class="operator">)</span>
+ <span class="operator">{</span> <span class="keyword">return</span> <span class="operator">(</span><span class="variable">OSSL_FUNC_bar_init_fn</span> <span class="operator">*)</span><span class="variable">opf</span><span class="operator">-&gt;</span><span class="variable">function</span><span class="operator">;</span> <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="comment">#define OSSL_FUNC_BAR_UPDATE      4</span>
+ <span class="variable">typedef</span> <span class="variable">void</span> <span class="operator">*(</span><span class="variable">OSSL_FUNC_bar_update_fn</span><span class="operator">)(</span><span class="variable">void</span> <span class="variable">*ctx</span><span class="operator">,</span>
+                                       <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*in</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">inl</span><span class="operator">);</span>
+ <span class="variable">static</span> <span class="variable">ossl_inline</span> <span class="variable">OSSL_FUNC_bar_update</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="variable">*opf</span><span class="operator">)</span>
+ <span class="operator">{</span> <span class="keyword">return</span> <span class="operator">(</span><span class="variable">OSSL_FUNC_bar_update_fn</span> <span class="operator">*)</span><span class="variable">opf</span><span class="operator">-&gt;</span><span class="variable">function</span><span class="operator">;</span> <span class="operator">}</span>
+</pre>
+<pre>
+ <span class="comment">#define OSSL_FUNC_BAR_FINAL       5</span>
+ <span class="variable">typedef</span> <span class="variable">void</span> <span class="operator">*(</span><span class="variable">OSSL_FUNC_bar_final_fn</span><span class="operator">)(</span><span class="variable">void</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="variable">static</span> <span class="variable">ossl_inline</span> <span class="variable">OSSL_FUNC_bar_final</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="variable">*opf</span><span class="operator">)</span>
+ <span class="operator">{</span> <span class="keyword">return</span> <span class="operator">(</span><span class="variable">OSSL_FUNC_bar_final_fn</span> <span class="operator">*)</span><span class="variable">opf</span><span class="operator">-&gt;</span><span class="variable">function</span><span class="operator">;</span> <span class="operator">}</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>provider(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>The concept of providers and everything surrounding them was
+introduced in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2019-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

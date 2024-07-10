@@ -1,0 +1,108 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_KEM-RSA</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#rsa_kem_parameters">RSA KEM parameters</a></li>
+	</ul>
+
+	<li><a href="#conforming_to">CONFORMING TO</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_KEM-RSA
+- EVP_KEM RSA keytype and algorithm support</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>RSA</strong> keytype and its parameters are described in <em>EVP_PKEY-RSA(7)</em>.
+See <em>EVP_PKEY_encapsulate(3)</em> and <em>EVP_PKEY_decapsulate(3)</em> for more info.</p>
+<p>
+</p>
+<h2><a name="rsa_kem_parameters">RSA KEM parameters</a></h2>
+<dl>
+<dt><strong><a name="operation_ossl_kem_param_operation_utf8_string" class="item">&quot;operation&quot; (<strong>OSSL_KEM_PARAM_OPERATION</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>The OpenSSL RSA Key Encapsulation Mechanism only currently supports the
+following operation</p>
+<dl>
+<dt><strong><a name="rsasve" class="item">&quot;RSASVE&quot;</a></strong></dt>
+
+<dd>
+<p>The encapsulate function simply generates a secret using random bytes and then
+encrypts the secret using the RSA public key (with no padding).
+The decapsulate function recovers the secret using the RSA private key.</p>
+</dd>
+</dl>
+<p>This can be set using <code>EVP_PKEY_CTX_set_kem_op()</code>.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="conforming_to">CONFORMING TO</a></h1>
+<dl>
+<dt><strong><a name="sp800_56br2" class="item">SP800-56Br2</a></strong></dt>
+
+<dd>
+<p>Section 7.2.1.2 RSASVE Generate Operation (RSASVE.GENERATE).
+Section 7.2.1.3 RSASVE Recovery Operation (RSASVE.RECOVER).</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_PKEY_CTX_set_kem_op(3)</em>,
+<em>EVP_PKEY_encapsulate(3)</em>,
+<em>EVP_PKEY_decapsulate(3)</em>
+<em>EVP_KEYMGMT(3)</em>,
+<em>EVP_PKEY(3)</em>,
+<em>provider-keymgmt(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>This functionality was added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2020 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

@@ -1,0 +1,239 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OBJ_nid2obj</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>i2t_ASN1_OBJECT,
+OBJ_length, OBJ_get0_data, OBJ_nid2obj, OBJ_nid2ln,
+OBJ_nid2sn, OBJ_obj2nid, OBJ_txt2nid, OBJ_ln2nid, OBJ_sn2nid, OBJ_cmp,
+OBJ_dup, OBJ_txt2obj, OBJ_obj2txt, OBJ_create, OBJ_cleanup, OBJ_add_sigid
+- ASN1 object utility functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/objects.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">ASN1_OBJECT</span> <span class="variable">*OBJ_nid2obj</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">n</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*OBJ_nid2ln</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">n</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*OBJ_nid2sn</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">n</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OBJ_obj2nid</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">ASN1_OBJECT</span> <span class="variable">*o</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OBJ_ln2nid</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*ln</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OBJ_sn2nid</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*sn</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OBJ_txt2nid</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*s</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">ASN1_OBJECT</span> <span class="variable">*OBJ_txt2obj</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*s</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">no_name</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OBJ_obj2txt</span><span class="operator">(</span><span class="variable">char</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">buf_len</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">ASN1_OBJECT</span> <span class="variable">*a</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">no_name</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">i2t_ASN1_OBJECT</span><span class="operator">(</span><span class="variable">char</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">buf_len</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">ASN1_OBJECT</span> <span class="variable">*a</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OBJ_cmp</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">ASN1_OBJECT</span> <span class="variable">*a</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">ASN1_OBJECT</span> <span class="variable">*b</span><span class="operator">);</span>
+ <span class="variable">ASN1_OBJECT</span> <span class="variable">*OBJ_dup</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">ASN1_OBJECT</span> <span class="variable">*o</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OBJ_create</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*oid</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*sn</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*ln</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">size_t</span> <span class="variable">OBJ_length</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">ASN1_OBJECT</span> <span class="variable">*obj</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*OBJ_get0_data</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">ASN1_OBJECT</span> <span class="variable">*obj</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OBJ_add_sigid</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">signid</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">dig_id</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">pkey_id</span><span class="operator">);</span>
+</pre>
+<p>The following function has been deprecated since OpenSSL 1.1.0, and can be
+hidden entirely by defining <strong>OPENSSL_API_COMPAT</strong> with a suitable version value,
+see <em>openssl_user_macros(7)</em>:</p>
+<pre>
+ <span class="variable">void</span> <span class="variable">OBJ_cleanup</span><span class="operator">(</span><span class="variable">void</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The ASN1 object utility functions process ASN1_OBJECT structures which are
+a representation of the ASN1 OBJECT IDENTIFIER (OID) type.
+For convenience, OIDs are usually represented in source code as numeric
+identifiers, or <strong>NID</strong>s.  OpenSSL has an internal table of OIDs that
+are generated when the library is built, and their corresponding NIDs
+are available as defined constants.  For the functions below, application
+code should treat all returned values -- OIDs, NIDs, or names -- as
+constants.</p>
+<p>OBJ_nid2obj(), OBJ_nid2ln() and OBJ_nid2sn() convert the NID <em>n</em> to
+an ASN1_OBJECT structure, its long name and its short name respectively,
+or <strong>NULL</strong> if an error occurred.</p>
+<p>OBJ_obj2nid(), OBJ_ln2nid(), OBJ_sn2nid() return the corresponding NID
+for the object <em>o</em>, the long name <em>ln</em> or the short name <em>sn</em> respectively
+or NID_undef if an error occurred.</p>
+<p>OBJ_txt2nid() returns NID corresponding to text string <em>s</em>. <em>s</em> can be
+a long name, a short name or the numerical representation of an object.</p>
+<p>OBJ_txt2obj() converts the text string <em>s</em> into an ASN1_OBJECT structure.
+If <em>no_name</em> is 0 then long names and short names will be interpreted
+as well as numerical forms. If <em>no_name</em> is 1 only the numerical form
+is acceptable.</p>
+<p>OBJ_obj2txt() converts the <strong>ASN1_OBJECT</strong> <em>a</em> into a textual representation.
+Unless <em>buf</em> is NULL,
+the representation is written as a NUL-terminated string to <em>buf</em>, where
+at most <em>buf_len</em> bytes are written, truncating the result if necessary.
+In any case it returns the total string length, excluding the NUL character,
+required for non-truncated representation, or -1 on error.
+If <em>no_name</em> is 0 then if the object has a long or short name
+then that will be used, otherwise the numerical form will be used.
+If <em>no_name</em> is 1 then the numerical form will always be used.</p>
+<p>i2t_ASN1_OBJECT() is the same as OBJ_obj2txt() with the <em>no_name</em> set to zero.</p>
+<p><code>OBJ_cmp()</code> compares <em>a</em> to <em>b</em>. If the two are identical 0 is returned.</p>
+<p><code>OBJ_dup()</code> returns a copy of <em>o</em>.</p>
+<p><code>OBJ_create()</code> adds a new object to the internal table. <em>oid</em> is the
+numerical form of the object, <em>sn</em> the short name and <em>ln</em> the
+long name. A new NID is returned for the created object in case of
+success and NID_undef in case of failure.</p>
+<p><code>OBJ_length()</code> returns the size of the content octets of <em>obj</em>.</p>
+<p>OBJ_get0_data() returns a pointer to the content octets of <em>obj</em>.
+The returned pointer is an internal pointer which <strong>must not</strong> be freed.</p>
+<p><code>OBJ_add_sigid()</code> creates a new composite &quot;Signature Algorithm&quot; that associates a
+given NID with two other NIDs - one representing the underlying signature
+algorithm and the other representing a digest algorithm to be used in
+conjunction with it. <em>signid</em> represents the NID for the composite &quot;Signature
+Algorithm&quot;, <em>dig_id</em> is the NID for the digest algorithm and <em>pkey_id</em> is the
+NID for the underlying signature algorithm. As there are signature algorithms
+that do not require a digest, NID_undef is a valid <em>dig_id</em>.</p>
+<p><code>OBJ_cleanup()</code> releases any resources allocated by creating new objects.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>Objects in OpenSSL can have a short name, a long name and a numerical
+identifier (NID) associated with them. A standard set of objects is
+represented in an internal table. The appropriate values are defined
+in the header file <strong>objects.h</strong>.</p>
+<p>For example the OID for commonName has the following definitions:</p>
+<pre>
+ <span class="comment">#define SN_commonName                   "CN"</span>
+ <span class="comment">#define LN_commonName                   "commonName"</span>
+ <span class="comment">#define NID_commonName                  13</span>
+</pre>
+<p>New objects can be added by calling <code>OBJ_create()</code>.</p>
+<p>Table objects have certain advantages over other objects: for example
+their NIDs can be used in a C language switch statement. They are
+also static constant structures which are shared: that is there
+is only a single constant structure for each table object.</p>
+<p>Objects which are not in the table have the NID value NID_undef.</p>
+<p>Objects do not need to be in the internal tables to be processed,
+the functions OBJ_txt2obj() and OBJ_obj2txt() can process the numerical
+form of an OID.</p>
+<p>Some objects are used to represent algorithms which do not have a
+corresponding ASN.1 OBJECT IDENTIFIER encoding (for example no OID currently
+exists for a particular algorithm). As a result they <strong>cannot</strong> be encoded or
+decoded as part of ASN.1 structures. Applications can determine if there
+is a corresponding OBJECT IDENTIFIER by checking <code>OBJ_length()</code> is not zero.</p>
+<p>These functions cannot return <strong>const</strong> because an <strong>ASN1_OBJECT</strong> can
+represent both an internal, constant, OID and a dynamically-created one.
+The latter cannot be constant because it needs to be freed after use.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>OBJ_nid2obj() returns an <strong>ASN1_OBJECT</strong> structure or <strong>NULL</strong> is an
+error occurred.</p>
+<p>OBJ_nid2ln() and OBJ_nid2sn() returns a valid string or <strong>NULL</strong>
+on error.</p>
+<p>OBJ_obj2nid(), OBJ_ln2nid(), OBJ_sn2nid() and OBJ_txt2nid() return
+a NID or <strong>NID_undef</strong> on error.</p>
+<p><code>OBJ_add_sigid()</code> returns 1 on success or 0 on error.</p>
+<p>i2t_ASN1_OBJECT() an OBJ_obj2txt() return -1 on error.
+On success, they return the length of the string written to <em>buf</em> if <em>buf</em> is
+not NULL and <em>buf_len</em> is big enough, otherwise the total string length.
+Note that this does not count the trailing NUL character.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Create an object for <strong>commonName</strong>:</p>
+<pre>
+ <span class="variable">ASN1_OBJECT</span> <span class="variable">*o</span> <span class="operator">=</span> <span class="variable">OBJ_nid2obj</span><span class="operator">(</span><span class="variable">NID_commonName</span><span class="operator">);</span>
+</pre>
+<p>Check if an object is <strong>commonName</strong></p>
+<pre>
+ if (OBJ_obj2nid(obj) == NID_commonName)
+     /* Do something */</pre>
+<p>Create a new NID and initialize an object from it:</p>
+<pre>
+ <span class="keyword">int</span> <span class="variable">new_nid</span> <span class="operator">=</span> <span class="variable">OBJ_create</span><span class="operator">(</span><span class="string">"1.2.3.4"</span><span class="operator">,</span> <span class="string">"NewOID"</span><span class="operator">,</span> <span class="string">"New Object Identifier"</span><span class="operator">);</span>
+ <span class="variable">ASN1_OBJECT</span> <span class="variable">*obj</span> <span class="operator">=</span> <span class="variable">OBJ_nid2obj</span><span class="operator">(</span><span class="variable">new_nid</span><span class="operator">);</span>
+</pre>
+<p>Create a new object directly:</p>
+<pre>
+ <span class="variable">obj</span> <span class="operator">=</span> <span class="variable">OBJ_txt2obj</span><span class="operator">(</span><span class="string">"1.2.3.4"</span><span class="operator">,</span> <span class="number">1</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>Neither <code>OBJ_create()</code> nor <code>OBJ_add_sigid()</code> do any locking and are thus not
+thread safe.  Moreover, none of the other functions should be called while
+concurrent calls to these two functions are possible.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>ERR_get_error(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><code>OBJ_cleanup()</code> was deprecated in OpenSSL 1.1.0 by <em>OPENSSL_init_crypto(3)</em>
+and should not be used.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2002-2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OSSL_CRMF_MSG_set0_validity</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>OSSL_CRMF_MSG_set0_validity,
+OSSL_CRMF_MSG_set_certReqId,
+OSSL_CRMF_CERTTEMPLATE_fill,
+OSSL_CRMF_MSG_set0_extensions,
+OSSL_CRMF_MSG_push0_extension,
+OSSL_CRMF_MSG_create_popo,
+OSSL_CRMF_MSGS_verify_popo
+- functions populating and verifying CRMF CertReqMsg structures</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/crmf.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OSSL_CRMF_MSG_set0_validity</span><span class="operator">(</span><span class="variable">OSSL_CRMF_MSG</span> <span class="variable">*crm</span><span class="operator">,</span>
+                                 <span class="variable">ASN1_TIME</span> <span class="variable">*notBefore</span><span class="operator">,</span> <span class="variable">ASN1_TIME</span> <span class="variable">*notAfter</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OSSL_CRMF_MSG_set_certReqId</span><span class="operator">(</span><span class="variable">OSSL_CRMF_MSG</span> <span class="variable">*crm</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">rid</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OSSL_CRMF_CERTTEMPLATE_fill</span><span class="operator">(</span><span class="variable">OSSL_CRMF_CERTTEMPLATE</span> <span class="variable">*tmpl</span><span class="operator">,</span>
+                                 <span class="variable">EVP_PKEY</span> <span class="variable">*pubkey</span><span class="operator">,</span>
+                                 <span class="variable">const</span> <span class="variable">X509_NAME</span> <span class="variable">*subject</span><span class="operator">,</span>
+                                 <span class="variable">const</span> <span class="variable">X509_NAME</span> <span class="variable">*issuer</span><span class="operator">,</span>
+                                 <span class="variable">const</span> <span class="variable">ASN1_INTEGER</span> <span class="variable">*serial</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OSSL_CRMF_MSG_set0_extensions</span><span class="operator">(</span><span class="variable">OSSL_CRMF_MSG</span> <span class="variable">*crm</span><span class="operator">,</span> <span class="variable">X509_EXTENSIONS</span> <span class="variable">*exts</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OSSL_CRMF_MSG_push0_extension</span><span class="operator">(</span><span class="variable">OSSL_CRMF_MSG</span> <span class="variable">*crm</span><span class="operator">,</span> <span class="variable">X509_EXTENSION</span> <span class="variable">*ext</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OSSL_CRMF_MSG_create_popo</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">meth</span><span class="operator">,</span> <span class="variable">OSSL_CRMF_MSG</span> <span class="variable">*crm</span><span class="operator">,</span>
+                               <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">EVP_MD</span> <span class="variable">*digest</span><span class="operator">,</span>
+                               <span class="variable">OSSL_LIB_CTX</span> <span class="variable">*libctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*propq</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OSSL_CRMF_MSGS_verify_popo</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_CRMF_MSGS</span> <span class="variable">*reqs</span><span class="operator">,</span>
+                                <span class="keyword">int</span> <span class="variable">rid</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">acceptRAVerified</span><span class="operator">,</span>
+                                <span class="variable">OSSL_LIB_CTX</span> <span class="variable">*libctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*propq</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>OSSL_CRMF_MSG_set0_validity() sets the <em>notBefore</em> and <em>notAfter</em> fields
+as validity constraints in the certTemplate of <em>crm</em>.
+Any of the <em>notBefore</em> and <em>notAfter</em> parameters may be NULL,
+which means no constraint for the respective field.
+On success ownership of <em>notBefore</em> and <em>notAfter</em> is transferred to <em>crm</em>.</p>
+<p><code>OSSL_CRMF_MSG_set_certReqId()</code> sets <em>rid</em> as the certReqId of <em>crm</em>.</p>
+<p><code>OSSL_CRMF_CERTTEMPLATE_fill()</code> sets those fields of the certTemplate <em>tmpl</em>
+for which non-NULL values are provided: <em>pubkey</em>, <em>subject</em>, <em>issuer</em>,
+and/or <em>serial</em>.
+X.509 extensions may be set using OSSL_CRMF_MSG_set0_extensions().
+On success the reference counter of the <em>pubkey</em> (if given) is incremented,
+while the <em>subject</em>, <em>issuer</em>, and <em>serial</em> structures (if given) are copied.</p>
+<p>OSSL_CRMF_MSG_set0_extensions() sets <em>exts</em> as the extensions in the
+certTemplate of <em>crm</em>. Frees any pre-existing ones and consumes <em>exts</em>.</p>
+<p>OSSL_CRMF_MSG_push0_extension() pushes the X509 extension <em>ext</em> to the
+extensions in the certTemplate of <em>crm</em>.  Consumes <em>ext</em>.</p>
+<p><code>OSSL_CRMF_MSG_create_popo()</code> creates and sets the Proof-of-Possession (POPO)
+according to the method <em>meth</em> in <em>crm</em>.
+The library context <em>libctx</em> and property query string <em>propq</em>,
+may be NULL to select the defaults.
+In case the method is OSSL_CRMF_POPO_SIGNATURE the POPO is calculated
+using the private key <em>pkey</em> and the digest method <em>digest</em>,
+where the <em>digest</em> argument is ignored if <em>pkey</em> is of a type (such as
+Ed25519 and Ed448) that is implicitly associated with a digest algorithm.</p>
+<p><em>meth</em> can be one of the following:</p>
+<ul>
+<li><strong><a name="500" class="item">OSSL_CRMF_POPO_NONE       - <a href="http://www.ietf.org/rfc/rfc4211.txt" class="rfc">RFC 4211</a>, section 4, POP field omitted.
+CA/RA uses out-of-band method to verify POP. Note that servers may fail in this
+case, resulting for instance in HTTP error code 500 (Internal error).</a></strong>
+
+</li>
+<li><strong><a name="ossl_crmf_popo_raverified_rfc_4211_section_4_explicit_indication_that_the_ra_has_already_verified_the_pop" class="item">OSSL_CRMF_POPO_RAVERIFIED - <a href="http://www.ietf.org/rfc/rfc4211.txt" class="rfc">RFC 4211</a>, section 4, explicit indication
+that the RA has already verified the POP.</a></strong>
+
+</li>
+<li><strong><a name="ossl_crmf_popo_signature_rfc_4211_section_4_1_only_case_3_supported_so_far" class="item">OSSL_CRMF_POPO_SIGNATURE  - <a href="http://www.ietf.org/rfc/rfc4211.txt" class="rfc">RFC 4211</a>, section 4.1, only case 3 supported
+so far.</a></strong>
+
+</li>
+<li><strong><a name="method" class="item">OSSL_CRMF_POPO_KEYENC     - <a href="http://www.ietf.org/rfc/rfc4211.txt" class="rfc">RFC 4211</a>, section 4.2, only indirect method
+(subsequentMessage/enccert) supported,
+challenge-response exchange (challengeResp) not yet supported.</a></strong>
+
+</li>
+<li><strong><a name="ossl_crmf_popo_keyagree_rfc_4211_section_4_3_not_yet_supported" class="item">OSSL_CRMF_POPO_KEYAGREE   - <a href="http://www.ietf.org/rfc/rfc4211.txt" class="rfc">RFC 4211</a>, section 4.3, not yet supported.</a></strong>
+
+</li>
+</ul>
+<p>OSSL_CRMF_MSGS_verify_popo verifies the Proof-of-Possession of the request with
+the given <em>rid</em> in the list of <em>reqs</em>. Optionally accepts RAVerified. It can
+make use of the library context <em>libctx</em> and property query string <em>propq</em>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>All functions return 1 on success, 0 on error.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>RFC 4211</p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>The OpenSSL CRMF support was added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2007-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

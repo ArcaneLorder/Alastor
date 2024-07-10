@@ -1,0 +1,285 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>X509V3_get_d2i</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#supported_extensions">SUPPORTED EXTENSIONS</a></li>
+	<ul>
+
+		<li><a href="#pkix_certificate_extensions">PKIX Certificate Extensions</a></li>
+		<li><a href="#netscape_certificate_extensions">Netscape Certificate Extensions</a></li>
+		<li><a href="#miscellaneous_certificate_extensions">Miscellaneous Certificate Extensions</a></li>
+		<li><a href="#pkix_crl_extensions">PKIX CRL Extensions</a></li>
+		<li><a href="#ocsp_extensions">OCSP Extensions</a></li>
+		<li><a href="#certificate_transparency_extensions">Certificate Transparency Extensions</a></li>
+	</ul>
+
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>X509V3_get_d2i, X509V3_add1_i2d, X509V3_EXT_d2i, X509V3_EXT_i2d,
+X509_get_ext_d2i, X509_add1_ext_i2d,
+X509_CRL_get_ext_d2i, X509_CRL_add1_ext_i2d,
+X509_REVOKED_get_ext_d2i, X509_REVOKED_add1_ext_i2d,
+X509_get0_extensions, X509_CRL_get0_extensions,
+X509_REVOKED_get0_extensions - X509 extension decode and encode functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/x509v3.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">void</span> <span class="variable">*X509V3_get_d2i</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">STACK_OF</span><span class="operator">(</span><span class="variable">X509_EXTENSION</span><span class="operator">)</span> <span class="variable">*x</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">nid</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*crit</span><span class="operator">,</span>
+                      <span class="keyword">int</span> <span class="variable">*idx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">X509V3_add1_i2d</span><span class="operator">(</span><span class="variable">STACK_OF</span><span class="operator">(</span><span class="variable">X509_EXTENSION</span><span class="operator">)</span> <span class="operator">**x,</span> <span class="keyword">int</span> <span class="variable">nid</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*value</span><span class="operator">,</span>
+                     <span class="keyword">int</span> <span class="variable">crit</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">long</span> <span class="variable">flags</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">void</span> <span class="variable">*X509V3_EXT_d2i</span><span class="operator">(</span><span class="variable">X509_EXTENSION</span> <span class="variable">*ext</span><span class="operator">);</span>
+ <span class="variable">X509_EXTENSION</span> <span class="variable">*X509V3_EXT_i2d</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">ext_nid</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">crit</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*ext_struc</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">void</span> <span class="variable">*X509_get_ext_d2i</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">X509</span> <span class="variable">*x</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">nid</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*crit</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*idx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">X509_add1_ext_i2d</span><span class="operator">(</span><span class="variable">X509</span> <span class="variable">*x</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">nid</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*value</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">crit</span><span class="operator">,</span>
+                       <span class="variable">unsigned</span> <span class="variable">long</span> <span class="variable">flags</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">void</span> <span class="variable">*X509_CRL_get_ext_d2i</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">X509_CRL</span> <span class="variable">*crl</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">nid</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*crit</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*idx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">X509_CRL_add1_ext_i2d</span><span class="operator">(</span><span class="variable">X509_CRL</span> <span class="variable">*crl</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">nid</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*value</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">crit</span><span class="operator">,</span>
+                           <span class="variable">unsigned</span> <span class="variable">long</span> <span class="variable">flags</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">void</span> <span class="variable">*X509_REVOKED_get_ext_d2i</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">X509_REVOKED</span> <span class="variable">*r</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">nid</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*crit</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*idx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">X509_REVOKED_add1_ext_i2d</span><span class="operator">(</span><span class="variable">X509_REVOKED</span> <span class="variable">*r</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">nid</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*value</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">crit</span><span class="operator">,</span>
+                               <span class="variable">unsigned</span> <span class="variable">long</span> <span class="variable">flags</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">const</span> <span class="variable">STACK_OF</span><span class="operator">(</span><span class="variable">X509_EXTENSION</span><span class="operator">)</span> <span class="variable">*X509_get0_extensions</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">X509</span> <span class="variable">*x</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">STACK_OF</span><span class="operator">(</span><span class="variable">X509_EXTENSION</span><span class="operator">)</span> <span class="variable">*X509_CRL_get0_extensions</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">X509_CRL</span> <span class="variable">*crl</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">STACK_OF</span><span class="operator">(</span><span class="variable">X509_EXTENSION</span><span class="operator">)</span> <span class="variable">*X509_REVOKED_get0_extensions</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">X509_REVOKED</span> <span class="variable">*r</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>X509V3_get_d2i() looks for an extension with OID <em>nid</em> in the extensions
+<em>x</em> and, if found, decodes it. If <em>idx</em> is NULL then only one
+occurrence of an extension is permissible, otherwise the first extension after
+index <em>*idx</em> is returned and <em>*idx</em> updated to the location of the extension.
+If <em>crit</em> is not NULL then <em>*crit</em> is set to a status value: -2 if the
+extension occurs multiple times (this is only returned if <em>idx</em> is NULL),
+-1 if the extension could not be found, 0 if the extension is found and is
+not critical and 1 if critical. A pointer to an extension specific structure
+or NULL is returned.</p>
+<p>X509V3_add1_i2d() adds extension <em>value</em> to STACK <em>*x</em> (allocating a new
+STACK if necessary) using OID <em>nid</em> and criticality <em>crit</em> according
+to <em>flags</em>.</p>
+<p>X509V3_EXT_d2i() attempts to decode the ASN.1 data contained in extension
+<em>ext</em> and returns a pointer to an extension specific structure or NULL
+if the extension could not be decoded (invalid syntax or not supported).</p>
+<p>X509V3_EXT_i2d() encodes the extension specific structure <em>ext_struc</em>
+with OID <em>ext_nid</em> and criticality <em>crit</em>.</p>
+<p>X509_get_ext_d2i() and X509_add1_ext_i2d() operate on the extensions of
+certificate <em>x</em>. They are otherwise identical to X509V3_get_d2i() and
+X509V3_add1_i2d().</p>
+<p>X509_CRL_get_ext_d2i() and X509_CRL_add1_ext_i2d() operate on the extensions
+of CRL <em>crl</em>. They are otherwise identical to X509V3_get_d2i() and
+X509V3_add1_i2d().</p>
+<p>X509_REVOKED_get_ext_d2i() and X509_REVOKED_add1_ext_i2d() operate on the
+extensions of <strong>X509_REVOKED</strong> structure <em>r</em> (i.e for CRL entry extensions).
+They are otherwise identical to X509V3_get_d2i() and X509V3_add1_i2d().</p>
+<p>X509_get0_extensions(), X509_CRL_get0_extensions() and
+X509_REVOKED_get0_extensions() return a STACK of all the extensions
+of a certificate, a CRL or a CRL entry respectively.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>In almost all cases an extension can occur at most once and multiple
+occurrences is an error. Therefore, the <em>idx</em> parameter is usually NULL.</p>
+<p>The <em>flags</em> parameter may be one of the following values.</p>
+<p><strong>X509V3_ADD_DEFAULT</strong> appends a new extension only if the extension does
+not exist. An error is returned if the extension exists.</p>
+<p><strong>X509V3_ADD_APPEND</strong> appends a new extension, ignoring whether the extension
+exists.</p>
+<p><strong>X509V3_ADD_REPLACE</strong> replaces an existing extension. If the extension does
+not exist, appends a new extension.</p>
+<p><strong>X509V3_ADD_REPLACE_EXISTING</strong> replaces an existing extension. If the
+extension does not exist, returns an error.</p>
+<p><strong>X509V3_ADD_KEEP_EXISTING</strong> appends a new extension only if the extension does
+not exist. An error is <strong>not</strong> returned if the extension exists.</p>
+<p><strong>X509V3_ADD_DELETE</strong> deletes and frees an existing extension. If the extension
+does not exist, returns an error. No new extension is added.</p>
+<p>If <strong>X509V3_ADD_SILENT</strong> is bitwise ORed with <em>flags</em>: any error returned
+will not be added to the error queue.</p>
+<p>The function X509V3_get_d2i() and its variants
+will return NULL if the extension is not
+found, occurs multiple times or cannot be decoded. It is possible to
+determine the precise reason by checking the value of <em>*crit</em>.</p>
+<p>The function X509V3_add1_i2d() and its variants allocate <strong>X509_EXTENSION</strong>
+objects on STACK <em>*x</em> depending on <em>flags</em>. The <strong>X509_EXTENSION</strong> objects
+must be explicitly freed using X509_EXTENSION_free().</p>
+<p>
+</p>
+<hr />
+<h1><a name="supported_extensions">SUPPORTED EXTENSIONS</a></h1>
+<p>The following sections contain a list of all supported extensions
+including their name and NID.</p>
+<p>
+</p>
+<h2><a name="pkix_certificate_extensions">PKIX Certificate Extensions</a></h2>
+<p>The following certificate extensions are defined in PKIX standards such as
+<a href="http://www.ietf.org/rfc/rfc5280.txt" class="rfc">RFC5280</a>.</p>
+<pre>
+ Basic Constraints                  NID_basic_constraints
+ Key Usage                          NID_key_usage
+ Extended Key Usage                 NID_ext_key_usage</pre>
+<pre>
+ Subject Key Identifier             NID_subject_key_identifier
+ Authority Key Identifier           NID_authority_key_identifier</pre>
+<pre>
+ Private Key Usage Period           NID_private_key_usage_period</pre>
+<pre>
+ Subject Alternative Name           NID_subject_alt_name
+ Issuer Alternative Name            NID_issuer_alt_name</pre>
+<pre>
+ Authority Information Access       NID_info_access
+ Subject Information Access         NID_sinfo_access</pre>
+<pre>
+ Name Constraints                   NID_name_constraints</pre>
+<pre>
+ Certificate Policies               NID_certificate_policies
+ Policy Mappings                    NID_policy_mappings
+ Policy Constraints                 NID_policy_constraints
+ Inhibit Any Policy                 NID_inhibit_any_policy</pre>
+<pre>
+ TLS Feature                        NID_tlsfeature</pre>
+<p>
+</p>
+<h2><a name="netscape_certificate_extensions">Netscape Certificate Extensions</a></h2>
+<p>The following are (largely obsolete) Netscape certificate extensions.</p>
+<pre>
+ Netscape Cert Type                 NID_netscape_cert_type
+ Netscape Base Url                  NID_netscape_base_url
+ Netscape Revocation Url            NID_netscape_revocation_url
+ Netscape CA Revocation Url         NID_netscape_ca_revocation_url
+ Netscape Renewal Url               NID_netscape_renewal_url
+ Netscape CA Policy Url             NID_netscape_ca_policy_url
+ Netscape SSL Server Name           NID_netscape_ssl_server_name
+ Netscape Comment                   NID_netscape_comment</pre>
+<p>
+</p>
+<h2><a name="miscellaneous_certificate_extensions">Miscellaneous Certificate Extensions</a></h2>
+<pre>
+ Strong Extranet ID                 NID_sxnet
+ Proxy Certificate Information      NID_proxyCertInfo</pre>
+<p>
+</p>
+<h2><a name="pkix_crl_extensions">PKIX CRL Extensions</a></h2>
+<p>The following are CRL extensions from PKIX standards such as <a href="http://www.ietf.org/rfc/rfc5280.txt" class="rfc">RFC5280</a>.</p>
+<pre>
+ CRL Number                         NID_crl_number
+ CRL Distribution Points            NID_crl_distribution_points
+ Delta CRL Indicator                NID_delta_crl
+ Freshest CRL                       NID_freshest_crl
+ Invalidity Date                    NID_invalidity_date
+ Issuing Distribution Point         NID_issuing_distribution_point</pre>
+<p>The following are CRL entry extensions from PKIX standards such as <a href="http://www.ietf.org/rfc/rfc5280.txt" class="rfc">RFC5280</a>.</p>
+<pre>
+ CRL Reason Code                    NID_crl_reason
+ Certificate Issuer                 NID_certificate_issuer</pre>
+<p>
+</p>
+<h2><a name="ocsp_extensions">OCSP Extensions</a></h2>
+<pre>
+ OCSP Nonce                         NID_id_pkix_OCSP_Nonce
+ OCSP CRL ID                        NID_id_pkix_OCSP_CrlID
+ Acceptable OCSP Responses          NID_id_pkix_OCSP_acceptableResponses
+ OCSP No Check                      NID_id_pkix_OCSP_noCheck
+ OCSP Archive Cutoff                NID_id_pkix_OCSP_archiveCutoff
+ OCSP Service Locator               NID_id_pkix_OCSP_serviceLocator
+ Hold Instruction Code              NID_hold_instruction_code</pre>
+<p>
+</p>
+<h2><a name="certificate_transparency_extensions">Certificate Transparency Extensions</a></h2>
+<p>The following extensions are used by certificate transparency, <a href="http://www.ietf.org/rfc/rfc6962.txt" class="rfc">RFC6962</a></p>
+<pre>
+ CT Precertificate SCTs             NID_ct_precert_scts
+ CT Certificate SCTs                NID_ct_cert_scts</pre>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>X509V3_get_d2i(), its variants, and X509V3_EXT_d2i() return
+a pointer to an extension specific structure or NULL if an error occurs.</p>
+<p>X509V3_add1_i2d() and its variants return 1 if the operation is successful
+and 0 if it fails due to a non-fatal error (extension not found, already exists,
+cannot be encoded) or -1 due to a fatal error such as a memory allocation
+failure.</p>
+<p>X509V3_EXT_i2d() returns a pointer to an <strong>X509_EXTENSION</strong> structure
+or NULL if an error occurs.</p>
+<p>X509_get0_extensions(), X509_CRL_get0_extensions() and
+X509_REVOKED_get0_extensions() return a stack of extensions. They return
+NULL if no extensions are present.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>d2i_X509(3)</em>,
+<em>ERR_get_error(3)</em>,
+<em>X509_CRL_get0_by_serial(3)</em>,
+<em>X509_get0_signature(3)</em>,
+<em>X509_get_ext_d2i(3)</em>,
+<em>X509_get_extension_flags(3)</em>,
+<em>X509_get_pubkey(3)</em>,
+<em>X509_get_subject_name(3)</em>,
+<em>X509_get_version(3)</em>,
+<em>X509_NAME_add_entry_by_txt(3)</em>,
+<em>X509_NAME_ENTRY_get_object(3)</em>,
+<em>X509_NAME_get_index_by_NID(3)</em>,
+<em>X509_NAME_print_ex(3)</em>,
+<em>X509_new(3)</em>,
+<em>X509_sign(3)</em>,
+<em>X509_verify_cert(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2015-2022 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

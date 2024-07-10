@@ -1,0 +1,240 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OSSL_PARAM_BLD</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<ul>
+
+		<li><a href="#example_1">Example 1</a></li>
+		<li><a href="#example_2">Example 2</a></li>
+	</ul>
+
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>OSSL_PARAM_BLD, OSSL_PARAM_BLD_new, OSSL_PARAM_BLD_to_param,
+OSSL_PARAM_BLD_free, OSSL_PARAM_BLD_push_int,
+OSSL_PARAM_BLD_push_uint, OSSL_PARAM_BLD_push_long,
+OSSL_PARAM_BLD_push_ulong, OSSL_PARAM_BLD_push_int32,
+OSSL_PARAM_BLD_push_uint32, OSSL_PARAM_BLD_push_int64,
+OSSL_PARAM_BLD_push_uint64, OSSL_PARAM_BLD_push_size_t,
+OSSL_PARAM_BLD_push_time_t, OSSL_PARAM_BLD_push_double,
+OSSL_PARAM_BLD_push_BN, OSSL_PARAM_BLD_push_BN_pad,
+OSSL_PARAM_BLD_push_utf8_string, OSSL_PARAM_BLD_push_utf8_ptr,
+OSSL_PARAM_BLD_push_octet_string, OSSL_PARAM_BLD_push_octet_ptr
+- functions to assist in the creation of OSSL_PARAM arrays</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/param_build.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">typedef</span> <span class="variable">struct</span> <span class="variable">OSSL_PARAM_BLD</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">OSSL_PARAM_BLD</span> <span class="variable">*OSSL_PARAM_BLD_new</span><span class="operator">(</span><span class="variable">void</span><span class="operator">);</span>
+ <span class="variable">OSSL_PARAM</span> <span class="variable">*OSSL_PARAM_BLD_to_param</span><span class="operator">(</span><span class="variable">OSSL_PARAM_BLD</span> <span class="variable">*bld</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">OSSL_PARAM_BLD_free</span><span class="operator">(</span><span class="variable">OSSL_PARAM_BLD</span> <span class="variable">*bld</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OSSL_PARAM_BLD_push_TYPE</span><span class="operator">(</span><span class="variable">OSSL_PARAM_BLD</span> <span class="variable">*bld</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key</span><span class="operator">,</span> <span class="variable">TYPE</span> <span class="variable">val</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OSSL_PARAM_BLD_push_BN</span><span class="operator">(</span><span class="variable">OSSL_PARAM_BLD</span> <span class="variable">*bld</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key</span><span class="operator">,</span>
+                            <span class="variable">const</span> <span class="variable">BIGNUM</span> <span class="variable">*bn</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_PARAM_BLD_push_BN_pad</span><span class="operator">(</span><span class="variable">OSSL_PARAM_BLD</span> <span class="variable">*bld</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key</span><span class="operator">,</span>
+                                <span class="variable">const</span> <span class="variable">BIGNUM</span> <span class="variable">*bn</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">sz</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OSSL_PARAM_BLD_push_utf8_string</span><span class="operator">(</span><span class="variable">OSSL_PARAM_BLD</span> <span class="variable">*bld</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key</span><span class="operator">,</span>
+                                     <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">bsize</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_PARAM_BLD_push_utf8_ptr</span><span class="operator">(</span><span class="variable">OSSL_PARAM_BLD</span> <span class="variable">*bld</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key</span><span class="operator">,</span>
+                                  <span class="variable">char</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">bsize</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_PARAM_BLD_push_octet_string</span><span class="operator">(</span><span class="variable">OSSL_PARAM_BLD</span> <span class="variable">*bld</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key</span><span class="operator">,</span>
+                                      <span class="variable">const</span> <span class="variable">void</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">bsize</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_PARAM_BLD_push_octet_ptr</span><span class="operator">(</span><span class="variable">OSSL_PARAM_BLD</span> <span class="variable">*bld</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key</span><span class="operator">,</span>
+                                   <span class="variable">void</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">bsize</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>A collection of utility functions that simplify the creation of OSSL_PARAM
+arrays.  The <strong><em>TYPE</em></strong> names are as per <em>OSSL_PARAM_int(3)</em>.</p>
+<p><code>OSSL_PARAM_BLD_new()</code> allocates and initialises a new OSSL_PARAM_BLD structure
+so that values can be added.
+Any existing values are cleared.</p>
+<p><code>OSSL_PARAM_BLD_free()</code> deallocates the memory allocates by <code>OSSL_PARAM_BLD_new()</code>.</p>
+<p><code>OSSL_PARAM_BLD_to_param()</code> converts a built up OSSL_PARAM_BLD structure
+<em>bld</em> into an allocated OSSL_PARAM array.
+The OSSL_PARAM array and all associated storage must be freed by calling
+<code>OSSL_PARAM_free()</code> with the functions return value.
+<code>OSSL_PARAM_BLD_free()</code> can safely be called any time after this function is.</p>
+<p><strong>OSSL_PARAM_BLD_push_<em>TYPE</em></strong>() are a series of functions which will create
+OSSL_PARAM objects of the specified size and correct type for the <em>val</em>
+argument.
+<em>val</em> is stored by value and an expression or auto variable can be used.</p>
+<p><code>OSSL_PARAM_BLD_push_BN()</code> is a function that will create an OSSL_PARAM object
+that holds the specified BIGNUM <em>bn</em>.
+If <em>bn</em> is marked as being securely allocated, its OSSL_PARAM representation
+will also be securely allocated.
+The <em>bn</em> argument is stored by reference and the underlying BIGNUM object
+must exist until after <code>OSSL_PARAM_BLD_to_param()</code> has been called.</p>
+<p><code>OSSL_PARAM_BLD_push_BN_pad()</code> is a function that will create an OSSL_PARAM object
+that holds the specified BIGNUM <em>bn</em>.
+The object will be padded to occupy exactly <em>sz</em> bytes, if insufficient space
+is specified an error results.
+If <em>bn</em> is marked as being securely allocated, its OSSL_PARAM representation
+will also be securely allocated.
+The <em>bn</em> argument is stored by reference and the underlying BIGNUM object
+must exist until after <code>OSSL_PARAM_BLD_to_param()</code> has been called.</p>
+<p>OSSL_PARAM_BLD_push_utf8_string() is a function that will create an OSSL_PARAM
+object that references the UTF8 string specified by <em>buf</em>.
+The length of the string <em>bsize</em> should not include the terminating NUL byte.
+If it is zero then it will be calculated.
+The string that <em>buf</em> points to is stored by reference and must remain in
+scope until after <code>OSSL_PARAM_BLD_to_param()</code> has been called.</p>
+<p><code>OSSL_PARAM_BLD_push_octet_string()</code> is a function that will create an OSSL_PARAM
+object that references the octet string specified by <em>buf</em> and &lt;bsize&gt;.
+The memory that <em>buf</em> points to is stored by reference and must remain in
+scope until after <code>OSSL_PARAM_BLD_to_param()</code> has been called.</p>
+<p>OSSL_PARAM_BLD_push_utf8_ptr() is a function that will create an OSSL_PARAM
+object that references the UTF8 string specified by <em>buf</em>.
+The length of the string <em>bsize</em> should not include the terminating NUL byte.
+If it is zero then it will be calculated.
+The string <em>buf</em> points to is stored by reference and must remain in
+scope until the OSSL_PARAM array is freed.</p>
+<p><code>OSSL_PARAM_BLD_push_octet_ptr()</code> is a function that will create an OSSL_PARAM
+object that references the octet string specified by <em>buf</em>.
+The memory <em>buf</em> points to is stored by reference and must remain in
+scope until the OSSL_PARAM array is freed.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>OSSL_PARAM_BLD_new()</code> returns the allocated OSSL_PARAM_BLD structure, or NULL
+on error.</p>
+<p><code>OSSL_PARAM_BLD_to_param()</code> returns the allocated OSSL_PARAM array, or NULL
+on error.</p>
+<p>All of the OSSL_PARAM_BLD_push_TYPE functions return 1 on success and 0
+on error.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p><code>OSSL_PARAM_BLD_push_BN()</code> and <code>OSSL_PARAM_BLD_push_BN_pad()</code> currently only
+support nonnegative <strong>BIGNUM</strong>s.  They return an error on negative <strong>BIGNUM</strong>s.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Both examples creating an OSSL_PARAM array that contains an RSA key.
+For both, the predefined key variables are:</p>
+<pre>
+    <span class="variable">BIGNUM</span> <span class="variable">*n</span><span class="operator">;</span>           <span class="regex">/* modulus */</span>
+    <span class="variable">unsigned</span> <span class="keyword">int</span> <span class="variable">e</span><span class="operator">;</span>      <span class="regex">/* public exponent */</span>
+    <span class="variable">BIGNUM</span> <span class="variable">*d</span><span class="operator">;</span>           <span class="regex">/* private exponent */</span>
+    <span class="variable">BIGNUM</span> <span class="variable">*p</span><span class="operator">,</span> <span class="variable">*q</span><span class="operator">;</span>       <span class="regex">/* first two prime factors */</span>
+    <span class="variable">BIGNUM</span> <span class="variable">*dmp1</span><span class="operator">,</span> <span class="variable">*dmq1</span><span class="operator">;</span> <span class="regex">/* first two CRT exponents */</span>
+    <span class="variable">BIGNUM</span> <span class="variable">*iqmp</span><span class="operator">;</span>        <span class="regex">/* first CRT coefficient */</span>
+</pre>
+<p>
+</p>
+<h2><a name="example_1">Example 1</a></h2>
+<p>This example shows how to create an OSSL_PARAM array that contains an RSA
+private key.</p>
+<pre>
+    <span class="variable">OSSL_PARAM_BLD</span> <span class="variable">*bld</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_BLD_new</span><span class="operator">();</span>
+    <span class="variable">OSSL_PARAM</span> <span class="variable">*params</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+    <span class="keyword">if</span> <span class="operator">(</span><span class="variable">bld</span> <span class="operator">==</span> <span class="variable">NULL</span>
+        <span class="operator">||</span> <span class="operator">!</span><span class="variable">OSSL_PARAM_BLD_push_BN</span><span class="operator">(</span><span class="variable">bld</span><span class="operator">,</span> <span class="string">"n"</span><span class="operator">,</span> <span class="variable">n</span><span class="operator">)</span>
+        <span class="operator">||</span> <span class="operator">!</span><span class="variable">OSSL_PARAM_BLD_push_uint</span><span class="operator">(</span><span class="variable">bld</span><span class="operator">,</span> <span class="string">"e"</span><span class="operator">,</span> <span class="variable">e</span><span class="operator">)</span>
+        <span class="operator">||</span> <span class="operator">!</span><span class="variable">OSSL_PARAM_BLD_push_BN</span><span class="operator">(</span><span class="variable">bld</span><span class="operator">,</span> <span class="string">"d"</span><span class="operator">,</span> <span class="variable">d</span><span class="operator">)</span>
+        <span class="operator">||</span> <span class="operator">!</span><span class="variable">OSSL_PARAM_BLD_push_BN</span><span class="operator">(</span><span class="variable">bld</span><span class="operator">,</span> <span class="string">"rsa-factor1"</span><span class="operator">,</span> <span class="variable">p</span><span class="operator">)</span>
+        <span class="operator">||</span> <span class="operator">!</span><span class="variable">OSSL_PARAM_BLD_push_BN</span><span class="operator">(</span><span class="variable">bld</span><span class="operator">,</span> <span class="string">"rsa-factor2"</span><span class="operator">,</span> <span class="string">q)
+        || !OSSL_PARAM_BLD_push_BN(bld, "rsa-exponent1", dmp1)</span>
+        <span class="operator">||</span> <span class="operator">!</span><span class="variable">OSSL_PARAM_BLD_push_BN</span><span class="operator">(</span><span class="variable">bld</span><span class="operator">,</span> <span class="string">"rsa-exponent2"</span><span class="operator">,</span> <span class="variable">dmq1</span><span class="operator">)</span>
+        <span class="operator">||</span> <span class="operator">!</span><span class="variable">OSSL_PARAM_BLD_push_BN</span><span class="operator">(</span><span class="variable">bld</span><span class="operator">,</span> <span class="string">"rsa-coefficient1"</span><span class="operator">,</span> <span class="variable">iqmp</span><span class="operator">)</span>
+        <span class="operator">||</span> <span class="operator">(</span><span class="variable">params</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_BLD_to_param</span><span class="operator">(</span><span class="variable">bld</span><span class="operator">))</span> <span class="operator">==</span> <span class="variable">NULL</span><span class="operator">)</span>
+        <span class="keyword">goto</span> <span class="variable">err</span><span class="operator">;</span>
+    <span class="variable">OSSL_PARAM_BLD_free</span><span class="operator">(</span><span class="variable">bld</span><span class="operator">);</span>
+    <span class="regex">/* Use params */</span>
+    <span class="operator">...</span>
+    <span class="variable">OSSL_PARAM_free</span><span class="operator">(</span><span class="variable">params</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<h2><a name="example_2">Example 2</a></h2>
+<p>This example shows how to create an OSSL_PARAM array that contains an RSA
+public key.</p>
+<pre>
+    <span class="variable">OSSL_PARAM_BLD</span> <span class="variable">*bld</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_BLD_new</span><span class="operator">();</span>
+    <span class="variable">OSSL_PARAM</span> <span class="variable">*params</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+    <span class="keyword">if</span> <span class="operator">(</span><span class="variable">nld</span> <span class="operator">==</span> <span class="variable">NULL</span>
+        <span class="operator">||</span> <span class="operator">!</span><span class="variable">OSSL_PARAM_BLD_push_BN</span><span class="operator">(</span><span class="variable">bld</span><span class="operator">,</span> <span class="string">"n"</span><span class="operator">,</span> <span class="variable">n</span><span class="operator">)</span>
+        <span class="operator">||</span> <span class="operator">!</span><span class="variable">OSSL_PARAM_BLD_push_uint</span><span class="operator">(</span><span class="variable">bld</span><span class="operator">,</span> <span class="string">"e"</span><span class="operator">,</span> <span class="variable">e</span><span class="operator">)</span>
+        <span class="operator">||</span> <span class="operator">(</span><span class="variable">params</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_BLD_to_param</span><span class="operator">(</span><span class="variable">bld</span><span class="operator">))</span> <span class="operator">==</span> <span class="variable">NULL</span><span class="operator">)</span>
+        <span class="keyword">goto</span> <span class="variable">err</span><span class="operator">;</span>
+    <span class="variable">OSSL_PARAM_BLD_free</span><span class="operator">(</span><span class="variable">bld</span><span class="operator">);</span>
+    <span class="regex">/* Use params */</span>
+    <span class="operator">...</span>
+    <span class="variable">OSSL_PARAM_free</span><span class="operator">(</span><span class="variable">params</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>OSSL_PARAM_int(3)</em>, <em>OSSL_PARAM(3)</em>, <em>OSSL_PARAM_free(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>The functions described here were all added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2019-2022 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

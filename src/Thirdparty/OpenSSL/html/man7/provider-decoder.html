@@ -1,0 +1,342 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>provider-decoder</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#names_and_properties">Names and properties</a></li>
+		<li><a href="#subset_selections">Subset selections</a></li>
+		<li><a href="#context_functions">Context functions</a></li>
+		<li><a href="#export_function">Export function</a></li>
+		<li><a href="#decoding_functions">Decoding functions</a></li>
+		<li><a href="#decoder_operation_parameters">Decoder operation parameters</a></li>
+	</ul>
+
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>provider-decoder - The OSSL_DECODER library &lt;-&gt; provider functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/core_dispatch.h&gt;</span>
+</pre>
+<pre>
+ /*
+  * None of these are actual functions, but are displayed like this for
+  * the function signatures for functions that are offered as function
+  * pointers in OSSL_DISPATCH arrays.
+  */</pre>
+<pre>
+ <span class="regex">/* Decoder parameter accessor and descriptor */</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*OSSL_FUNC_decoder_gettable_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_decoder_get_params</span><span class="operator">(</span><span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* Functions to construct /</span> <span class="variable">destruct</span> <span class="operator">/</span> <span class="variable">manipulate</span> <span class="variable">the</span> <span class="variable">decoder</span> <span class="variable">context</span> <span class="operator">*/</span>
+ <span class="variable">void</span> <span class="variable">*OSSL_FUNC_decoder_newctx</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">OSSL_FUNC_decoder_freectx</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*OSSL_FUNC_decoder_settable_ctx_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_decoder_set_ctx_params</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* Functions to check selection support */</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_decoder_does_selection</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*provctx</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">selection</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* Functions to decode object data */</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_decoder_decode</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">OSSL_CORE_BIO</span> <span class="variable">*in</span><span class="operator">,</span>
+                              <span class="keyword">int</span> <span class="variable">selection</span><span class="operator">,</span>
+                              <span class="variable">OSSL_CALLBACK</span> <span class="variable">*data_cb</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*data_cbarg</span><span class="operator">,</span>
+                              <span class="variable">OSSL_PASSPHRASE_CALLBACK</span> <span class="variable">*cb</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*cbarg</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="regex">/* Functions to export a decoded object */</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_FUNC_decoder_export_object</span><span class="operator">(</span><span class="variable">void</span> <span class="variable">*ctx</span><span class="operator">,</span>
+                                       <span class="variable">const</span> <span class="variable">void</span> <span class="variable">*objref</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">objref_sz</span><span class="operator">,</span>
+                                       <span class="variable">OSSL_CALLBACK</span> <span class="variable">*export_cb</span><span class="operator">,</span>
+                                       <span class="variable">void</span> <span class="variable">*export_cbarg</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><em>The term &quot;decode&quot; is used throughout this manual.  This includes but is
+not limited to deserialization as individual decoders can also do
+decoding into intermediate data formats.</em></p>
+<p>The DECODER operation is a generic method to create a provider-native
+object reference or intermediate decoded data from an encoded form
+read from the given <strong>OSSL_CORE_BIO</strong>. If the caller wants to decode
+data from memory, it should provide a <em>BIO_s_mem(3)</em> <strong>BIO</strong>. The decoded
+data or object reference is passed along with eventual metadata
+to the <em>metadata_cb</em> as <em>OSSL_PARAM(3)</em> parameters.</p>
+<p>The decoder doesn't need to know more about the <strong>OSSL_CORE_BIO</strong>
+pointer than being able to pass it to the appropriate BIO upcalls (see
+<em>provider-base(7)/Core functions</em>).</p>
+<p>The DECODER implementation may be part of a chain, where data is
+passed from one to the next.  For example, there may be an
+implementation to decode an object from PEM to DER, and another one
+that decodes DER to a provider-native object.</p>
+<p>The last decoding step in the decoding chain is usually supposed to create
+a provider-native object referenced by an object reference. To import
+that object into a different provider the <code>OSSL_FUNC_decoder_export_object()</code>
+can be called as the final step of the decoding process.</p>
+<p>All &quot;functions&quot; mentioned here are passed as function pointers between
+<em class="file">libcrypto</em> and the provider in <em>OSSL_DISPATCH(3)</em> arrays via
+<em>OSSL_ALGORITHM(3)</em> arrays that are returned by the provider's
+<code>provider_query_operation()</code> function
+(see <em>provider-base(7)/Provider Functions</em>).</p>
+<p>All these &quot;functions&quot; have a corresponding function type definition
+named <strong>OSSL_FUNC_{name}_fn</strong>, and a helper function to retrieve the
+function pointer from an <em>OSSL_DISPATCH(3)</em> element named
+<strong>OSSL_FUNC_{name}</strong>.
+For example, the &quot;function&quot; <code>OSSL_FUNC_decoder_decode()</code> has these:</p>
+<pre>
+ <span class="variable">typedef</span> <span class="keyword">int</span>
+     <span class="operator">(</span><span class="variable">OSSL_FUNC_decoder_decode_fn</span><span class="operator">)(</span><span class="variable">void</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">OSSL_CORE_BIO</span> <span class="variable">*in</span><span class="operator">,</span>
+                                   <span class="keyword">int</span> <span class="variable">selection</span><span class="operator">,</span>
+                                   <span class="variable">OSSL_CALLBACK</span> <span class="variable">*data_cb</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*data_cbarg</span><span class="operator">,</span>
+                                   <span class="variable">OSSL_PASSPHRASE_CALLBACK</span> <span class="variable">*cb</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*cbarg</span><span class="operator">);</span>
+ <span class="variable">static</span> <span class="variable">ossl_inline</span> <span class="variable">OSSL_FUNC_decoder_decode_fn</span><span class="operator">*</span>
+     <span class="variable">OSSL_FUNC_decoder_decode</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">OSSL_DISPATCH</span> <span class="variable">*opf</span><span class="operator">);</span>
+</pre>
+<p><em>OSSL_DISPATCH(3)</em> arrays are indexed by numbers that are provided as
+macros in <em>openssl-core_dispatch.h(7)</em>, as follows:</p>
+<pre>
+ OSSL_FUNC_decoder_get_params          OSSL_FUNC_DECODER_GET_PARAMS
+ OSSL_FUNC_decoder_gettable_params     OSSL_FUNC_DECODER_GETTABLE_PARAMS</pre>
+<pre>
+ OSSL_FUNC_decoder_newctx              OSSL_FUNC_DECODER_NEWCTX
+ OSSL_FUNC_decoder_freectx             OSSL_FUNC_DECODER_FREECTX
+ OSSL_FUNC_decoder_set_ctx_params      OSSL_FUNC_DECODER_SET_CTX_PARAMS
+ OSSL_FUNC_decoder_settable_ctx_params OSSL_FUNC_DECODER_SETTABLE_CTX_PARAMS</pre>
+<pre>
+ OSSL_FUNC_decoder_does_selection      OSSL_FUNC_DECODER_DOES_SELECTION</pre>
+<pre>
+ OSSL_FUNC_decoder_decode              OSSL_FUNC_DECODER_DECODE</pre>
+<pre>
+ OSSL_FUNC_decoder_export_object       OSSL_FUNC_DECODER_EXPORT_OBJECT</pre>
+<p>
+</p>
+<h2><a name="names_and_properties">Names and properties</a></h2>
+<p>The name of an implementation should match the target type of object
+it decodes. For example, an implementation that decodes an RSA key
+should be named &quot;RSA&quot;. Likewise, an implementation that decodes DER data
+from PEM input should be named &quot;DER&quot;.</p>
+<p>Properties can be used to further specify details about an implementation:</p>
+<dl>
+<dt><strong><a name="input" class="item">input</a></strong></dt>
+
+<dd>
+<p>This property is used to specify what format of input the implementation
+can decode.</p>
+<p>This property is <em>mandatory</em>.</p>
+<p>OpenSSL providers recognize the following input types:</p>
+<dl>
+<dt><strong><a name="pem" class="item">pem</a></strong></dt>
+
+<dd>
+<p>An implementation with that input type decodes PEM formatted data.</p>
+</dd>
+<dt><strong><a name="der" class="item">der</a></strong></dt>
+
+<dd>
+<p>An implementation with that input type decodes DER formatted data.</p>
+</dd>
+<dt><strong><a name="msblob" class="item">msblob</a></strong></dt>
+
+<dd>
+<p>An implementation with that input type decodes MSBLOB formatted data.</p>
+</dd>
+<dt><strong><a name="pvk" class="item">pvk</a></strong></dt>
+
+<dd>
+<p>An implementation with that input type decodes PVK formatted data.</p>
+</dd>
+</dl>
+</dd>
+<dt><strong><a name="structure" class="item">structure</a></strong></dt>
+
+<dd>
+<p>This property is used to specify the structure that the decoded data is
+expected to have.</p>
+<p>This property is <em>optional</em>.</p>
+<p>Structures currently recognised by built-in decoders:</p>
+<dl>
+<dt><strong><a name="type_specific" class="item">&quot;type-specific&quot;</a></strong></dt>
+
+<dd>
+<p>Type specific structure.</p>
+</dd>
+<dt><strong><a name="pkcs8" class="item">&quot;pkcs8&quot;</a></strong></dt>
+
+<dd>
+<p>Structure according to the PKCS#8 specification.</p>
+</dd>
+<dt><strong><a name="subjectpublickeyinfo" class="item">&quot;SubjectPublicKeyInfo&quot;</a></strong></dt>
+
+<dd>
+<p>Encoding of public keys according to the Subject Public Key Info of <a href="http://www.ietf.org/rfc/rfc5280.txt" class="rfc">RFC 5280</a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>The possible values of both these properties is open ended.  A provider may
+very well specify input types and structures that libcrypto doesn't know
+anything about.</p>
+<p>
+</p>
+<h2><a name="subset_selections">Subset selections</a></h2>
+<p>Sometimes, an object has more than one subset of data that is interesting to
+treat separately or together.  It's possible to specify what subsets are to
+be decoded, with a set of bits <em>selection</em> that are passed in an <strong>int</strong>.</p>
+<p>This set of bits depend entirely on what kind of provider-side object is
+to be decoded.  For example, those bits are assumed to be the same as those
+used with <em>provider-keymgmt(7)</em> (see <em>provider-keymgmt(7)/Key Objects</em>) when
+the object is an asymmetric keypair - e.g., <strong>OSSL_KEYMGMT_SELECT_PRIVATE_KEY</strong>
+if the object to be decoded is supposed to contain private key components.</p>
+<p><code>OSSL_FUNC_decoder_does_selection()</code> should tell if a particular implementation
+supports any of the combinations given by <em>selection</em>.</p>
+<p>
+</p>
+<h2><a name="context_functions">Context functions</a></h2>
+<p><code>OSSL_FUNC_decoder_newctx()</code> returns a context to be used with the rest of
+the functions.</p>
+<p><code>OSSL_FUNC_decoder_freectx()</code> frees the given <em>ctx</em> as created by
+<code>OSSL_FUNC_decoder_newctx()</code>.</p>
+<p><code>OSSL_FUNC_decoder_set_ctx_params()</code> sets context data according to parameters
+from <em>params</em> that it recognises.  Unrecognised parameters should be
+ignored.
+Passing NULL for <em>params</em> should return true.</p>
+<p><code>OSSL_FUNC_decoder_settable_ctx_params()</code> returns a constant <em>OSSL_PARAM(3)</em>
+array describing the parameters that <code>OSSL_FUNC_decoder_set_ctx_params()</code>
+can handle.</p>
+<p>See <em>OSSL_PARAM(3)</em> for further details on the parameters structure used by
+<code>OSSL_FUNC_decoder_set_ctx_params()</code> and <code>OSSL_FUNC_decoder_settable_ctx_params()</code>.</p>
+<p>
+</p>
+<h2><a name="export_function">Export function</a></h2>
+<p>When a provider-native object is created by a decoder it would be unsuitable
+for direct use with a foreign provider. The export function allows for
+exporting the object into that foreign provider if the foreign provider
+supports the type of the object and provides an import function.</p>
+<p><code>OSSL_FUNC_decoder_export_object()</code> should export the object of size <em>objref_sz</em>
+referenced by <em>objref</em> as an <em>OSSL_PARAM(3)</em> array and pass that into the
+<em>export_cb</em> as well as the given <em>export_cbarg</em>.</p>
+<p>
+</p>
+<h2><a name="decoding_functions">Decoding functions</a></h2>
+<p><code>OSSL_FUNC_decoder_decode()</code> should decode the data as read from
+the <strong>OSSL_CORE_BIO</strong> <em>in</em> to produce decoded data or an object to be
+passed as reference in an <em>OSSL_PARAM(3)</em> array along with possible other
+metadata that was decoded from the input. This <em>OSSL_PARAM(3)</em> array is
+then passed to the <em>data_cb</em> callback.  The <em>selection</em> bits,
+if relevant, should determine what the input data should contain.
+The decoding functions also take an <em>OSSL_PASSPHRASE_CALLBACK(3)</em> function
+pointer along with a pointer to application data <em>cbarg</em>, which should be
+used when a pass phrase prompt is needed.</p>
+<p>It's important to understand that the return value from this function is
+interpreted as follows:</p>
+<dl>
+<dt><strong><a name="true" class="item">True (1)</a></strong></dt>
+
+<dd>
+<p>This means &quot;carry on the decoding process&quot;, and is meaningful even though
+this function couldn't decode the input into anything, because there may be
+another decoder implementation that can decode it into something.</p>
+<p>The <em>data_cb</em> callback should never be called when this function can't
+decode the input into anything.</p>
+</dd>
+<dt><strong><a name="false" class="item">False (0)</a></strong></dt>
+
+<dd>
+<p>This means &quot;stop the decoding process&quot;, and is meaningful when the input
+could be decoded into some sort of object that this function understands,
+but further treatment of that object results into errors that won't be
+possible for some other decoder implementation to get a different result.</p>
+</dd>
+</dl>
+<p>The conditions to stop the decoding process are at the discretion of the
+implementation.</p>
+<p>
+</p>
+<h2><a name="decoder_operation_parameters">Decoder operation parameters</a></h2>
+<p>There are currently no operation parameters currently recognised by the
+built-in decoders.</p>
+<p>Parameters currently recognised by the built-in pass phrase callback:</p>
+<dl>
+<dt><strong><a name="info_ossl_passphrase_param_info_utf8_string" class="item">&quot;info&quot; (<strong>OSSL_PASSPHRASE_PARAM_INFO</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>A string of information that will become part of the pass phrase
+prompt.  This could be used to give the user information on what kind
+of object it's being prompted for.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>OSSL_FUNC_decoder_newctx()</code> returns a pointer to a context, or NULL on
+failure.</p>
+<p><code>OSSL_FUNC_decoder_set_ctx_params()</code> returns 1, unless a recognised
+parameter was invalid or caused an error, for which 0 is returned.</p>
+<p><code>OSSL_FUNC_decoder_settable_ctx_params()</code> returns a pointer to an array of
+constant <em>OSSL_PARAM(3)</em> elements.</p>
+<p><code>OSSL_FUNC_decoder_does_selection()</code> returns 1 if the decoder implementation
+supports any of the <em>selection</em> bits, otherwise 0.</p>
+<p><code>OSSL_FUNC_decoder_decode()</code> returns 1 to signal that the decoding process
+should continue, or 0 to signal that it should stop.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>provider(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>The DECODER interface was introduced in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2019-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+﻿  stdafx.cpp
+C:\Users\Administrator\Desktop\newobj\src\public\define.h(16,1): warning C4005: “HPSOCKET_STATIC_LIB”: 宏重定义
+C:\Users\Administrator\Desktop\newobj\src\public\define.h(16,1): message : 之前在命令行上声明的“HPSOCKET_STATIC_LIB”
+  BufferPool.cpp
+  FuncHelper.cpp
+C:\Users\Administrator\Desktop\newobj\thirdparty\hpsocket\Src\Common\FuncHelper.cpp(40,4): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Administrator\Desktop\newobj\thirdparty\hpsocket\Src\Common\FuncHelper.cpp(42,4): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Administrator\Desktop\newobj\thirdparty\hpsocket\Src\Common\FuncHelper.cpp(46,3): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Administrator\Desktop\newobj\thirdparty\hpsocket\Src\Common\FuncHelper.cpp(48,3): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  RWLock.cpp
+  SysHelper.cpp
+  WaitFor.cpp
+  ArqHelper.cpp
+  HPSocket.cpp
+  HPThreadPool.cpp
+  HttpAgent.cpp
+  HttpClient.cpp
+  HttpCookie.cpp
+  HttpHelper.cpp
+C:\Users\Administrator\Desktop\newobj\thirdparty\hpsocket\Src\HttpHelper.cpp(214,3): warning C4996: '_itoa': This function or variable may be unsafe. Consider using _itoa_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Administrator\Desktop\newobj\thirdparty\hpsocket\Src\HttpHelper.cpp(285,3): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Administrator\Desktop\newobj\thirdparty\hpsocket\Src\HttpHelper.cpp(295,3): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  HttpServer.cpp
+  MiscHelper.cpp
+  SocketHelper.cpp
+  SSLAgent.cpp
+  SSLClient.cpp
+  SSLHelper.cpp
+  HPSocket-SSL.cpp
+  SSLServer.cpp
+  正在生成代码...
+  正在编译...
+  TcpAgent.cpp
+  TcpClient.cpp
+  TcpServer.cpp
+  UdpArqClient.cpp
+  UdpArqServer.cpp
+  UdpCast.cpp
+  UdpClient.cpp
+  UdpNode.cpp
+  UdpServer.cpp
+  正在生成代码...
+  llhttp_api.c
+  llhttp_internal.c
+  llhttp_support.c
+  llhttp_url.c
+  ikcp.c
+  正在生成代码...
+  HPSocketLIB.vcxproj -> C:\Users\Administrator\Desktop\newobj\thirdparty\hpsocket\Lib\HPSocket\x64\static\HPSocket.lib

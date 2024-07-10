@@ -1,0 +1,117 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>openssl-passphrase-options</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<ul>
+
+		<li><a href="#pass_phrase_option_arguments">Pass Phrase Option Arguments</a></li>
+	</ul>
+
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>openssl-passphrase-options - Pass phrase options</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong>
+<em>command</em>
+[ <em>options</em> ... ]
+[ <em>parameters</em> ... ]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Several OpenSSL commands accept password arguments, typically using <strong>-passin</strong>
+and <strong>-passout</strong> for input and output passwords respectively. These allow
+the password to be obtained from a variety of sources. Both of these
+options take a single argument whose format is described below. If no
+password argument is given and a password is required then the user is
+prompted to enter one: this will typically be read from the current
+terminal with echoing turned off.</p>
+<p>Note that character encoding may be relevant, please see
+<em>passphrase-encoding(7)</em>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<p>
+</p>
+<h2><a name="pass_phrase_option_arguments">Pass Phrase Option Arguments</a></h2>
+<p>Pass phrase arguments can be formatted as follows.</p>
+<dl>
+<dt><strong><a name="pass_password" class="item"><strong>pass:</strong><em>password</em></a></strong></dt>
+
+<dd>
+<p>The actual password is <em>password</em>. Since the password is visible
+to utilities (like 'ps' under Unix) this form should only be used
+where security is not important.</p>
+</dd>
+<dt><strong><a name="env_var" class="item"><strong>env:</strong><em>var</em></a></strong></dt>
+
+<dd>
+<p>Obtain the password from the environment variable <em>var</em>. Since
+the environment of other processes is visible on certain platforms
+(e.g. ps under certain Unix OSes) this option should be used with caution.</p>
+</dd>
+<dt><strong><a name="file_pathname" class="item"><strong>file:</strong><em>pathname</em></a></strong></dt>
+
+<dd>
+<p>The first line of <em>pathname</em> is the password. If the same <em>pathname</em>
+argument is supplied to <strong>-passin</strong> and <strong>-passout</strong> arguments then the first
+line will be used for the input password and the next line for the output
+password. <em>pathname</em> need not refer to a regular file: it could for example
+refer to a device or named pipe.</p>
+</dd>
+<dt><strong><a name="fd_number" class="item"><strong>fd:</strong><em>number</em></a></strong></dt>
+
+<dd>
+<p>Read the password from the file descriptor <em>number</em>. This can be used to
+send the data via a pipe for example.</p>
+</dd>
+<dt><strong><a name="stdin" class="item"><strong>stdin</strong></a></strong></dt>
+
+<dd>
+<p>Read the password from standard input.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2000-2020 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

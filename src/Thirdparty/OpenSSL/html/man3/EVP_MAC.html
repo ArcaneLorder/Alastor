@@ -1,0 +1,520 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_MAC</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#types">Types</a></li>
+		<li><a href="#algorithm_implementation_fetching">Algorithm implementation fetching</a></li>
+		<li><a href="#context_manipulation_functions">Context manipulation functions</a></li>
+		<li><a href="#computing_functions">Computing functions</a></li>
+		<li><a href="#information_functions">Information functions</a></li>
+	</ul>
+
+	<li><a href="#parameters">PARAMETERS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_MAC, EVP_MAC_fetch, EVP_MAC_up_ref, EVP_MAC_free, EVP_MAC_is_a,
+EVP_MAC_get0_name, EVP_MAC_names_do_all, EVP_MAC_get0_description,
+EVP_MAC_get0_provider, EVP_MAC_get_params, EVP_MAC_gettable_params,
+EVP_MAC_CTX, EVP_MAC_CTX_new, EVP_MAC_CTX_free, EVP_MAC_CTX_dup,
+EVP_MAC_CTX_get0_mac, EVP_MAC_CTX_get_params, EVP_MAC_CTX_set_params,
+EVP_MAC_CTX_get_mac_size, EVP_MAC_CTX_get_block_size, EVP_Q_mac,
+EVP_MAC_init, EVP_MAC_update, EVP_MAC_final, EVP_MAC_finalXOF,
+EVP_MAC_gettable_ctx_params, EVP_MAC_settable_ctx_params,
+EVP_MAC_CTX_gettable_params, EVP_MAC_CTX_settable_params,
+EVP_MAC_do_all_provided - EVP MAC routines</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">typedef</span> <span class="variable">struct</span> <span class="variable">evp_mac_st</span> <span class="variable">EVP_MAC</span><span class="operator">;</span>
+ <span class="variable">typedef</span> <span class="variable">struct</span> <span class="variable">evp_mac_ctx_st</span> <span class="variable">EVP_MAC_CTX</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="variable">EVP_MAC</span> <span class="variable">*EVP_MAC_fetch</span><span class="operator">(</span><span class="variable">OSSL_LIB_CTX</span> <span class="variable">*libctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*algorithm</span><span class="operator">,</span>
+                        <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*properties</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_MAC_up_ref</span><span class="operator">(</span><span class="variable">EVP_MAC</span> <span class="variable">*mac</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">EVP_MAC_free</span><span class="operator">(</span><span class="variable">EVP_MAC</span> <span class="variable">*mac</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_MAC_is_a</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_MAC</span> <span class="variable">*mac</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*name</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*EVP_MAC_get0_name</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_MAC</span> <span class="variable">*mac</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_MAC_names_do_all</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_MAC</span> <span class="variable">*mac</span><span class="operator">,</span>
+                          <span class="variable">void</span> <span class="operator">(</span><span class="variable">*fn</span><span class="operator">)(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*name</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*data</span><span class="operator">),</span>
+                          <span class="variable">void</span> <span class="variable">*data</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*EVP_MAC_get0_description</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_MAC</span> <span class="variable">*mac</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PROVIDER</span> <span class="variable">*EVP_MAC_get0_provider</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_MAC</span> <span class="variable">*mac</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_MAC_get_params</span><span class="operator">(</span><span class="variable">EVP_MAC</span> <span class="variable">*mac</span><span class="operator">,</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">EVP_MAC_CTX</span> <span class="variable">*EVP_MAC_CTX_new</span><span class="operator">(</span><span class="variable">EVP_MAC</span> <span class="variable">*mac</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">EVP_MAC_CTX_free</span><span class="operator">(</span><span class="variable">EVP_MAC_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="variable">EVP_MAC_CTX</span> <span class="variable">*EVP_MAC_CTX_dup</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_MAC_CTX</span> <span class="variable">*src</span><span class="operator">);</span>
+ <span class="variable">EVP_MAC</span> <span class="variable">*EVP_MAC_CTX_get0_mac</span><span class="operator">(</span><span class="variable">EVP_MAC_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_MAC_CTX_get_params</span><span class="operator">(</span><span class="variable">EVP_MAC_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_MAC_CTX_set_params</span><span class="operator">(</span><span class="variable">EVP_MAC_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">size_t</span> <span class="variable">EVP_MAC_CTX_get_mac_size</span><span class="operator">(</span><span class="variable">EVP_MAC_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="variable">size_t</span> <span class="variable">EVP_MAC_CTX_get_block_size</span><span class="operator">(</span><span class="variable">EVP_MAC_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*EVP_Q_mac</span><span class="operator">(</span><span class="variable">OSSL_LIB_CTX</span> <span class="variable">*libctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*name</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*propq</span><span class="operator">,</span>
+                          <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*subalg</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*params</span><span class="operator">,</span>
+                          <span class="variable">const</span> <span class="variable">void</span> <span class="variable">*key</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">keylen</span><span class="operator">,</span>
+                          <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*data</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">datalen</span><span class="operator">,</span>
+                          <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*out</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">outsize</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">*outlen</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_MAC_init</span><span class="operator">(</span><span class="variable">EVP_MAC_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*key</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">keylen</span><span class="operator">,</span>
+                  <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[]</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_MAC_update</span><span class="operator">(</span><span class="variable">EVP_MAC_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*data</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">datalen</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_MAC_final</span><span class="operator">(</span><span class="variable">EVP_MAC_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span>
+                   <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*out</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">*outl</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">outsize</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_MAC_finalXOF</span><span class="operator">(</span><span class="variable">EVP_MAC_CTX</span> <span class="variable">*ctx</span><span class="operator">,</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*out</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">outsize</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*EVP_MAC_gettable_params</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_MAC</span> <span class="variable">*mac</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*EVP_MAC_gettable_ctx_params</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_MAC</span> <span class="variable">*mac</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*EVP_MAC_settable_ctx_params</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_MAC</span> <span class="variable">*mac</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*EVP_MAC_CTX_gettable_params</span><span class="operator">(</span><span class="variable">EVP_MAC_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">OSSL_PARAM</span> <span class="variable">*EVP_MAC_CTX_settable_params</span><span class="operator">(</span><span class="variable">EVP_MAC_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">void</span> <span class="variable">EVP_MAC_do_all_provided</span><span class="operator">(</span><span class="variable">OSSL_LIB_CTX</span> <span class="variable">*libctx</span><span class="operator">,</span>
+                              <span class="variable">void</span> <span class="operator">(</span><span class="variable">*fn</span><span class="operator">)(</span><span class="variable">EVP_MAC</span> <span class="variable">*mac</span><span class="operator">,</span> <span class="variable">void</span> <span class="variable">*arg</span><span class="operator">),</span>
+                              <span class="variable">void</span> <span class="variable">*arg</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>These types and functions help the application to calculate MACs of
+different types and with different underlying algorithms if there are
+any.</p>
+<p>MACs are a bit complex insofar that some of them use other algorithms
+for actual computation.  HMAC uses a digest, and CMAC uses a cipher.
+Therefore, there are sometimes two contexts to keep track of, one for
+the MAC algorithm itself and one for the underlying computation
+algorithm if there is one.</p>
+<p>To make things less ambiguous, this manual talks about a &quot;context&quot; or
+&quot;MAC context&quot;, which is to denote the MAC level context, and about a
+&quot;underlying context&quot;, or &quot;computation context&quot;, which is to denote the
+context for the underlying computation algorithm if there is one.</p>
+<p>
+</p>
+<h2><a name="types">Types</a></h2>
+<p><strong>EVP_MAC</strong> is a type that holds the implementation of a MAC.</p>
+<p><strong>EVP_MAC_CTX</strong> is a context type that holds internal MAC information
+as well as a reference to a computation context, for those MACs that
+rely on an underlying computation algorithm.</p>
+<p>
+</p>
+<h2><a name="algorithm_implementation_fetching">Algorithm implementation fetching</a></h2>
+<p><code>EVP_MAC_fetch()</code> fetches an implementation of a MAC <em>algorithm</em>, given
+a library context <em>libctx</em> and a set of <em>properties</em>.
+See <em>crypto(7)/ALGORITHM FETCHING</em> for further information.</p>
+<p>See <em>OSSL_PROVIDER-default(7)/Message Authentication Code (MAC)</em> for the list
+of algorithms supported by the default provider.</p>
+<p>The returned value must eventually be freed with
+<em>EVP_MAC_free(3)</em>.</p>
+<p><code>EVP_MAC_up_ref()</code> increments the reference count of an already fetched
+MAC.</p>
+<p><code>EVP_MAC_free()</code> frees a fetched algorithm.
+NULL is a valid parameter, for which this function is a no-op.</p>
+<p>
+</p>
+<h2><a name="context_manipulation_functions">Context manipulation functions</a></h2>
+<p><code>EVP_MAC_CTX_new()</code> creates a new context for the MAC type <em>mac</em>.
+The created context can then be used with most other functions
+described here.</p>
+<p><code>EVP_MAC_CTX_free()</code> frees the contents of the context, including an
+underlying context if there is one, as well as the context itself.
+NULL is a valid parameter, for which this function is a no-op.</p>
+<p><code>EVP_MAC_CTX_dup()</code> duplicates the <em>src</em> context and returns a newly allocated
+context.</p>
+<p>EVP_MAC_CTX_get0_mac() returns the <strong>EVP_MAC</strong> associated with the context
+<em>ctx</em>.</p>
+<p>
+</p>
+<h2><a name="computing_functions">Computing functions</a></h2>
+<p><code>EVP_Q_mac()</code> computes the message authentication code
+of <em>data</em> with length <em>datalen</em>
+using the MAC algorithm <em>name</em> and the key <em>key</em> with length <em>keylen</em>.
+The MAC algorithm is fetched using any given <em>libctx</em> and property query
+string <em>propq</em>. It takes parameters <em>subalg</em> and further <em>params</em>,
+both of which may be NULL if not needed.
+If <em>out</em> is not NULL, it places the result in the memory pointed at by <em>out</em>,
+but only if <em>outsize</em> is sufficient (otherwise no computation is made).
+If <em>out</em> is NULL, it allocates and uses a buffer of suitable length,
+which will be returned on success and must be freed by the caller.
+In either case, also on error,
+it assigns the number of bytes written to <em>*outlen</em> unless <em>outlen</em> is NULL.</p>
+<p><code>EVP_MAC_init()</code> sets up the underlying context <em>ctx</em> with information given
+via the <em>key</em> and <em>params</em> arguments.  The MAC <em>key</em> has a length of
+<em>keylen</em> and the parameters in <em>params</em> are processed before setting
+the key.  If <em>key</em> is NULL, the key must be set via <em>params</em> either
+as part of this call or separately using <code>EVP_MAC_CTX_set_params()</code>.
+Providing non-NULL <em>params</em> to this function is equivalent to calling
+<code>EVP_MAC_CTX_set_params()</code> with those <em>params</em> for the same <em>ctx</em> beforehand.</p>
+<p><code>EVP_MAC_init()</code> should be called before <code>EVP_MAC_update()</code> and <code>EVP_MAC_final()</code>.</p>
+<p><code>EVP_MAC_update()</code> adds <em>datalen</em> bytes from <em>data</em> to the MAC input.</p>
+<p><code>EVP_MAC_final()</code> does the final computation and stores the result in
+the memory pointed at by <em>out</em> of size <em>outsize</em>, and sets the number
+of bytes written in <em>*outl</em> at.
+If <em>out</em> is NULL or <em>outsize</em> is too small, then no computation
+is made.
+To figure out what the output length will be and allocate space for it
+dynamically, simply call with <em>out</em> being NULL and <em>outl</em>
+pointing at a valid location, then allocate space and make a second
+call with <em>out</em> pointing at the allocated space.</p>
+<p><code>EVP_MAC_finalXOF()</code> does the final computation for an XOF based MAC and stores
+the result in the memory pointed at by <em>out</em> of size <em>outsize</em>.</p>
+<p><code>EVP_MAC_get_params()</code> retrieves details about the implementation
+<em>mac</em>.
+The set of parameters given with <em>params</em> determine exactly what
+parameters should be retrieved.
+Note that a parameter that is unknown in the underlying context is
+simply ignored.</p>
+<p><code>EVP_MAC_CTX_get_params()</code> retrieves chosen parameters, given the
+context <em>ctx</em> and its underlying context.
+The set of parameters given with <em>params</em> determine exactly what
+parameters should be retrieved.
+Note that a parameter that is unknown in the underlying context is
+simply ignored.</p>
+<p><code>EVP_MAC_CTX_set_params()</code> passes chosen parameters to the underlying
+context, given a context <em>ctx</em>.
+The set of parameters given with <em>params</em> determine exactly what
+parameters are passed down.
+If <em>params</em> are NULL, the underlying context should do nothing and return 1.
+Note that a parameter that is unknown in the underlying context is
+simply ignored.
+Also, what happens when a needed parameter isn't passed down is
+defined by the implementation.</p>
+<p><code>EVP_MAC_gettable_params()</code> returns an <em>OSSL_PARAM(3)</em> array that describes
+the retrievable and settable parameters.  <code>EVP_MAC_gettable_params()</code>
+returns parameters that can be used with <code>EVP_MAC_get_params()</code>.</p>
+<p><code>EVP_MAC_gettable_ctx_params()</code> and <code>EVP_MAC_CTX_gettable_params()</code>
+return constant <em>OSSL_PARAM(3)</em> arrays that describe the retrievable
+parameters that can be used with <code>EVP_MAC_CTX_get_params()</code>.
+<code>EVP_MAC_gettable_ctx_params()</code> returns the parameters that can be retrieved
+from the algorithm, whereas <code>EVP_MAC_CTX_gettable_params()</code> returns
+the parameters that can be retrieved in the context's current state.</p>
+<p><code>EVP_MAC_settable_ctx_params()</code> and <code>EVP_MAC_CTX_settable_params()</code> return
+constant <em>OSSL_PARAM(3)</em> arrays that describe the settable parameters that
+can be used with <code>EVP_MAC_CTX_set_params()</code>.  <code>EVP_MAC_settable_ctx_params()</code>
+returns the parameters that can be retrieved from the algorithm,
+whereas <code>EVP_MAC_CTX_settable_params()</code> returns the parameters that can
+be retrieved in the context's current state.</p>
+<p>
+</p>
+<h2><a name="information_functions">Information functions</a></h2>
+<p><code>EVP_MAC_CTX_get_mac_size()</code> returns the MAC output size for the given context.</p>
+<p><code>EVP_MAC_CTX_get_block_size()</code> returns the MAC block size for the given context.
+Not all MAC algorithms support this.</p>
+<p><code>EVP_MAC_is_a()</code> checks if the given <em>mac</em> is an implementation of an
+algorithm that's identifiable with <em>name</em>.</p>
+<p>EVP_MAC_get0_provider() returns the provider that holds the implementation
+of the given <em>mac</em>.</p>
+<p><code>EVP_MAC_do_all_provided()</code> traverses all MAC implemented by all activated
+providers in the given library context <em>libctx</em>, and for each of the
+implementations, calls the given function <em>fn</em> with the implementation method
+and the given <em>arg</em> as argument.</p>
+<p>EVP_MAC_get0_name() return the name of the given MAC.  For fetched MACs
+with multiple names, only one of them is returned; it's
+recommended to use <code>EVP_MAC_names_do_all()</code> instead.</p>
+<p><code>EVP_MAC_names_do_all()</code> traverses all names for <em>mac</em>, and calls
+<em>fn</em> with each name and <em>data</em>.</p>
+<p>EVP_MAC_get0_description() returns a description of the <em>mac</em>, meant
+for display and human consumption.  The description is at the discretion
+of the mac implementation.</p>
+<p>
+</p>
+<hr />
+<h1><a name="parameters">PARAMETERS</a></h1>
+<p>Parameters are identified by name as strings, and have an expected
+data type and maximum size.
+OpenSSL has a set of macros for parameter names it expects to see in
+its own MAC implementations.
+Here, we show all three, the OpenSSL macro for the parameter name, the
+name in string form, and a type description.</p>
+<p>The standard parameter names are:</p>
+<dl>
+<dt><strong><a name="key_ossl_mac_param_key_octet_string" class="item">&quot;key&quot; (<strong>OSSL_MAC_PARAM_KEY</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Its value is the MAC key as an array of bytes.</p>
+<p>For MACs that use an underlying computation algorithm, the algorithm
+must be set first, see parameter names &quot;algorithm&quot; below.</p>
+</dd>
+<dt><strong><a name="iv_ossl_mac_param_iv_octet_string" class="item">&quot;iv&quot; (<strong>OSSL_MAC_PARAM_IV</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Some MAC implementations (GMAC) require an IV, this parameter sets the IV.</p>
+</dd>
+<dt><strong><a name="custom_ossl_mac_param_custom_octet_string" class="item">&quot;custom&quot; (<strong>OSSL_MAC_PARAM_CUSTOM</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Some MAC implementations (KMAC, BLAKE2) accept a Customization String,
+this parameter sets the Customization String. The default value is the
+empty string.</p>
+</dd>
+<dt><strong><a name="salt_ossl_mac_param_salt_octet_string" class="item">&quot;salt&quot; (<strong>OSSL_MAC_PARAM_SALT</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>This option is used by BLAKE2 MAC.</p>
+</dd>
+<dt><strong><a name="xof_ossl_mac_param_xof_integer" class="item">&quot;xof&quot; (<strong>OSSL_MAC_PARAM_XOF</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>It's a simple flag, the value 0 or 1 are expected.</p>
+<p>This option is used by KMAC.</p>
+</dd>
+<dt><strong><a name="digest_noinit_ossl_mac_param_digest_noinit_integer" class="item">&quot;digest-noinit&quot; (<strong>OSSL_MAC_PARAM_DIGEST_NOINIT</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>A simple flag to set the MAC digest to not initialise the
+implementation specific data. The value 0 or 1 is expected.</p>
+<p>This option is used by HMAC.</p>
+</dd>
+<dt><strong><a name="digest_oneshot_ossl_mac_param_digest_oneshot_integer" class="item">&quot;digest-oneshot&quot; (<strong>OSSL_MAC_PARAM_DIGEST_ONESHOT</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>A simple flag to set the MAC digest to be a oneshot operation.
+The value 0 or 1 is expected.</p>
+<p>This option is used by HMAC.</p>
+</dd>
+<dt><strong><a name="properties_ossl_mac_param_properties_utf8_string" class="item">&quot;properties&quot; (<strong>OSSL_MAC_PARAM_PROPERTIES</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dt><strong><a name="digest_ossl_mac_param_digest_utf8_string" class="item">&quot;digest&quot; (<strong>OSSL_MAC_PARAM_DIGEST</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dt><strong><a name="cipher_ossl_mac_param_cipher_utf8_string" class="item">&quot;cipher&quot; (<strong>OSSL_MAC_PARAM_CIPHER</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>For MAC implementations that use an underlying computation cipher or
+digest, these parameters set what the algorithm should be.</p>
+<p>The value is always the name of the intended algorithm,
+or the properties.</p>
+<p>Note that not all algorithms may support all digests.
+HMAC does not support variable output length digests such as SHAKE128
+or SHAKE256.</p>
+</dd>
+<dt><strong><a name="size_ossl_mac_param_size_unsigned_integer" class="item">&quot;size&quot; (<strong>OSSL_MAC_PARAM_SIZE</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>For MAC implementations that support it, set the output size that
+<code>EVP_MAC_final()</code> should produce.
+The allowed sizes vary between MAC implementations, but must never exceed
+what can be given with a <strong>size_t</strong>.</p>
+</dd>
+<dt><strong><a name="tls_data_size_ossl_mac_param_tls_data_size_unsigned_integer" class="item">&quot;tls-data-size&quot; (<strong>OSSL_MAC_PARAM_TLS_DATA_SIZE</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>This parameter is only supported by HMAC. If set then special handling is
+activated for calculating the MAC of a received mac-then-encrypt TLS record
+where variable length record padding has been used (as in the case of CBC mode
+ciphersuites). The value represents the total length of the record that is
+having the MAC calculated including the received MAC and the record padding.</p>
+<p>When used EVP_MAC_update must be called precisely twice. The first time with
+the 13 bytes of TLS &quot;header&quot; data, and the second time with the entire record
+including the MAC itself and any padding. The entire record length must equal
+the value passed in the &quot;tls-data-size&quot; parameter. The length passed in the
+<strong>datalen</strong> parameter to <code>EVP_MAC_update()</code> should be equal to the length of the
+record after the MAC and any padding has been removed.</p>
+</dd>
+</dl>
+<p>All these parameters should be used before the calls to any of
+<code>EVP_MAC_init()</code>, <code>EVP_MAC_update()</code> and <code>EVP_MAC_final()</code> for a full
+computation.
+Anything else may give undefined results.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>The MAC life-cycle is described in <em>life_cycle-mac(7)</em>.  In the future,
+the transitions described there will be enforced.  When this is done, it will
+not be considered a breaking change to the API.</p>
+<p>The usage of the parameter names &quot;custom&quot;, &quot;iv&quot; and &quot;salt&quot; correspond to
+the names used in the standard where the algorithm was defined.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>EVP_MAC_fetch()</code> returns a pointer to a newly fetched <strong>EVP_MAC</strong>, or
+NULL if allocation failed.</p>
+<p><code>EVP_MAC_up_ref()</code> returns 1 on success, 0 on error.</p>
+<p><code>EVP_MAC_names_do_all()</code> returns 1 if the callback was called for all names. A
+return value of 0 means that the callback was not called for any names.</p>
+<p><code>EVP_MAC_free()</code> returns nothing at all.</p>
+<p><code>EVP_MAC_is_a()</code> returns 1 if the given method can be identified with
+the given name, otherwise 0.</p>
+<p>EVP_MAC_get0_name() returns a name of the MAC, or NULL on error.</p>
+<p>EVP_MAC_get0_provider() returns a pointer to the provider for the MAC, or
+NULL on error.</p>
+<p><code>EVP_MAC_CTX_new()</code> and <code>EVP_MAC_CTX_dup()</code> return a pointer to a newly
+created EVP_MAC_CTX, or NULL if allocation failed.</p>
+<p><code>EVP_MAC_CTX_free()</code> returns nothing at all.</p>
+<p><code>EVP_MAC_CTX_get_params()</code> and <code>EVP_MAC_CTX_set_params()</code> return 1 on
+success, 0 on error.</p>
+<p><code>EVP_Q_mac()</code> returns a pointer to the computed MAC value, or NULL on error.</p>
+<p><code>EVP_MAC_init()</code>, <code>EVP_MAC_update()</code>, <code>EVP_MAC_final()</code>, and <code>EVP_MAC_finalXOF()</code>
+return 1 on success, 0 on error.</p>
+<p><code>EVP_MAC_CTX_get_mac_size()</code> returns the expected output size, or 0 if it isn't
+set.  If it isn't set, a call to <code>EVP_MAC_init()</code> will set it.</p>
+<p><code>EVP_MAC_CTX_get_block_size()</code> returns the block size, or 0 if it isn't set.
+If it isn't set, a call to <code>EVP_MAC_init()</code> will set it.</p>
+<p><code>EVP_MAC_do_all_provided()</code> returns nothing at all.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<pre>
+  <span class="comment">#include &lt;stdlib.h&gt;</span>
+  <span class="comment">#include &lt;stdio.h&gt;</span>
+  <span class="comment">#include &lt;string.h&gt;</span>
+  <span class="comment">#include &lt;stdarg.h&gt;</span>
+  <span class="comment">#include &lt;unistd.h&gt;</span>
+</pre>
+<pre>
+  <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+  <span class="comment">#include &lt;openssl/err.h&gt;</span>
+  <span class="comment">#include &lt;openssl/params.h&gt;</span>
+</pre>
+<pre>
+  <span class="keyword">int</span> <span class="variable">main</span><span class="operator">()</span> <span class="operator">{</span>
+      <span class="variable">EVP_MAC</span> <span class="variable">*mac</span> <span class="operator">=</span> <span class="variable">EVP_MAC_fetch</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="variable">getenv</span><span class="operator">(</span><span class="string">"MY_MAC"</span><span class="operator">),</span> <span class="variable">NULL</span><span class="operator">);</span>
+      <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*cipher</span> <span class="operator">=</span> <span class="variable">getenv</span><span class="operator">(</span><span class="string">"MY_MAC_CIPHER"</span><span class="operator">);</span>
+      <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*digest</span> <span class="operator">=</span> <span class="variable">getenv</span><span class="operator">(</span><span class="string">"MY_MAC_DIGEST"</span><span class="operator">);</span>
+      <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*key</span> <span class="operator">=</span> <span class="variable">getenv</span><span class="operator">(</span><span class="string">"MY_KEY"</span><span class="operator">);</span>
+      <span class="variable">EVP_MAC_CTX</span> <span class="variable">*ctx</span> <span class="operator">=</span> <span class="variable">NULL</span><span class="operator">;</span>
+</pre>
+<pre>
+      <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">buf</span><span class="operator">[</span><span class="number">4096</span><span class="operator">]</span><span class="operator">;</span>
+      <span class="variable">size_t</span> <span class="variable">read_l</span><span class="operator">;</span>
+      <span class="variable">size_t</span> <span class="variable">final_l</span><span class="operator">;</span>
+</pre>
+<pre>
+      <span class="variable">size_t</span> <span class="variable">i</span><span class="operator">;</span>
+</pre>
+<pre>
+      <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[</span><span class="number">3</span><span class="operator">]</span><span class="operator">;</span>
+      <span class="variable">size_t</span> <span class="variable">params_n</span> <span class="operator">=</span> <span class="number">0</span><span class="operator">;</span>
+</pre>
+<pre>
+      <span class="keyword">if</span> <span class="operator">(</span><span class="variable">cipher</span> <span class="operator">!=</span> <span class="variable">NULL</span><span class="operator">)</span>
+          <span class="variable">params</span><span class="operator">[</span><span class="variable">params_n</span><span class="operator">++</span><span class="operator">]</span> <span class="operator">=</span>
+              <span class="variable">OSSL_PARAM_construct_utf8_string</span><span class="operator">(</span><span class="string">"cipher"</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">char</span><span class="operator">*)</span><span class="variable">cipher</span><span class="operator">,</span> <span class="number">0</span><span class="operator">);</span>
+      <span class="keyword">if</span> <span class="operator">(</span><span class="variable">digest</span> <span class="operator">!=</span> <span class="variable">NULL</span><span class="operator">)</span>
+          <span class="variable">params</span><span class="operator">[</span><span class="variable">params_n</span><span class="operator">++</span><span class="operator">]</span> <span class="operator">=</span>
+              <span class="variable">OSSL_PARAM_construct_utf8_string</span><span class="operator">(</span><span class="string">"digest"</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">char</span><span class="operator">*)</span><span class="variable">digest</span><span class="operator">,</span> <span class="number">0</span><span class="operator">);</span>
+      <span class="variable">params</span><span class="operator">[</span><span class="variable">params_n</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_end</span><span class="operator">();</span>
+</pre>
+<pre>
+      <span class="keyword">if</span> <span class="operator">(</span><span class="variable">mac</span> <span class="operator">==</span> <span class="variable">NULL</span>
+          <span class="operator">||</span> <span class="variable">key</span> <span class="operator">==</span> <span class="variable">NULL</span>
+          <span class="operator">||</span> <span class="operator">(</span><span class="variable">ctx</span> <span class="operator">=</span> <span class="variable">EVP_MAC_CTX_new</span><span class="operator">(</span><span class="variable">mac</span><span class="operator">))</span> <span class="operator">==</span> <span class="variable">NULL</span>
+          <span class="operator">||</span> <span class="operator">!</span><span class="variable">EVP_MAC_init</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="operator">*)</span><span class="variable">key</span><span class="operator">,</span> <span class="variable">strlen</span><span class="operator">(</span><span class="variable">key</span><span class="operator">),</span>
+                           <span class="variable">params</span><span class="operator">))</span>
+          <span class="keyword">goto</span> <span class="variable">err</span><span class="operator">;</span>
+</pre>
+<pre>
+      <span class="keyword">while</span> <span class="operator">(</span> <span class="operator">(</span><span class="variable">read_l</span> <span class="operator">=</span> <span class="keyword">read</span><span class="operator">(</span><span class="variable">STDIN_FILENO</span><span class="operator">,</span> <span class="variable">buf</span><span class="operator">,</span> <span class="variable">sizeof</span><span class="operator">(</span><span class="variable">buf</span><span class="operator">)))</span> <span class="operator">&gt;</span> <span class="number">0</span><span class="operator">)</span> <span class="operator">{</span>
+          <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">EVP_MAC_update</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="variable">buf</span><span class="operator">,</span> <span class="variable">read_l</span><span class="operator">))</span>
+              <span class="keyword">goto</span> <span class="variable">err</span><span class="operator">;</span>
+      <span class="operator">}</span>
+</pre>
+<pre>
+      <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">EVP_MAC_final</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">,</span> <span class="variable">buf</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">final_l</span><span class="operator">,</span> <span class="variable">sizeof</span><span class="operator">(</span><span class="variable">buf</span><span class="operator">)))</span>
+          <span class="keyword">goto</span> <span class="variable">err</span><span class="operator">;</span>
+</pre>
+<pre>
+      <span class="keyword">printf</span><span class="operator">(</span><span class="string">"Result: "</span><span class="operator">);</span>
+      <span class="keyword">for</span> <span class="operator">(</span><span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span><span class="operator">;</span> <span class="variable">i</span> <span class="operator">&lt;</span> <span class="variable">final_l</span><span class="operator">;</span> <span class="variable">i</span><span class="operator">++)</span>
+          <span class="keyword">printf</span><span class="operator">(</span><span class="string">"%02X"</span><span class="operator">,</span> <span class="variable">buf</span><span class="operator">[</span><span class="variable">i</span><span class="operator">]</span><span class="operator">);</span>
+      <span class="keyword">printf</span><span class="operator">(</span><span class="string">"\n"</span><span class="operator">);</span>
+</pre>
+<pre>
+      <span class="variable">EVP_MAC_CTX_free</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">);</span>
+      <span class="variable">EVP_MAC_free</span><span class="operator">(</span><span class="variable">mac</span><span class="operator">);</span>
+      <span class="keyword">exit</span><span class="operator">(</span><span class="number">0</span><span class="operator">);</span>
+</pre>
+<pre>
+   <span class="variable">err</span><span class="operator">:</span>
+      <span class="variable">EVP_MAC_CTX_free</span><span class="operator">(</span><span class="variable">ctx</span><span class="operator">);</span>
+      <span class="variable">EVP_MAC_free</span><span class="operator">(</span><span class="variable">mac</span><span class="operator">);</span>
+      <span class="variable">fprintf</span><span class="operator">(</span><span class="variable">stderr</span><span class="operator">,</span> <span class="string">"Something went wrong\n"</span><span class="operator">);</span>
+      <span class="variable">ERR_print_errors_fp</span><span class="operator">(</span><span class="variable">stderr</span><span class="operator">);</span>
+      <span class="keyword">exit</span> <span class="operator">(</span><span class="number">1</span><span class="operator">);</span>
+     <span class="operator">}</span>
+</pre>
+<p>A run of this program, called with correct environment variables, can
+look like this:</p>
+<pre>
+  $ MY_MAC=cmac MY_KEY=secret0123456789 MY_MAC_CIPHER=aes-128-cbc \
+    LD_LIBRARY_PATH=. ./foo &lt; foo.c
+  Result: C5C06683CD9DDEF904D754505C560A4E</pre>
+<p>(in this example, that program was stored in <em class="file">foo.c</em> and compiled to
+<em class="file">./foo</em>)</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>property(7)</em>
+<em>OSSL_PARAM(3)</em>,
+<em>EVP_MAC-BLAKE2(7)</em>,
+<em>EVP_MAC-CMAC(7)</em>,
+<em>EVP_MAC-GMAC(7)</em>,
+<em>EVP_MAC-HMAC(7)</em>,
+<em>EVP_MAC-KMAC(7)</em>,
+<em>EVP_MAC-Siphash(7)</em>,
+<em>EVP_MAC-Poly1305(7)</em>,
+<em>provider-mac(7)</em>,
+<em>life_cycle-mac(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>These functions were added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2018-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

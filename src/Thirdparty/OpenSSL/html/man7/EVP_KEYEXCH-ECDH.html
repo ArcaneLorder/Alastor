@@ -1,0 +1,159 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_KEYEXCH-ECDH</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#ecdh_key_exchange_parameters">ECDH Key Exchange parameters</a></li>
+	</ul>
+
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_KEYEXCH-ECDH - ECDH Key Exchange algorithm support</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Key exchange support for the <strong>ECDH</strong> key type.</p>
+<p>
+</p>
+<h2><a name="ecdh_key_exchange_parameters">ECDH Key Exchange parameters</a></h2>
+<dl>
+<dt><strong><a name="ecdh_cofactor_mode_ossl_exchange_param_ec_ecdh_cofactor_mode_integer" class="item">&quot;ecdh-cofactor-mode&quot; (<strong>OSSL_EXCHANGE_PARAM_EC_ECDH_COFACTOR_MODE</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>Sets or gets the ECDH mode of operation for the associated key exchange ctx.</p>
+<p>In the context of an Elliptic Curve Diffie-Hellman key exchange, this parameter
+can be used to select between the plain Diffie-Hellman (DH) or Cofactor
+Diffie-Hellman (CDH) variants of the key exchange algorithm.</p>
+<p>When setting, the value should be 1, 0 or -1, respectively forcing cofactor mode
+on, off, or resetting it to the default for the private key associated with the
+given key exchange ctx.</p>
+<p>When getting, the value should be either 1 or 0, respectively signaling if the
+cofactor mode is on or off.</p>
+<p>See also <em>provider-keymgmt(7)</em> for the related
+<strong>OSSL_PKEY_PARAM_USE_COFACTOR_ECDH</strong> parameter that can be set on a
+per-key basis.</p>
+</dd>
+<dt><strong><a name="kdf_type_ossl_exchange_param_kdf_type_utf8_string" class="item">&quot;kdf-type&quot; (<strong>OSSL_EXCHANGE_PARAM_KDF_TYPE</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>See <em>provider-keyexch(7)/Common Key Exchange parameters</em>.</p>
+</dd>
+<dt><strong><a name="kdf_digest_ossl_exchange_param_kdf_digest_utf8_string" class="item">&quot;kdf-digest&quot; (<strong>OSSL_EXCHANGE_PARAM_KDF_DIGEST</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>See <em>provider-keyexch(7)/Common Key Exchange parameters</em>.</p>
+</dd>
+<dt><strong><a name="kdf_digest_props_ossl_exchange_param_kdf_digest_props_utf8_string" class="item">&quot;kdf-digest-props&quot; (<strong>OSSL_EXCHANGE_PARAM_KDF_DIGEST_PROPS</strong>) &lt;UTF8 string&gt;</a></strong></dt>
+
+<dd>
+<p>See <em>provider-keyexch(7)/Common Key Exchange parameters</em>.</p>
+</dd>
+<dt><strong><a name="kdf_outlen_ossl_exchange_param_kdf_outlen_unsigned_integer" class="item">&quot;kdf-outlen&quot; (<strong>OSSL_EXCHANGE_PARAM_KDF_OUTLEN</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>See <em>provider-keyexch(7)/Common Key Exchange parameters</em>.</p>
+</dd>
+<dt><strong><a name="kdf_ukm_ossl_exchange_param_kdf_ukm_octet_string" class="item">&quot;kdf-ukm&quot; (<strong>OSSL_EXCHANGE_PARAM_KDF_UKM</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>See <em>provider-keyexch(7)/Common Key Exchange parameters</em>.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Keys for the host and peer must be generated as shown in
+<em>EVP_PKEY-EC(7)/Examples</em> using the same curve name.</p>
+<p>The code to generate a shared secret for the normal case is identical to
+<em>EVP_KEYEXCH-DH(7)/Examples</em>.</p>
+<p>To derive a shared secret on the host using the host's key and the peer's public
+key but also using X963KDF with a user key material:</p>
+<pre>
+    <span class="regex">/* It is assumed that the host_key, peer_pub_key and ukm are set up */</span>
+    <span class="variable">void</span> <span class="variable">derive_secret</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*host_key</span><span class="operator">,</span> <span class="variable">EVP_PKEY</span> <span class="variable">*peer_key</span><span class="operator">,</span>
+                       <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*ukm</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">ukm_len</span><span class="operator">)</span>
+    <span class="operator">{</span>
+        <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">secret</span><span class="operator">[</span><span class="number">64</span><span class="operator">]</span><span class="operator">;</span>
+        <span class="variable">size_t</span> <span class="variable">out_len</span> <span class="operator">=</span> <span class="variable">sizeof</span><span class="operator">(</span><span class="variable">secret</span><span class="operator">);</span>
+        <span class="variable">size_t</span> <span class="variable">secret_len</span> <span class="operator">=</span> <span class="variable">out_len</span><span class="operator">;</span>
+        <span class="variable">unsigned</span> <span class="keyword">int</span> <span class="variable">pad</span> <span class="operator">=</span> <span class="number">1</span><span class="operator">;</span>
+        <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[</span><span class="number">6</span><span class="operator">]</span><span class="operator">;</span>
+        <span class="variable">EVP_PKEY_CTX</span> <span class="variable">*dctx</span> <span class="operator">=</span> <span class="variable">EVP_PKEY_CTX_new_from_pkey</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="variable">host_key</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+</pre>
+<pre>
+        <span class="variable">EVP_PKEY_derive_init</span><span class="operator">(</span><span class="variable">dctx</span><span class="operator">);</span>
+</pre>
+<pre>
+        <span class="variable">params</span><span class="operator">[</span><span class="number">0</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_uint</span><span class="operator">(</span><span class="variable">OSSL_EXCHANGE_PARAM_PAD</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">pad</span><span class="operator">);</span>
+        <span class="variable">params</span><span class="operator">[</span><span class="number">1</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_utf8_string</span><span class="operator">(</span><span class="variable">OSSL_EXCHANGE_PARAM_KDF_TYPE</span><span class="operator">,</span>
+                                                     <span class="string">"X963KDF"</span><span class="operator">,</span> <span class="number">0</span><span class="operator">);</span>
+        <span class="variable">params</span><span class="operator">[</span><span class="number">2</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_utf8_string</span><span class="operator">(</span><span class="variable">OSSL_EXCHANGE_PARAM_KDF_DIGEST</span><span class="operator">,</span>
+                                                     <span class="string">"SHA1"</span><span class="operator">,</span> <span class="number">0</span><span class="operator">);</span>
+        <span class="variable">params</span><span class="operator">[</span><span class="number">3</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_size_t</span><span class="operator">(</span><span class="variable">OSSL_EXCHANGE_PARAM_KDF_OUTLEN</span><span class="operator">,</span>
+                                                <span class="operator">&amp;</span><span class="variable">out_len</span><span class="operator">);</span>
+        <span class="variable">params</span><span class="operator">[</span><span class="number">4</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_octet_string</span><span class="operator">(</span><span class="variable">OSSL_EXCHANGE_PARAM_KDF_UKM</span><span class="operator">,</span>
+                                                      <span class="variable">ukm</span><span class="operator">,</span> <span class="variable">ukm_len</span><span class="operator">);</span>
+        <span class="variable">params</span><span class="operator">[</span><span class="number">5</span><span class="operator">]</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_end</span><span class="operator">();</span>
+        <span class="variable">EVP_PKEY_CTX_set_params</span><span class="operator">(</span><span class="variable">dctx</span><span class="operator">,</span> <span class="variable">params</span><span class="operator">);</span>
+</pre>
+<pre>
+        <span class="variable">EVP_PKEY_derive_set_peer</span><span class="operator">(</span><span class="variable">dctx</span><span class="operator">,</span> <span class="variable">peer_pub_key</span><span class="operator">);</span>
+        <span class="variable">EVP_PKEY_derive</span><span class="operator">(</span><span class="variable">dctx</span><span class="operator">,</span> <span class="variable">secret</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">secret_len</span><span class="operator">);</span>
+        <span class="operator">...</span>
+        <span class="variable">OPENSSL_clear_free</span><span class="operator">(</span><span class="variable">secret</span><span class="operator">,</span> <span class="variable">secret_len</span><span class="operator">);</span>
+        <span class="variable">EVP_PKEY_CTX_free</span><span class="operator">(</span><span class="variable">dctx</span><span class="operator">);</span>
+            <span class="operator">}</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_PKEY-EC(7)</em>
+<em>EVP_PKEY(3)</em>,
+<em>provider-keyexch(7)</em>,
+<em>provider-keymgmt(7)</em>,
+<em>OSSL_PROVIDER-default(7)</em>,
+<em>OSSL_PROVIDER-FIPS(7)</em>,</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2020-2022 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

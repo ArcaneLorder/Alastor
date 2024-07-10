@@ -1,0 +1,166 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SSL_new</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>SSL_dup, SSL_new, SSL_up_ref - create an SSL structure for a connection</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/ssl.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">SSL</span> <span class="variable">*SSL_dup</span><span class="operator">(</span><span class="variable">SSL</span> <span class="variable">*s</span><span class="operator">);</span>
+ <span class="variable">SSL</span> <span class="variable">*SSL_new</span><span class="operator">(</span><span class="variable">SSL_CTX</span> <span class="variable">*ctx</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">SSL_up_ref</span><span class="operator">(</span><span class="variable">SSL</span> <span class="variable">*s</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>SSL_new()</code> creates a new <strong>SSL</strong> structure which is needed to hold the
+data for a TLS/SSL connection. The new structure inherits the settings
+of the underlying context <strong>ctx</strong>: connection method,
+options, verification settings, timeout settings. An <strong>SSL</strong> structure is
+reference counted. Creating an <strong>SSL</strong> structure for the first time increments
+the reference count. Freeing it (using SSL_free) decrements it. When the
+reference count drops to zero, any memory or resources allocated to the <strong>SSL</strong>
+structure are freed.</p>
+<p><code>SSL_up_ref()</code> increments the reference count for an
+existing <strong>SSL</strong> structure.</p>
+<p>The function <code>SSL_dup()</code> creates and returns a new <strong>SSL</strong> structure from the same
+<strong>SSL_CTX</strong> that was used to create <em>s</em>. It additionally duplicates a subset of
+the settings in <em>s</em> into the new <strong>SSL</strong> object.</p>
+<p>For <code>SSL_dup()</code> to work, the connection MUST be in its initial state and
+MUST NOT have yet started the SSL handshake.  For connections that are not in
+their initial state <code>SSL_dup()</code> just increments an internal
+reference count and returns the <em>same</em> handle.  It may be possible to
+use <em>SSL_clear(3)</em> to recycle an SSL handle that is not in its initial
+state for reuse, but this is best avoided.  Instead, save and restore
+the session, if desired, and construct a fresh handle for each connection.</p>
+<p>The subset of settings in <em>s</em> that are duplicated are:</p>
+<dl>
+<dt><strong><a name="configured" class="item">any session data if configured (including the session_id_context)</a></strong></dt>
+
+<dt><strong><a name="ssl_set_tmp_dh" class="item">any tmp_dh settings set via <a href="#ssl_set_tmp_dh">SSL_set_tmp_dh(3)</a>,
+<em>SSL_set_tmp_dh_callback(3)</em>, or <em>SSL_set_dh_auto(3)</em></a></strong></dt>
+
+<dt><strong><a name="any_configured_certificates_private_keys_or_certificate_chains" class="item">any configured certificates, private keys or certificate chains</a></strong></dt>
+
+<dt><strong><a name="any_configured_signature_algorithms_or_client_signature_algorithms" class="item">any configured signature algorithms, or client signature algorithms</a></strong></dt>
+
+<dt><strong><a name="any_dane_settings" class="item">any DANE settings</a></strong></dt>
+
+<dt><strong><a name="ssl_set_options" class="item">any Options set via <a href="#ssl_set_options">SSL_set_options(3)</a></a></strong></dt>
+
+<dt><strong><a name="ssl_set_mode" class="item">any Mode set via <a href="#ssl_set_mode">SSL_set_mode(3)</a></a></strong></dt>
+
+<dt><strong><a name="ssl_set_min_proto_version" class="item">any minimum or maximum protocol settings set via
+<a href="#ssl_set_min_proto_version">SSL_set_min_proto_version(3)</a> or <em>SSL_set_max_proto_version(3)</em> (Note: Only
+from OpenSSL 1.1.1h and above)</a></strong></dt>
+
+<dt><strong><a name="ssl_set_verify" class="item">any verify mode, callback or depth set via <a href="#ssl_set_verify">SSL_set_verify(3)</a> or
+<em>SSL_set_verify_depth(3)</em> or any configured X509 verification parameters</a></strong></dt>
+
+<dt><strong><a name="ssl_set_msg_callback" class="item">any msg callback or info callback set via <a href="#ssl_set_msg_callback">SSL_set_msg_callback(3)</a> or
+<em>SSL_set_info_callback(3)</em></a></strong></dt>
+
+<dt><strong><a name="ssl_set_default_passwd_cb" class="item">any default password callback set via <a href="#ssl_set_default_passwd_cb">SSL_set_default_passwd_cb(3)</a></a></strong></dt>
+
+<dt><strong><a name="ssl_set_generate_session_id" class="item">any session id generation callback set via <a href="#ssl_set_generate_session_id">SSL_set_generate_session_id(3)</a></a></strong></dt>
+
+<dt><strong><a name="any_configured_cipher_list" class="item">any configured Cipher List</a></strong></dt>
+
+<dt><strong><a name="accept" class="item">initial accept (server) or connect (client) state</a></strong></dt>
+
+<dt><strong><a name="ssl_set_max_cert_list" class="item">the max cert list value set via <a href="#ssl_set_max_cert_list">SSL_set_max_cert_list(3)</a></a></strong></dt>
+
+<dt><strong><a name="ssl_set_read_ahead" class="item">the read_ahead value set via <a href="#ssl_set_read_ahead">SSL_set_read_ahead(3)</a></a></strong></dt>
+
+<dt><strong><a name="ssl_set_ex_data" class="item">application specific data set via <a href="#ssl_set_ex_data">SSL_set_ex_data(3)</a></a></strong></dt>
+
+<dt><strong><a name="ssl_set0_ca_list" class="item">any CA list or client CA list set via <a href="#ssl_set0_ca_list">SSL_set0_CA_list(3)</a>,
+SSL_set0_client_CA_list() or similar functions</a></strong></dt>
+
+<dt><strong><a name="any_security_level_settings_or_callbacks" class="item">any security level settings or callbacks</a></strong></dt>
+
+<dt><strong><a name="any_configured_serverinfo_data" class="item">any configured serverinfo data</a></strong></dt>
+
+<dt><strong><a name="any_configured_psk_identity_hint" class="item">any configured PSK identity hint</a></strong></dt>
+
+<dt><strong><a name="any_configured_custom_extensions" class="item">any configured custom extensions</a></strong></dt>
+
+<dt><strong><a name="any_client_certificate_types_configured_via_ssl_set1_client_certificate_types" class="item">any client certificate types configured via SSL_set1_client_certificate_types</a></strong></dt>
+
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>The following return values can occur:</p>
+<dl>
+<dt><strong><a name="null" class="item">NULL</a></strong></dt>
+
+<dd>
+<p>The creation of a new SSL structure failed. Check the error stack to
+find out the reason.</p>
+</dd>
+<dt><strong><a name="pointer_to_an_ssl_structure" class="item">Pointer to an SSL structure</a></strong></dt>
+
+<dd>
+<p>The return value points to an allocated SSL structure.</p>
+<p><code>SSL_up_ref()</code> returns 1 for success and 0 for failure.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>SSL_free(3)</em>, <em>SSL_clear(3)</em>,
+<em>SSL_CTX_set_options(3)</em>,
+<em>SSL_get_SSL_CTX(3)</em>,
+<em>ssl(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2000-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

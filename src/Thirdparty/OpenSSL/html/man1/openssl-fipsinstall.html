@@ -1,0 +1,301 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>openssl-fipsinstall</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>openssl-fipsinstall - perform FIPS configuration installation</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl fipsinstall</strong>
+[<strong>-help</strong>]
+[<strong>-in</strong> <em>configfilename</em>]
+[<strong>-out</strong> <em>configfilename</em>]
+[<strong>-module</strong> <em>modulefilename</em>]
+[<strong>-provider_name</strong> <em>providername</em>]
+[<strong>-section_name</strong> <em>sectionname</em>]
+[<strong>-verify</strong>]
+[<strong>-mac_name</strong> <em>macname</em>]
+[<strong>-macopt</strong> <em>nm</em>:<em>v</em>]
+[<strong>-noout</strong>]
+[<strong>-quiet</strong>]
+[<strong>-no_conditional_errors</strong>]
+[<strong>-no_security_checks</strong>]
+[<strong>-self_test_onload</strong>]
+[<strong>-corrupt_desc</strong> <em>selftest_description</em>]
+[<strong>-corrupt_type</strong> <em>selftest_type</em>]
+[<strong>-config</strong> <em>parent_config</em>]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This command is used to generate a FIPS module configuration file.
+This configuration file can be used each time a FIPS module is loaded
+in order to pass data to the FIPS module self tests. The FIPS module always
+verifies its MAC, but optionally only needs to run the KAT's once,
+at installation.</p>
+<p>The generated configuration file consists of:</p>
+<dl>
+<dt><strong><a name="a_mac_of_the_fips_module_file" class="item">- A MAC of the FIPS module file.</a></strong></dt>
+
+<dt><strong><a name="a_test_status_indicator" class="item">- A test status indicator.</a></strong></dt>
+
+<dd>
+<p>This indicates if the Known Answer Self Tests (KAT's) have successfully run.</p>
+</dd>
+<dt><strong><a name="a_mac_of_the_status_indicator" class="item">- A MAC of the status indicator.</a></strong></dt>
+
+<dt><strong><a name="a_control_for_conditional_self_tests_errors" class="item">- A control for conditional self tests errors.</a></strong></dt>
+
+<dd>
+<p>By default if a continuous test (e.g a key pair test) fails then the FIPS module
+will enter an error state, and no services or cryptographic algorithms will be
+able to be accessed after this point.
+The default value of '1' will cause the fips module error state to be entered.
+If the value is '0' then the module error state will not be entered.
+Regardless of whether the error state is entered or not, the current operation
+(e.g. key generation) will return an error. The user is responsible for retrying
+the operation if the module error state is not entered.</p>
+</dd>
+<dt><strong><a name="a_control_to_indicate_whether_run_time_security_checks_are_done" class="item">- A control to indicate whether run-time security checks are done.</a></strong></dt>
+
+<dd>
+<p>This indicates if run-time checks related to enforcement of security parameters
+such as minimum security strength of keys and approved curve names are used.
+The default value of '1' will perform the checks.
+If the value is '0' the checks are not performed and FIPS compliance must
+be done by procedures documented in the relevant Security Policy.</p>
+</dd>
+</dl>
+<p>This file is described in <em>fips_config(5)</em>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="help" class="item"><strong>-help</strong></a></strong></dt>
+
+<dd>
+<p>Print a usage message.</p>
+</dd>
+<dt><strong><a name="module_filename" class="item"><strong>-module</strong> <em>filename</em></a></strong></dt>
+
+<dd>
+<p>Filename of the FIPS module to perform an integrity check on.
+The path provided in the filename is used to load the module when it is
+activated, and this overrides the environment variable <strong>OPENSSL_MODULES</strong>.</p>
+</dd>
+<dt><strong><a name="out_configfilename" class="item"><strong>-out</strong> <em>configfilename</em></a></strong></dt>
+
+<dd>
+<p>Filename to output the configuration data to; the default is standard output.</p>
+</dd>
+<dt><strong><a name="in_configfilename" class="item"><strong>-in</strong> <em>configfilename</em></a></strong></dt>
+
+<dd>
+<p>Input filename to load configuration data from.
+Must be used if the <strong>-verify</strong> option is specified.</p>
+</dd>
+<dt><strong><a name="verify" class="item"><strong>-verify</strong></a></strong></dt>
+
+<dd>
+<p>Verify that the input configuration file contains the correct information.</p>
+</dd>
+<dt><strong><a name="provider_name_providername" class="item"><strong>-provider_name</strong> <em>providername</em></a></strong></dt>
+
+<dd>
+<p>Name of the provider inside the configuration file.
+The default value is <code>fips</code>.</p>
+</dd>
+<dt><strong><a name="section_name_sectionname" class="item"><strong>-section_name</strong> <em>sectionname</em></a></strong></dt>
+
+<dd>
+<p>Name of the section inside the configuration file.
+The default value is <code>fips_sect</code>.</p>
+</dd>
+<dt><strong><a name="mac_name_name" class="item"><strong>-mac_name</strong> <em>name</em></a></strong></dt>
+
+<dd>
+<p>Specifies the name of a supported MAC algorithm which will be used.
+The MAC mechanisms that are available will depend on the options
+used when building OpenSSL.
+To see the list of supported MAC's use the command
+<code>openssl list -mac-algorithms</code>.  The default is <strong>HMAC</strong>.</p>
+</dd>
+<dt><strong><a name="macopt_nm_v" class="item"><strong>-macopt</strong> <em>nm</em>:<em>v</em></a></strong></dt>
+
+<dd>
+<p>Passes options to the MAC algorithm.
+A comprehensive list of controls can be found in the EVP_MAC implementation
+documentation.
+Common control strings used for this command are:</p>
+<dl>
+<dt><strong><a name="key_string" class="item"><strong>key</strong>:<em>string</em></a></strong></dt>
+
+<dd>
+<p>Specifies the MAC key as an alphanumeric string (use if the key contains
+printable characters only).
+The string length must conform to any restrictions of the MAC algorithm.
+A key must be specified for every MAC algorithm.
+If no key is provided, the default that was specified when OpenSSL was
+configured is used.</p>
+</dd>
+<dt><strong><a name="hexkey_string" class="item"><strong>hexkey</strong>:<em>string</em></a></strong></dt>
+
+<dd>
+<p>Specifies the MAC key in hexadecimal form (two hex digits per byte).
+The key length must conform to any restrictions of the MAC algorithm.
+A key must be specified for every MAC algorithm.
+If no key is provided, the default that was specified when OpenSSL was
+configured is used.</p>
+</dd>
+<dt><strong><a name="digest_string" class="item"><strong>digest</strong>:<em>string</em></a></strong></dt>
+
+<dd>
+<p>Used by HMAC as an alphanumeric string (use if the key contains printable
+characters only).
+The string length must conform to any restrictions of the MAC algorithm.
+To see the list of supported digests, use the command
+<code>openssl list -digest-commands</code>.
+The default digest is SHA-256.</p>
+</dd>
+</dl>
+</dd>
+<dt><strong><a name="noout" class="item"><strong>-noout</strong></a></strong></dt>
+
+<dd>
+<p>Disable logging of the self tests.</p>
+</dd>
+<dt><strong><a name="no_conditional_errors" class="item"><strong>-no_conditional_errors</strong></a></strong></dt>
+
+<dd>
+<p>Configure the module to not enter an error state if a conditional self test
+fails as described above.</p>
+</dd>
+<dt><strong><a name="no_security_checks" class="item"><strong>-no_security_checks</strong></a></strong></dt>
+
+<dd>
+<p>Configure the module to not perform run-time security checks as described above.</p>
+</dd>
+<dt><strong><a name="self_test_onload" class="item"><strong>-self_test_onload</strong></a></strong></dt>
+
+<dd>
+<p>Do not write the two fields related to the &quot;test status indicator&quot; and
+&quot;MAC status indicator&quot; to the output configuration file. Without these fields
+the self tests KATS will run each time the module is loaded. This option could be
+used for cross compiling, since the self tests need to run at least once on each
+target machine. Once the self tests have run on the target machine the user
+could possibly then add the 2 fields into the configuration using some other
+mechanism.</p>
+</dd>
+<dt><strong><a name="quiet" class="item"><strong>-quiet</strong></a></strong></dt>
+
+<dd>
+<p>Do not output pass/fail messages. Implies <strong>-noout</strong>.</p>
+</dd>
+<dt><strong><a name="corrupt_desc_selftest_description_corrupt_type_selftest_type" class="item"><strong>-corrupt_desc</strong> <em>selftest_description</em>,
+<strong>-corrupt_type</strong> <em>selftest_type</em></a></strong></dt>
+
+<dd>
+<p>The corrupt options can be used to test failure of one or more self tests by
+name.
+Either option or both may be used to select the tests to corrupt.
+Refer to the entries for <strong>st-desc</strong> and <strong>st-type</strong> in <em>OSSL_PROVIDER-FIPS(7)</em> for
+values that can be used.</p>
+</dd>
+<dt><strong><a name="config_parent_config" class="item"><strong>-config</strong> <em>parent_config</em></a></strong></dt>
+
+<dd>
+<p>Test that a FIPS provider can be loaded from the specified configuration file.
+A previous call to this application needs to generate the extra configuration
+data that is included by the base <code>parent_config</code> configuration file.
+See <em>config(5)</em> for further information on how to set up a provider section.
+All other options are ignored if '-config' is used.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>Self tests results are logged by default if the options <strong>-quiet</strong> and <strong>-noout</strong>
+are not specified, or if either of the options <strong>-corrupt_desc</strong> or
+<strong>-corrupt_type</strong> are used.
+If the base configuration file is set up to autoload the fips module, then the
+fips module will be loaded and self tested BEFORE the fipsinstall application
+has a chance to set up its own self test callback. As a result of this the self
+test output and the options <strong>-corrupt_desc</strong> and <strong>-corrupt_type</strong> will be ignored.
+For normal usage the base configuration file should use the default provider
+when generating the fips configuration file.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Calculate the mac of a FIPS module <em class="file">fips.so</em> and run a FIPS self test
+for the module, and save the <em class="file">fips.cnf</em> configuration file:</p>
+<pre>
+ openssl fipsinstall -module ./fips.so -out fips.cnf -provider_name fips</pre>
+<p>Verify that the configuration file <em class="file">fips.cnf</em> contains the correct info:</p>
+<pre>
+ openssl fipsinstall -module ./fips.so -in fips.cnf  -provider_name fips -verify</pre>
+<p>Corrupt any self tests which have the description <code>SHA1</code>:</p>
+<pre>
+ openssl fipsinstall -module ./fips.so -out fips.cnf -provider_name fips \
+         -corrupt_desc 'SHA1'</pre>
+<p>Validate that the fips module can be loaded from a base configuration file:</p>
+<pre>
+ export OPENSSL_CONF_INCLUDE=&lt;path of configuration files&gt;
+ export OPENSSL_MODULES=&lt;provider-path&gt;
+ openssl fipsinstall -config' 'default.cnf'</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>config(5)</em>,
+<em>fips_config(5)</em>,
+<em>OSSL_PROVIDER-FIPS(7)</em>,
+<em>EVP_MAC(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2019-2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

@@ -1,0 +1,169 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_RAND-TEST-RAND</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#identity">Identity</a></li>
+		<li><a href="#supported_parameters">Supported parameters</a></li>
+	</ul>
+
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_RAND-TEST-RAND - The test EVP_RAND implementation</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Support for a test generator through the <strong>EVP_RAND</strong> API. This generator is
+for test purposes only, it does not generate random numbers.</p>
+<p>
+</p>
+<h2><a name="identity">Identity</a></h2>
+<p>&quot;TEST-RAND&quot; is the name for this implementation; it can be used with the
+<code>EVP_RAND_fetch()</code> function.</p>
+<p>
+</p>
+<h2><a name="supported_parameters">Supported parameters</a></h2>
+<p>The supported parameters are:</p>
+<dl>
+<dt><strong><a name="state_ossl_rand_param_state_integer" class="item">&quot;state&quot; (<strong>OSSL_RAND_PARAM_STATE</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dd>
+<p>These parameter works as described in <em>EVP_RAND(3)/PARAMETERS</em>.</p>
+</dd>
+<dt><strong><a name="strength_ossl_rand_param_strength_unsigned_integer" class="item">&quot;strength&quot; (<strong>OSSL_RAND_PARAM_STRENGTH</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dt><strong><a name="reseed_requests_ossl_drbg_param_reseed_requests_unsigned_integer" class="item">&quot;reseed_requests&quot; (<strong>OSSL_DRBG_PARAM_RESEED_REQUESTS</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dt><strong><a name="reseed_time_interval_ossl_drbg_param_reseed_time_interval_integer" class="item">&quot;reseed_time_interval&quot; (<strong>OSSL_DRBG_PARAM_RESEED_TIME_INTERVAL</strong>) &lt;integer&gt;</a></strong></dt>
+
+<dt><strong><a name="max_request_ossl_drbg_param_reseed_requests_unsigned_integer" class="item">&quot;max_request&quot; (<strong>OSSL_DRBG_PARAM_RESEED_REQUESTS</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dt><strong><a name="min_entropylen_ossl_drbg_param_min_entropylen_unsigned_integer" class="item">&quot;min_entropylen&quot; (<strong>OSSL_DRBG_PARAM_MIN_ENTROPYLEN</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dt><strong><a name="max_entropylen_ossl_drbg_param_max_entropylen_unsigned_integer" class="item">&quot;max_entropylen&quot; (<strong>OSSL_DRBG_PARAM_MAX_ENTROPYLEN</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dt><strong><a name="min_noncelen_ossl_drbg_param_min_noncelen_unsigned_integer" class="item">&quot;min_noncelen&quot; (<strong>OSSL_DRBG_PARAM_MIN_NONCELEN</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dt><strong><a name="max_noncelen_ossl_drbg_param_max_noncelen_unsigned_integer" class="item">&quot;max_noncelen&quot; (<strong>OSSL_DRBG_PARAM_MAX_NONCELEN</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dt><strong><a name="max_perslen_ossl_drbg_param_max_perslen_unsigned_integer" class="item">&quot;max_perslen&quot; (<strong>OSSL_DRBG_PARAM_MAX_PERSLEN</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dt><strong><a name="max_adinlen_ossl_drbg_param_max_adinlen_unsigned_integer" class="item">&quot;max_adinlen&quot; (<strong>OSSL_DRBG_PARAM_MAX_ADINLEN</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dt><strong><a name="reseed_counter_ossl_drbg_param_reseed_counter_unsigned_integer" class="item">&quot;reseed_counter&quot; (<strong>OSSL_DRBG_PARAM_RESEED_COUNTER</strong>) &lt;unsigned integer&gt;</a></strong></dt>
+
+<dd>
+<p>These parameters work as described in <em>EVP_RAND(3)/PARAMETERS</em>, except that
+they can all be set as well as read.</p>
+</dd>
+<dt><strong><a name="test_entropy_ossl_rand_param_test_entropy_octet_string" class="item">&quot;test_entropy&quot; (<strong>OSSL_RAND_PARAM_TEST_ENTROPY</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the bytes returned when the test generator is sent an entropy request.
+The current position is remembered across generate calls.
+If there are insufficient data present to satisfy a call, an error is returned.</p>
+</dd>
+<dt><strong><a name="test_nonce_ossl_rand_param_test_nonce_octet_string" class="item">&quot;test_nonce&quot; (<strong>OSSL_RAND_PARAM_TEST_NONCE</strong>) &lt;octet string&gt;</a></strong></dt>
+
+<dd>
+<p>Sets the bytes returned when the test generator is sent a nonce request.
+Each nonce request will return all of the bytes.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>A context for a test generator can be obtained by calling:</p>
+<pre>
+ <span class="variable">EVP_RAND</span> <span class="variable">*rand</span> <span class="operator">=</span> <span class="variable">EVP_RAND_fetch</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"TEST-RAND"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+ <span class="variable">EVP_RAND_CTX</span> <span class="variable">*rctx</span> <span class="operator">=</span> <span class="variable">EVP_RAND_CTX_new</span><span class="operator">(</span><span class="keyword">rand</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<pre>
+ <span class="variable">EVP_RAND</span> <span class="variable">*rand</span><span class="operator">;</span>
+ <span class="variable">EVP_RAND_CTX</span> <span class="variable">*rctx</span><span class="operator">;</span>
+ <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">bytes</span><span class="operator">[</span><span class="number">100</span><span class="operator">]</span><span class="operator">;</span>
+ <span class="variable">OSSL_PARAM</span> <span class="variable">params</span><span class="operator">[</span><span class="number">4</span><span class="operator">]</span><span class="operator">,</span> <span class="variable">*p</span> <span class="operator">=</span> <span class="variable">params</span><span class="operator">;</span>
+ <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">entropy</span><span class="operator">[</span><span class="number">1000</span><span class="operator">]</span> <span class="operator">=</span> <span class="operator">{</span> <span class="operator">...</span> <span class="operator">}</span><span class="operator">;</span>
+ <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">nonce</span><span class="operator">[</span><span class="number">20</span><span class="operator">]</span> <span class="operator">=</span> <span class="operator">{</span> <span class="operator">...</span> <span class="operator">}</span><span class="operator">;</span>
+ <span class="variable">unsigned</span> <span class="keyword">int</span> <span class="variable">strength</span> <span class="operator">=</span> <span class="number">48</span><span class="operator">;</span>
+</pre>
+<pre>
+ <span class="keyword">rand</span> <span class="operator">=</span> <span class="variable">EVP_RAND_fetch</span><span class="operator">(</span><span class="variable">NULL</span><span class="operator">,</span> <span class="string">"TEST-RAND"</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+ <span class="variable">rctx</span> <span class="operator">=</span> <span class="variable">EVP_RAND_CTX_new</span><span class="operator">(</span><span class="keyword">rand</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">);</span>
+ <span class="variable">EVP_RAND_free</span><span class="operator">(</span><span class="keyword">rand</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">*p</span><span class="operator">++</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_uint</span><span class="operator">(</span><span class="variable">OSSL_RAND_PARAM_STRENGTH</span><span class="operator">,</span> <span class="operator">&amp;</span><span class="variable">strength</span><span class="operator">);</span>
+ <span class="variable">*p</span><span class="operator">++</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_octet_string</span><span class="operator">(</span><span class="variable">OSSL_RAND_PARAM_TEST_ENTROPY</span><span class="operator">,</span>
+                                          <span class="variable">entropy</span><span class="operator">,</span> <span class="variable">sizeof</span><span class="operator">(</span><span class="variable">entropy</span><span class="operator">));</span>
+ <span class="variable">*p</span><span class="operator">++</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_octet_string</span><span class="operator">(</span><span class="variable">OSSL_RAND_PARAM_TEST_NONCE</span><span class="operator">,</span>
+                                          <span class="variable">nonce</span><span class="operator">,</span> <span class="variable">sizeof</span><span class="operator">(</span><span class="variable">nonce</span><span class="operator">));</span>
+ <span class="variable">*p</span> <span class="operator">=</span> <span class="variable">OSSL_PARAM_construct_end</span><span class="operator">();</span>
+ <span class="variable">EVP_RAND_instantiate</span><span class="operator">(</span><span class="variable">rctx</span><span class="operator">,</span> <span class="variable">strength</span><span class="operator">,</span> <span class="number">0</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">,</span> <span class="number">0</span><span class="operator">,</span> <span class="variable">params</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">EVP_RAND_generate</span><span class="operator">(</span><span class="variable">rctx</span><span class="operator">,</span> <span class="variable">bytes</span><span class="operator">,</span> <span class="variable">sizeof</span><span class="operator">(</span><span class="variable">bytes</span><span class="operator">),</span> <span class="variable">strength</span><span class="operator">,</span> <span class="number">0</span><span class="operator">,</span> <span class="variable">NULL</span><span class="operator">,</span> <span class="number">0</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">EVP_RAND_CTX_free</span><span class="operator">(</span><span class="variable">rctx</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_RAND(3)</em>,
+<em>EVP_RAND(3)/PARAMETERS</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>This functionality was added in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2020-2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

@@ -1,0 +1,263 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>EVP_PKEY_set1_RSA</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#warnings">WARNINGS</a></li>
+	<li><a href="#notes">NOTES</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>EVP_PKEY_set1_RSA, EVP_PKEY_set1_DSA, EVP_PKEY_set1_DH, EVP_PKEY_set1_EC_KEY,
+EVP_PKEY_get1_RSA, EVP_PKEY_get1_DSA, EVP_PKEY_get1_DH, EVP_PKEY_get1_EC_KEY,
+EVP_PKEY_get0_RSA, EVP_PKEY_get0_DSA, EVP_PKEY_get0_DH, EVP_PKEY_get0_EC_KEY,
+EVP_PKEY_assign_RSA, EVP_PKEY_assign_DSA, EVP_PKEY_assign_DH,
+EVP_PKEY_assign_EC_KEY, EVP_PKEY_assign_POLY1305, EVP_PKEY_assign_SIPHASH,
+EVP_PKEY_get0_hmac, EVP_PKEY_get0_poly1305, EVP_PKEY_get0_siphash,
+EVP_PKEY_get0, EVP_PKEY_type, EVP_PKEY_get_id, EVP_PKEY_get_base_id,
+EVP_PKEY_set1_engine, EVP_PKEY_get0_engine,
+EVP_PKEY_id, EVP_PKEY_base_id -
+EVP_PKEY assignment functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/evp.h&gt;</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_get_id</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_get_base_id</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_type</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">type</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="comment">#define EVP_PKEY_id EVP_PKEY_get_id</span>
+ <span class="comment">#define EVP_PKEY_base_id EVP_PKEY_get_base_id</span>
+</pre>
+<p>The following functions have been deprecated since OpenSSL 3.0, and can be
+hidden entirely by defining <strong>OPENSSL_API_COMPAT</strong> with a suitable version value,
+see <em>openssl_user_macros(7)</em>:</p>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_set1_RSA</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">RSA</span> <span class="variable">*key</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_set1_DSA</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">DSA</span> <span class="variable">*key</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_set1_DH</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">DH</span> <span class="variable">*key</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_set1_EC_KEY</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">EC_KEY</span> <span class="variable">*key</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">RSA</span> <span class="variable">*EVP_PKEY_get1_RSA</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+ <span class="variable">DSA</span> <span class="variable">*EVP_PKEY_get1_DSA</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+ <span class="variable">DH</span> <span class="variable">*EVP_PKEY_get1_DH</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+ <span class="variable">EC_KEY</span> <span class="variable">*EVP_PKEY_get1_EC_KEY</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*EVP_PKEY_get0_hmac</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">*len</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*EVP_PKEY_get0_poly1305</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">*len</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*EVP_PKEY_get0_siphash</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">size_t</span> <span class="variable">*len</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">RSA</span> <span class="variable">*EVP_PKEY_get0_RSA</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">DSA</span> <span class="variable">*EVP_PKEY_get0_DSA</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">DH</span> <span class="variable">*EVP_PKEY_get0_DH</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+ <span class="variable">const</span> <span class="variable">EC_KEY</span> <span class="variable">*EVP_PKEY_get0_EC_KEY</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+ <span class="variable">void</span> <span class="variable">*EVP_PKEY_get0</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_assign_RSA</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">RSA</span> <span class="variable">*key</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_assign_DSA</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">DSA</span> <span class="variable">*key</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_assign_DH</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">DH</span> <span class="variable">*key</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_assign_EC_KEY</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">EC_KEY</span> <span class="variable">*key</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_assign_POLY1305</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">ASN1_OCTET_STRING</span> <span class="variable">*key</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_assign_SIPHASH</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">ASN1_OCTET_STRING</span> <span class="variable">*key</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">ENGINE</span> <span class="variable">*EVP_PKEY_get0_engine</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">EVP_PKEY_set1_engine</span><span class="operator">(</span><span class="variable">EVP_PKEY</span> <span class="variable">*pkey</span><span class="operator">,</span> <span class="variable">ENGINE</span> <span class="variable">*engine</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>EVP_PKEY_get_base_id()</code> returns the type of <em>pkey</em>. For example
+an RSA key will return <strong>EVP_PKEY_RSA</strong>.</p>
+<p><code>EVP_PKEY_get_id()</code> returns the actual NID associated with <em>pkey</em>
+only if the <em>pkey</em> type isn't implemented just in a <em>provider(7)</em>.
+Historically keys using the same algorithm could use different NIDs.
+For example an RSA key could use the NIDs corresponding to
+the NIDs <strong>NID_rsaEncryption</strong> (equivalent to <strong>EVP_PKEY_RSA</strong>) or
+<strong>NID_rsa</strong> (equivalent to <strong>EVP_PKEY_RSA2</strong>). The use of
+alternative non-standard NIDs is now rare so <strong>EVP_PKEY_RSA2</strong> et al are not
+often seen in practice.
+<code>EVP_PKEY_get_id()</code> returns -1 (<strong>EVP_PKEY_KEYMGMT</strong>) if the <em>pkey</em> is
+only implemented in a <em>provider(7)</em>.</p>
+<p><code>EVP_PKEY_type()</code> returns the underlying type of the NID <em>type</em>. For example
+EVP_PKEY_type(EVP_PKEY_RSA2) will return <strong>EVP_PKEY_RSA</strong>.</p>
+<p>EVP_PKEY_set1_RSA(), EVP_PKEY_set1_DSA(), EVP_PKEY_set1_DH() and
+EVP_PKEY_set1_EC_KEY() set the key referenced by <em>pkey</em> to <em>key</em>. These
+functions are deprecated. Applications should instead use
+<em>EVP_PKEY_fromdata(3)</em>.</p>
+<p><code>EVP_PKEY_assign_RSA()</code>, <code>EVP_PKEY_assign_DSA()</code>, <code>EVP_PKEY_assign_DH()</code>,
+<code>EVP_PKEY_assign_EC_KEY()</code>, EVP_PKEY_assign_POLY1305() and
+<code>EVP_PKEY_assign_SIPHASH()</code> set the referenced key to <em>key</em> however these use
+the supplied <em>key</em> internally and so <em>key</em> will be freed when the parent
+<em>pkey</em> is freed. These macros are deprecated. Applications should instead read
+an EVP_PKEY directly using the OSSL_DECODER APIs (see
+<em>OSSL_DECODER_CTX_new_for_pkey(3)</em>), or construct an EVP_PKEY from data using
+<em>EVP_PKEY_fromdata(3)</em>.</p>
+<p>EVP_PKEY_get1_RSA(), EVP_PKEY_get1_DSA(), EVP_PKEY_get1_DH() and
+EVP_PKEY_get1_EC_KEY() return the referenced key in <em>pkey</em> or NULL if the
+key is not of the correct type. The returned key must be freed after use.
+These functions are deprecated. Applications should instead use the EVP_PKEY
+directly where possible. If access to the low level key parameters is required
+then applications should use <em>EVP_PKEY_get_params(3)</em> and other similar
+functions. To write an EVP_PKEY out use the OSSL_ENCODER APIs (see
+<em>OSSL_ENCODER_CTX_new_for_pkey(3)</em>).</p>
+<p>EVP_PKEY_get0_hmac(), EVP_PKEY_get0_poly1305(), EVP_PKEY_get0_siphash(),
+EVP_PKEY_get0_RSA(), EVP_PKEY_get0_DSA(), EVP_PKEY_get0_DH() and
+EVP_PKEY_get0_EC_KEY() return the referenced key in <em>pkey</em> or NULL if the
+key is not of the correct type. The reference count of the returned key is
+<strong>not</strong> incremented and so the key must not be freed after use. These functions
+are deprecated. Applications should instead use the EVP_PKEY directly where
+possible. If access to the low level key parameters is required then
+applications should use <em>EVP_PKEY_get_params(3)</em> and other similar functions.
+To write an EVP_PKEY out use the OSSL_ENCODER APIs (see
+<em>OSSL_ENCODER_CTX_new_for_pkey(3)</em>). EVP_PKEY_get0() returns a pointer to the
+legacy key or NULL if the key is not legacy.</p>
+<p>Note that if an EVP_PKEY was not constructed using one of the deprecated
+functions such as EVP_PKEY_set1_RSA(), EVP_PKEY_set1_DSA(), EVP_PKEY_set1_DH()
+or EVP_PKEY_set1_EC_KEY(), or via the similarly named <strong>EVP_PKEY_assign</strong> macros
+described above then the internal key will be managed by a provider (see
+<em>provider(7)</em>). In that case the key returned by EVP_PKEY_get1_RSA(),
+EVP_PKEY_get1_DSA(), EVP_PKEY_get1_DH(), EVP_PKEY_get1_EC_KEY(),
+EVP_PKEY_get0_hmac(), EVP_PKEY_get0_poly1305(), EVP_PKEY_get0_siphash(),
+EVP_PKEY_get0_RSA(), EVP_PKEY_get0_DSA(), EVP_PKEY_get0_DH() or
+EVP_PKEY_get0_EC_KEY() will be a cached copy of the provider's key. Subsequent
+updates to the provider's key will not be reflected back in the cached copy, and
+updates made by an application to the returned key will not be reflected back in
+the provider's key. Subsequent calls to EVP_PKEY_get1_RSA(),
+EVP_PKEY_get1_DSA(), EVP_PKEY_get1_DH() and EVP_PKEY_get1_EC_KEY() will always
+return the cached copy returned by the first call.</p>
+<p>EVP_PKEY_get0_engine() returns a reference to the ENGINE handling <em>pkey</em>. This
+function is deprecated. Applications should use providers instead of engines
+(see <em>provider(7)</em> for details).</p>
+<p>EVP_PKEY_set1_engine() sets the ENGINE handling <em>pkey</em> to <em>engine</em>. It
+must be called after the key algorithm and components are set up.
+If <em>engine</em> does not include an <strong>EVP_PKEY_METHOD</strong> for <em>pkey</em> an
+error occurs. This function is deprecated. Applications should use providers
+instead of engines (see <em>provider(7)</em> for details).</p>
+<p>
+</p>
+<hr />
+<h1><a name="warnings">WARNINGS</a></h1>
+<p>The following functions are only reliable with <strong>EVP_PKEY</strong>s that have
+been assigned an internal key with EVP_PKEY_assign_*():</p>
+<p><code>EVP_PKEY_get_id()</code>, <code>EVP_PKEY_get_base_id()</code>, <code>EVP_PKEY_type()</code></p>
+<p>For EVP_PKEY key type checking purposes, <em>EVP_PKEY_is_a(3)</em> is more generic.</p>
+<p>For purposes of retrieving the name of the <strong>EVP_PKEY</strong> the function
+<em>EVP_PKEY_get0_type_name(3)</em> is more generally useful.</p>
+<p>The keys returned from the functions EVP_PKEY_get0_RSA(), EVP_PKEY_get0_DSA(),
+EVP_PKEY_get0_DH() and EVP_PKEY_get0_EC_KEY() were changed to have a &quot;const&quot;
+return type in OpenSSL 3.0. As described above the keys returned may be cached
+copies of the key held in a provider. Due to this, and unlike in earlier
+versions of OpenSSL, they should be considered read-only copies of the key.
+Updates to these keys will not be reflected back in the provider side key. The
+EVP_PKEY_get1_RSA(), EVP_PKEY_get1_DSA(), EVP_PKEY_get1_DH() and
+EVP_PKEY_get1_EC_KEY() functions were not changed to have a &quot;const&quot; return type
+in order that applications can &quot;free&quot; the return value. However applications
+should still consider them as read-only copies.</p>
+<p>
+</p>
+<hr />
+<h1><a name="notes">NOTES</a></h1>
+<p>In accordance with the OpenSSL naming convention the key obtained
+from or assigned to the <em>pkey</em> using the <strong>1</strong> functions must be
+freed as well as <em>pkey</em>.</p>
+<p><code>EVP_PKEY_assign_RSA()</code>, <code>EVP_PKEY_assign_DSA()</code>, <code>EVP_PKEY_assign_DH()</code>,
+<code>EVP_PKEY_assign_EC_KEY()</code>, EVP_PKEY_assign_POLY1305()
+and <code>EVP_PKEY_assign_SIPHASH()</code> are implemented as macros.</p>
+<p><code>EVP_PKEY_assign_EC_KEY()</code> looks at the curve name id to determine if
+the passed <strong>EC_KEY</strong> is an <em>SM2(7)</em> key, and will set the <strong>EVP_PKEY</strong>
+type to <strong>EVP_PKEY_SM2</strong> in that case, instead of <strong>EVP_PKEY_EC</strong>.</p>
+<p>Most applications wishing to know a key type will simply call
+<code>EVP_PKEY_get_base_id()</code> and will not care about the actual type:
+which will be identical in almost all cases.</p>
+<p>Previous versions of this document suggested using EVP_PKEY_type(pkey-&gt;type)
+to determine the type of a key. Since <strong>EVP_PKEY</strong> is now opaque this
+is no longer possible: the equivalent is EVP_PKEY_get_base_id(pkey).</p>
+<p>EVP_PKEY_set1_engine() is typically used by an ENGINE returning an HSM
+key as part of its routine to load a private key.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p>EVP_PKEY_set1_RSA(), EVP_PKEY_set1_DSA(), EVP_PKEY_set1_DH() and
+EVP_PKEY_set1_EC_KEY() return 1 for success or 0 for failure.</p>
+<p>EVP_PKEY_get1_RSA(), EVP_PKEY_get1_DSA(), EVP_PKEY_get1_DH() and
+EVP_PKEY_get1_EC_KEY() return the referenced key or NULL if
+an error occurred.</p>
+<p><code>EVP_PKEY_assign_RSA()</code>, <code>EVP_PKEY_assign_DSA()</code>, <code>EVP_PKEY_assign_DH()</code>,
+<code>EVP_PKEY_assign_EC_KEY()</code>, EVP_PKEY_assign_POLY1305()
+and <code>EVP_PKEY_assign_SIPHASH()</code> return 1 for success and 0 for failure.</p>
+<p><code>EVP_PKEY_get_base_id()</code>, <code>EVP_PKEY_get_id()</code> and <code>EVP_PKEY_type()</code> return a key
+type or <strong>NID_undef</strong> (equivalently <strong>EVP_PKEY_NONE</strong>) on error.</p>
+<p>EVP_PKEY_set1_engine() returns 1 for success and 0 for failure.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_PKEY_new(3)</em>, <em>SM2(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>The <code>EVP_PKEY_id()</code> and <code>EVP_PKEY_base_id()</code> functions were renamed to
+include <code>get</code> in their names in OpenSSL 3.0, respectively. The old names
+are kept as non-deprecated alias macros.</p>
+<p>EVP_PKEY_set1_RSA, EVP_PKEY_set1_DSA, EVP_PKEY_set1_DH, EVP_PKEY_set1_EC_KEY,
+EVP_PKEY_get1_RSA, EVP_PKEY_get1_DSA, EVP_PKEY_get1_DH, EVP_PKEY_get1_EC_KEY,
+EVP_PKEY_get0_RSA, EVP_PKEY_get0_DSA, EVP_PKEY_get0_DH, EVP_PKEY_get0_EC_KEY,
+EVP_PKEY_assign_RSA, EVP_PKEY_assign_DSA, EVP_PKEY_assign_DH,
+EVP_PKEY_assign_EC_KEY, EVP_PKEY_assign_POLY1305, EVP_PKEY_assign_SIPHASH,
+EVP_PKEY_get0_hmac, EVP_PKEY_get0_poly1305, EVP_PKEY_get0_siphash,
+EVP_PKEY_set1_engine and EVP_PKEY_get0_engine were deprecated in OpenSSL 3.0.</p>
+<p>The return value from EVP_PKEY_get0_RSA, EVP_PKEY_get0_DSA, EVP_PKEY_get0_DH,
+EVP_PKEY_get0_EC_KEY were made const in OpenSSL 3.0.</p>
+<p>The function <code>EVP_PKEY_set_alias_type()</code> was previously documented on this page.
+It was removed in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2002-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

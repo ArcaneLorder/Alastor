@@ -1,0 +1,145 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OSSL_HTTP_parse_url</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>OSSL_HTTP_adapt_proxy,
+OSSL_parse_url,
+OSSL_HTTP_parse_url,
+OCSP_parse_url
+- http utility functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/http.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*OSSL_HTTP_adapt_proxy</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*proxy</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*no_proxy</span><span class="operator">,</span>
+                                   <span class="variable">const</span> <span class="variable">char</span> <span class="variable">*server</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">use_ssl</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OSSL_parse_url</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*url</span><span class="operator">,</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">pscheme</span><span class="operator">,</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">puser</span><span class="operator">,</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">phost</span><span class="operator">,</span>
+                    <span class="variable">char</span> <span class="operator">**</span><span class="variable">pport</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*pport_num</span><span class="operator">,</span>
+                    <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppath</span><span class="operator">,</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">pquery</span><span class="operator">,</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">pfrag</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">OSSL_HTTP_parse_url</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*url</span><span class="operator">,</span>
+                         <span class="keyword">int</span> <span class="variable">*pssl</span><span class="operator">,</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">puser</span><span class="operator">,</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">phost</span><span class="operator">,</span>
+                         <span class="variable">char</span> <span class="operator">**</span><span class="variable">pport</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">*pport_num</span><span class="operator">,</span>
+                         <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppath</span><span class="operator">,</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">pquery</span><span class="operator">,</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">pfrag</span><span class="operator">);</span>
+</pre>
+<p>The following functions have been deprecated since OpenSSL 3.0, and can be
+hidden entirely by defining <strong>OPENSSL_API_COMPAT</strong> with a suitable version value,
+see <em>openssl_user_macros(7)</em>:</p>
+<pre>
+ <span class="keyword">int</span> <span class="variable">OCSP_parse_url</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">char</span> <span class="variable">*url</span><span class="operator">,</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">phost</span><span class="operator">,</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">pport</span><span class="operator">,</span> <span class="variable">char</span> <span class="operator">**</span><span class="variable">ppath</span><span class="operator">,</span>
+                    <span class="keyword">int</span> <span class="variable">*pssl</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>OSSL_HTTP_adapt_proxy()</code> takes an optional proxy hostname <em>proxy</em>
+and returns it transformed according to the optional <em>no_proxy</em> parameter,
+<em>server</em>, <em>use_ssl</em>, and the applicable environment variable, as follows.
+If <em>proxy</em> is NULL, take any default value from the <code>http_proxy</code>
+environment variable, or from <code>https_proxy</code> if <em>use_ssl</em> is nonzero.
+If this still does not yield a proxy hostname,
+take any further default value from the <code>HTTP_PROXY</code>
+environment variable, or from <code>HTTPS_PROXY</code> if <em>use_ssl</em> is nonzero.
+If <em>no_proxy</em> is NULL, take any default exclusion value from the <code>no_proxy</code>
+environment variable, or else from <code>NO_PROXY</code>.
+Return the determined proxy hostname unless the exclusion contains <em>server</em>.
+Otherwise return NULL.</p>
+<p><code>OSSL_parse_url()</code> parses its input string <em>url</em> as a URL of the form
+<code>[scheme://][userinfo@]host[:port][/path][?query][#fragment]</code> and splits it up
+into scheme, userinfo, host, port, path, query, and fragment components.
+The host (or server) component may be a DNS name or an IP address
+where IPv6 addresses should be enclosed in square brackets <code>[</code> and <code>]</code>.
+The port component is optional and defaults to <code>0</code>.
+If given, it must be in decimal form.  If the <em>pport_num</em> argument is not NULL
+the integer value of the port number is assigned to <em>*pport_num</em> on success.
+The path component is also optional and defaults to <code>/</code>.
+Each non-NULL result pointer argument <em>pscheme</em>, <em>puser</em>, <em>phost</em>, <em>pport</em>,
+<em>ppath</em>, <em>pquery</em>, and <em>pfrag</em>, is assigned the respective url component.
+On success, they are guaranteed to contain non-NULL string pointers, else NULL.
+It is the responsibility of the caller to free them using <em>OPENSSL_free(3)</em>.
+If <em>pquery</em> is NULL, any given query component is handled as part of the path.
+A string returned via <em>*ppath</em> is guaranteed to begin with a <code>/</code> character.
+For absent scheme, userinfo, port, query, and fragment components
+an empty string is provided.</p>
+<p><code>OSSL_HTTP_parse_url()</code> is a special form of <code>OSSL_parse_url()</code>
+where the scheme, if given, must be <code>http</code> or <code>https</code>.
+If <em>pssl</em> is not NULL, <em>*pssl</em> is assigned 1 in case parsing was successful
+and the scheme is <code>https</code>, else 0.
+The port component is optional and defaults to <code>443</code> if the scheme is <code>https</code>,
+else <code>80</code>.
+Note that relative paths must be given with a leading <code>/</code>,
+otherwise the first path element is interpreted as the hostname.</p>
+<p>Calling the deprecated function OCSP_parse_url(url, host, port, path, ssl)
+is equivalent to
+OSSL_HTTP_parse_url(url, ssl, NULL, host, port, NULL, path, NULL, NULL).</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>OSSL_HTTP_adapt_proxy()</code> returns NULL if no proxy is to be used,
+otherwise a constant proxy hostname string,
+which is either the proxy name handed in or an environment variable value.</p>
+<p><code>OSSL_parse_url()</code>, <code>OSSL_HTTP_parse_url()</code>, and <code>OCSP_parse_url()</code>
+return 1 on success, 0 on error.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>OSSL_HTTP_transfer(3)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><code>OSSL_HTTP_adapt_proxy()</code>,
+<code>OSSL_parse_url()</code> and <code>OSSL_HTTP_parse_url()</code> were added in OpenSSL 3.0.
+<code>OCSP_parse_url()</code> was deprecated in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2019-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

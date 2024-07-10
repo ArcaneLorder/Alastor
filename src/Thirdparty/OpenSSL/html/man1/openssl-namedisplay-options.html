@@ -1,0 +1,238 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>openssl-namedisplay-options</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<ul>
+
+		<li><a href="#name_format_option_arguments">Name Format Option Arguments</a></li>
+	</ul>
+
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>openssl-namedisplay-options - Distinguished name display options</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>openssl</strong>
+<em>command</em>
+[ <em>options</em> ... ]
+[ <em>parameters</em> ... ]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>OpenSSL provides fine-grain control over how the subject and issuer DN's are
+displayed.
+This is specified by using the <strong>-nameopt</strong> option, which takes a
+comma-separated list of options from the following set.
+An option may be preceded by a minus sign, <code>-</code>, to turn it off.
+The default value is <a href="#oneline"><code>oneline</code></a>.
+The first four are the most commonly used.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<p>
+</p>
+<h2><a name="name_format_option_arguments">Name Format Option Arguments</a></h2>
+<p>The DN output format can be fine tuned with the following flags.</p>
+<dl>
+<dt><strong><a name="compat" class="item"><strong>compat</strong></a></strong></dt>
+
+<dd>
+<p>Display the name using an old format from previous OpenSSL versions.</p>
+</dd>
+<dt><strong><a name="rfc2253" class="item"><strong>RFC2253</strong></a></strong></dt>
+
+<dd>
+<p>Display the name using the format defined in <a href="http://www.ietf.org/rfc/rfc2253.txt" class="rfc">RFC 2253</a>.
+It is equivalent to <strong>esc_2253</strong>, <strong>esc_ctrl</strong>, <strong>esc_msb</strong>, <strong>utf8</strong>,
+<strong>dump_nostr</strong>, <strong>dump_unknown</strong>, <strong>dump_der</strong>, <strong>sep_comma_plus</strong>, <strong>dn_rev</strong>
+and <strong>sname</strong>.</p>
+</dd>
+<dt><strong><a name="oneline" class="item"><strong>oneline</strong></a></strong></dt>
+
+<dd>
+<p>Display the name in one line, using a format that is more readable
+<a href="http://www.ietf.org/rfc/rfc2253.txt" class="rfc">RFC 2253</a>.
+It is equivalent to <strong>esc_2253</strong>, <strong>esc_ctrl</strong>, <strong>esc_msb</strong>, <strong>utf8</strong>,
+<strong>dump_nostr</strong>, <strong>dump_der</strong>, <strong>use_quote</strong>, <strong>sep_comma_plus_space</strong>,
+<strong>space_eq</strong> and <strong>sname</strong> options.</p>
+</dd>
+<dt><strong><a name="multiline" class="item"><strong>multiline</strong></a></strong></dt>
+
+<dd>
+<p>Display the name using multiple lines.
+It is equivalent to <strong>esc_ctrl</strong>, <strong>esc_msb</strong>, <strong>sep_multiline</strong>, <strong>space_eq</strong>,
+<strong>lname</strong> and <strong>align</strong>.</p>
+</dd>
+<dt><strong><a name="esc_2253" class="item"><strong>esc_2253</strong></a></strong></dt>
+
+<dd>
+<p>Escape the &quot;special&quot; characters in a field, as required by <a href="http://www.ietf.org/rfc/rfc2253.txt" class="rfc">RFC 2253</a>.
+That is, any of the characters <code>,+&quot;&lt;&gt;;</code>, <code>#</code> at the beginning of
+a string and leading or trailing spaces.</p>
+</dd>
+<dt><strong><a name="esc_2254" class="item"><strong>esc_2254</strong></a></strong></dt>
+
+<dd>
+<p>Escape the &quot;special&quot; characters in a field as required by <a href="http://www.ietf.org/rfc/rfc2254.txt" class="rfc">RFC 2254</a> in a field.
+That is, the <strong>NUL</strong> character and of <code>()*</code>.</p>
+</dd>
+<dt><strong><a name="esc_ctrl" class="item"><strong>esc_ctrl</strong></a></strong></dt>
+
+<dd>
+<p>Escape non-printable ASCII characters, codes less than 0x20 (space)
+or greater than 0x7F (DELETE). They are displayed using <a href="http://www.ietf.org/rfc/rfc2253.txt" class="rfc">RFC 2253</a> <code>\XX</code>
+notation where <strong>XX</strong> are the two hex digits representing the character value.</p>
+</dd>
+<dt><strong><a name="esc_msb" class="item"><strong>esc_msb</strong></a></strong></dt>
+
+<dd>
+<p>Escape any characters with the most significant bit set, that is with
+values larger than 127, as described in <strong>esc_ctrl</strong>.</p>
+</dd>
+<dt><strong><a name="use_quote" class="item"><strong>use_quote</strong></a></strong></dt>
+
+<dd>
+<p>Escapes some characters by surrounding the entire string with quotation
+marks, <code>&quot;</code>.
+Without this option, individual special characters are preceded with
+a backslash character, <code>\</code>.</p>
+</dd>
+<dt><strong><a name="utf8" class="item"><strong>utf8</strong></a></strong></dt>
+
+<dd>
+<p>Convert all strings to UTF-8 format first as required by <a href="http://www.ietf.org/rfc/rfc2253.txt" class="rfc">RFC 2253</a>.
+If the output device is UTF-8 compatible, then using this option (and
+not setting <strong>esc_msb</strong>) may give the correct display of multibyte
+characters.
+If this option is not set, then multibyte characters larger than 0xFF
+will be output as <code>\UXXXX</code> for 16 bits or <code>\WXXXXXXXX</code> for 32 bits.
+In addition, any UTF8Strings will be converted to their character form first.</p>
+</dd>
+<dt><strong><a name="ignore_type" class="item"><strong>ignore_type</strong></a></strong></dt>
+
+<dd>
+<p>This option does not attempt to interpret multibyte characters in any
+way. That is, the content octets are merely dumped as though one octet
+represents each character. This is useful for diagnostic purposes but
+will result in rather odd looking output.</p>
+</dd>
+<dt><strong><a name="show_type" class="item"><strong>show_type</strong></a></strong></dt>
+
+<dd>
+<p>Display the type of the ASN1 character string before the value,
+such as <code>BMPSTRING: Hello World</code>.</p>
+</dd>
+<dt><strong><a name="dump_der" class="item"><strong>dump_der</strong></a></strong></dt>
+
+<dd>
+<p>Any fields that would be output in hex format are displayed using
+the DER encoding of the field.
+If not set, just the content octets are displayed.
+Either way, the <strong>#XXXX...</strong> format of <a href="http://www.ietf.org/rfc/rfc2253.txt" class="rfc">RFC 2253</a> is used.</p>
+</dd>
+<dt><strong><a name="dump_nostr" class="item"><strong>dump_nostr</strong></a></strong></dt>
+
+<dd>
+<p>Dump non-character strings, such as ASN.1 <strong>OCTET STRING</strong>.
+If this option is not set, then non character string types will be displayed
+as though each content octet represents a single character.</p>
+</dd>
+<dt><strong><a name="dump_all" class="item"><strong>dump_all</strong></a></strong></dt>
+
+<dd>
+<p>Dump all fields. When this used with <strong>dump_der</strong>, this allows the
+DER encoding of the structure to be unambiguously determined.</p>
+</dd>
+<dt><strong><a name="dump_unknown" class="item"><strong>dump_unknown</strong></a></strong></dt>
+
+<dd>
+<p>Dump any field whose OID is not recognised by OpenSSL.</p>
+</dd>
+<dt><strong><a name="sep_comma_plus_sep_comma_plus_space_sep_semi_plus_space_sep_multiline" class="item"><strong>sep_comma_plus</strong>, <strong>sep_comma_plus_space</strong>, <strong>sep_semi_plus_space</strong>,
+<strong>sep_multiline</strong></a></strong></dt>
+
+<dd>
+<p>Specify the field separators. The first word is used between the
+Relative Distinguished Names (RDNs) and the second is between
+multiple Attribute Value Assertions (AVAs). Multiple AVAs are
+very rare and their use is discouraged.
+The options ending in &quot;space&quot; additionally place a space after the separator to make it more readable.
+The <strong>sep_multiline</strong> starts each field on its own line, and uses &quot;plus space&quot;
+for the AVA separator.
+It also indents the fields by four characters.
+The default value is <strong>sep_comma_plus_space</strong>.</p>
+</dd>
+<dt><strong><a name="dn_rev" class="item"><strong>dn_rev</strong></a></strong></dt>
+
+<dd>
+<p>Reverse the fields of the DN as required by <a href="http://www.ietf.org/rfc/rfc2253.txt" class="rfc">RFC 2253</a>.
+This also reverses the order of multiple AVAs in a field, but this is
+permissible as there is no ordering on values.</p>
+</dd>
+<dt><strong><a name="nofname_sname_lname_oid" class="item"><strong>nofname</strong>, <strong>sname</strong>, <strong>lname</strong>, <strong>oid</strong></a></strong></dt>
+
+<dd>
+<p>Specify how the field name is displayed.
+<strong>nofname</strong> does not display the field at all.
+<strong>sname</strong> uses the &quot;short name&quot; form (CN for commonName for example).
+<strong>lname</strong> uses the long form.
+<strong>oid</strong> represents the OID in numerical form and is useful for
+diagnostic purpose.</p>
+</dd>
+<dt><strong><a name="align" class="item"><strong>align</strong></a></strong></dt>
+
+<dd>
+<p>Align field values for a more readable output. Only usable with
+<strong>sep_multiline</strong>.</p>
+</dd>
+<dt><strong><a name="space_eq" class="item"><strong>space_eq</strong></a></strong></dt>
+
+<dd>
+<p>Places spaces round the equal sign, <code>=</code>, character which follows the field
+name.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2000-2020 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

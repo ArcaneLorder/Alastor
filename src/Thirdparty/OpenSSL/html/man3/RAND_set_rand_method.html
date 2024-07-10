@@ -1,0 +1,126 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>RAND_set_rand_method</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#the_rand_method_structure">THE RAND_METHOD STRUCTURE</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>RAND_set_rand_method, RAND_get_rand_method, RAND_OpenSSL - select RAND method</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/rand.h&gt;</span>
+</pre>
+<p>The following functions have been deprecated since OpenSSL 3.0, and can be
+hidden entirely by defining <strong>OPENSSL_API_COMPAT</strong> with a suitable version value,
+see <em>openssl_user_macros(7)</em>:</p>
+<pre>
+ <span class="variable">RAND_METHOD</span> <span class="variable">*RAND_OpenSSL</span><span class="operator">(</span><span class="variable">void</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">RAND_set_rand_method</span><span class="operator">(</span><span class="variable">const</span> <span class="variable">RAND_METHOD</span> <span class="variable">*meth</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="variable">const</span> <span class="variable">RAND_METHOD</span> <span class="variable">*RAND_get_rand_method</span><span class="operator">(</span><span class="variable">void</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>All of the functions described on this page are deprecated.
+Applications should instead use <em>RAND_set_DRBG_type(3)</em>,
+<em>EVP_RAND(3)</em> and <em>EVP_RAND(7)</em>.</p>
+<p>A <strong>RAND_METHOD</strong> specifies the functions that OpenSSL uses for random number
+generation.</p>
+<p><code>RAND_OpenSSL()</code> returns the default <strong>RAND_METHOD</strong> implementation by OpenSSL.
+This implementation ensures that the PRNG state is unique for each thread.</p>
+<p>If an <strong>ENGINE</strong> is loaded that provides the RAND API, however, it will
+be used instead of the method returned by <code>RAND_OpenSSL()</code>.  This is deprecated
+in OpenSSL 3.0.</p>
+<p><code>RAND_set_rand_method()</code> makes <strong>meth</strong> the method for PRNG use.  If an
+ENGINE was providing the method, it will be released first.</p>
+<p><code>RAND_get_rand_method()</code> returns a pointer to the current <strong>RAND_METHOD</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="the_rand_method_structure">THE RAND_METHOD STRUCTURE</a></h1>
+<pre>
+ <span class="variable">typedef</span> <span class="variable">struct</span> <span class="variable">rand_meth_st</span> <span class="operator">{</span>
+     <span class="keyword">int</span> <span class="operator">(</span><span class="variable">*seed</span><span class="operator">)(</span><span class="variable">const</span> <span class="variable">void</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">num</span><span class="operator">);</span>
+     <span class="keyword">int</span> <span class="operator">(</span><span class="variable">*bytes</span><span class="operator">)(</span><span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">num</span><span class="operator">);</span>
+     <span class="variable">void</span> <span class="operator">(</span><span class="variable">*cleanup</span><span class="operator">)(</span><span class="variable">void</span><span class="operator">);</span>
+     <span class="keyword">int</span> <span class="operator">(</span><span class="variable">*add</span><span class="operator">)(</span><span class="variable">const</span> <span class="variable">void</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">num</span><span class="operator">,</span> <span class="variable">double</span> <span class="variable">entropy</span><span class="operator">);</span>
+     <span class="keyword">int</span> <span class="operator">(</span><span class="variable">*pseudorand</span><span class="operator">)(</span><span class="variable">unsigned</span> <span class="variable">char</span> <span class="variable">*buf</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">num</span><span class="operator">);</span>
+     <span class="keyword">int</span> <span class="operator">(</span><span class="variable">*status</span><span class="operator">)(</span><span class="variable">void</span><span class="operator">);</span>
+ <span class="operator">}</span> <span class="variable">RAND_METHOD</span><span class="operator">;</span>
+</pre>
+<p>The fields point to functions that are used by, in order,
+<code>RAND_seed()</code>, <code>RAND_bytes()</code>, internal RAND cleanup, <code>RAND_add()</code>, <code>RAND_pseudo_rand()</code>
+and <code>RAND_status()</code>.
+Each pointer may be NULL if the function is not implemented.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>RAND_set_rand_method()</code> returns 1 on success and 0 on failure.
+<code>RAND_get_rand_method()</code> and <code>RAND_OpenSSL()</code> return pointers to the respective
+methods.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>EVP_RAND(3)</em>,
+<em>RAND_set_DRBG_type(3)</em>,
+<em>RAND_bytes(3)</em>,
+<em>ENGINE_by_id(3)</em>,
+<em>EVP_RAND(7)</em>,
+<em>RAND(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>All of these functions were deprecated in OpenSSL 3.0.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2000-2021 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>

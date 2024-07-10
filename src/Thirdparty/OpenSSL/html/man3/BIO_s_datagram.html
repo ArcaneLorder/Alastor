@@ -1,0 +1,267 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>BIO_s_datagram</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_values">RETURN VALUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>BIO_s_datagram, BIO_new_dgram,
+BIO_ctrl_dgram_connect,
+BIO_ctrl_set_connected,
+BIO_dgram_recv_timedout,
+BIO_dgram_send_timedout,
+BIO_dgram_get_peer,
+BIO_dgram_set_peer,
+BIO_dgram_get_mtu_overhead - Network BIO with datagram semantics</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ <span class="comment">#include &lt;openssl/bio.h&gt;</span>
+</pre>
+<pre>
+ <span class="variable">BIO_METHOD</span> <span class="variable">*BIO_s_datagram</span><span class="operator">(</span><span class="variable">void</span><span class="operator">);</span>
+ <span class="variable">BIO</span> <span class="variable">*BIO_new_dgram</span><span class="operator">(</span><span class="keyword">int</span> <span class="variable">fd</span><span class="operator">,</span> <span class="keyword">int</span> <span class="variable">close_flag</span><span class="operator">);</span>
+</pre>
+<pre>
+ <span class="keyword">int</span> <span class="variable">BIO_ctrl_dgram_connect</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bio</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">BIO_ADDR</span> <span class="variable">*peer</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_ctrl_set_connected</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bio</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">BIO_ADDR</span> <span class="variable">*peer</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_dgram_recv_timedout</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bio</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_dgram_send_timedout</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bio</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_dgram_get_peer</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bio</span><span class="operator">,</span> <span class="variable">BIO_ADDR</span> <span class="variable">*peer</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_dgram_set_peer</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bio</span><span class="operator">,</span> <span class="variable">const</span> <span class="variable">BIO_ADDR</span> <span class="variable">*peer</span><span class="operator">);</span>
+ <span class="keyword">int</span> <span class="variable">BIO_dgram_get_mtu_overhead</span><span class="operator">(</span><span class="variable">BIO</span> <span class="variable">*bio</span><span class="operator">);</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>BIO_s_datagram()</code> is a BIO implementation designed for use with network sockets
+which provide datagram semantics, such as UDP sockets. It is suitable for use
+with DTLSv1.</p>
+<p>Because <code>BIO_s_datagram()</code> has datagram semantics, a single <code>BIO_write()</code> call sends
+a single datagram and a single <code>BIO_read()</code> call receives a single datagram. If
+the size of the buffer passed to <code>BIO_read()</code> is inadequate, the datagram is
+silently truncated.</p>
+<p>When using <code>BIO_s_datagram()</code>, it is important to note that:</p>
+<dl>
+<dt>
+<dd>
+<p>This BIO can be used with either a connected or unconnected network socket. A
+connected socket is a network socket which has had <em>BIO_connect(3)</em> or a
+similar OS-specific function called on it. Such a socket can only receive
+datagrams from the specified peer. Any other socket is an unconnected socket and
+can receive datagrams from any host.</p>
+</dd>
+<dt>
+<dd>
+<p>Despite their naming,
+neither <a href="#bio_ctrl_dgram_connect"><code>BIO_ctrl_dgram_connect()</code></a> nor <a href="#bio_ctrl_set_connected"><code>BIO_ctrl_set_connected()</code></a> cause a socket
+to become connected. These controls are provided to indicate to the BIO how
+the underlying socket is configured and how it is to be used; see below.</p>
+</dd>
+<dt>
+<dd>
+<p>Use of <code>BIO_s_datagram()</code> with an unconnected network socket is hazardous hecause
+any successful call to <code>BIO_read()</code> results in the peer address used for any
+subsequent call to <code>BIO_write()</code> being set to the source address of the datagram
+received by that call to <code>BIO_read()</code>. Thus, unless the caller calls
+<a href="#bio_dgram_set_peer"><code>BIO_dgram_set_peer()</code></a> immediately prior to every call to <code>BIO_write()</code>, or never
+calls <code>BIO_read()</code>, any host on the network may cause future datagrams written to
+be redirected to that host. Therefore, it is recommended that users use
+<code>BIO_s_dgram()</code> only with a connected socket. An exception is where
+<em>DTLSv1_listen(3)</em> must be used; see <em>DTLSv1_listen(3)</em> for further
+discussion.</p>
+</dd>
+</dl>
+<p>Various controls are available for configuring the <code>BIO_s_datagram()</code> using
+<em>BIO_ctrl(3)</em>:</p>
+<dl>
+<dt><strong><a name="bio_ctrl_dgram_connect" class="item">BIO_ctrl_dgram_connect (BIO_CTRL_DGRAM_CONNECT)</a></strong></dt>
+
+<dd>
+<p>This is equivalent to calling <a href="#bio_dgram_set_peer">BIO_dgram_set_peer(3)</a>.</p>
+<p>Despite its name, this function does not cause the underlying socket to become
+connected.</p>
+</dd>
+<dt><strong><a name="bio_ctrl_set_connected" class="item">BIO_ctrl_set_connected (BIO_CTRL_SET_CONNECTED)</a></strong></dt>
+
+<dd>
+<p>This informs the <code>BIO_s_datagram()</code> whether the underlying socket has been
+connected, and therefore how the <code>BIO_s_datagram()</code> should attempt to use the
+socket.</p>
+<p>If the <em>peer</em> argument is non-NULL, <code>BIO_s_datagram()</code> assumes that the
+underlying socket has been connected and will attempt to use the socket using OS
+APIs which do not specify peer addresses (for example, <code>send(3)</code> and <code>recv(3)</code> or
+similar). The <em>peer</em> argument should specify the peer address to which the socket
+is connected.</p>
+<p>If the <em>peer</em> argument is NULL, <code>BIO_s_datagram()</code> assumes that the underlying
+socket is not connected and will attempt to use the socket using an OS APIs
+which specify peer addresses (for example, <code>sendto(3)</code> and recvfrom(3)).</p>
+</dd>
+<dt><strong><a name="bio_dgram_get_peer" class="item">BIO_dgram_get_peer (BIO_CTRL_DGRAM_GET_PEER)</a></strong></dt>
+
+<dd>
+<p>This outputs a <strong>BIO_ADDR</strong> which specifies one of the following values,
+whichever happened most recently:</p>
+<dl>
+<dt>
+<dd>
+<p>The peer address last passed to <a href="#bio_dgram_set_peer"><code>BIO_dgram_set_peer()</code></a>, <a href="#bio_ctrl_dgram_connect"><code>BIO_ctrl_dgram_connect()</code></a>
+or <a href="#bio_ctrl_set_connected"><code>BIO_ctrl_set_connected()</code></a>.</p>
+</dd>
+<dt>
+<dd>
+<p>The peer address of the datagram last received by a call to <code>BIO_read()</code>.</p>
+</dd>
+</dl>
+</dd>
+<dt><strong><a name="bio_dgram_set_peer" class="item">BIO_dgram_set_peer (BIO_CTRL_DGRAM_SET_PEER)</a></strong></dt>
+
+<dd>
+<p>Sets the peer address to be used for subsequent writes to this BIO.</p>
+<p>Warning: When used with an unconnected network socket, the value set may be
+modified by future calls to <em>BIO_read(3)</em>, making use of <code>BIO_s_datagram()</code>
+hazardous when used with unconnected network sockets; see above.</p>
+</dd>
+<dt><strong><a name="bio_dgram_recv_timeout" class="item">BIO_dgram_recv_timeout (BIO_CTRL_DGRAM_GET_RECV_TIMER_EXP)</a></strong></dt>
+
+<dd>
+<p>Returns 1 if the last I/O operation performed on the BIO (for example, via a
+call to <em>BIO_read(3)</em>) may have been caused by a receive timeout.</p>
+</dd>
+<dt><strong><a name="bio_dgram_send_timedout" class="item">BIO_dgram_send_timedout (BIO_CTRL_DGRAM_GET_SEND_TIMER_EXP)</a></strong></dt>
+
+<dd>
+<p>Returns 1 if the last I/O operation performed on the BIO (for example, via a
+call to <em>BIO_write(3)</em>) may have been caused by a send timeout.</p>
+</dd>
+<dt><strong><a name="bio_dgram_get_mtu_overhead" class="item">BIO_dgram_get_mtu_overhead (BIO_CTRL_DGRAM_GET_MTU_OVERHEAD)</a></strong></dt>
+
+<dd>
+<p>Returns a quantity in bytes which is a rough estimate of the number of bytes of
+overhead which should typically be added to a datagram payload size in order to
+estimate the final size of the Layer 3 (e.g. IP) packet which will contain the
+datagram. In most cases, the maximum datagram payload size which can be
+transmitted can be determined by determining the link MTU in bytes and
+subtracting the value returned by this call.</p>
+<p>The value returned by this call depends on the network layer protocol being
+used.</p>
+<p>The value returned is not fully reliable because datagram overheads can be
+higher in atypical network configurations, for example where IPv6 extension
+headers or IPv4 options are used.</p>
+</dd>
+<dt><strong><a name="bio_ctrl_dgram_set_dont_frag" class="item">BIO_CTRL_DGRAM_SET_DONT_FRAG</a></strong></dt>
+
+<dd>
+<p>If <em>num</em> is nonzero, configures the underlying network socket to enable Don't
+Fragment mode, in which datagrams will be set with the IP Don't Fragment (DF)
+bit set. If <em>num</em> is zero, Don't Fragment mode is disabled.</p>
+</dd>
+<dt><strong><a name="bio_ctrl_dgram_query_mtu" class="item">BIO_CTRL_DGRAM_QUERY_MTU</a></strong></dt>
+
+<dd>
+<p>Queries the OS for its assessment of the Path MTU for the destination to which
+the underlying network socket, and returns that Path MTU in bytes. This control
+can only be used with a connected socket.</p>
+<p>This is not supported on all platforms and depends on OS support being
+available. Returns 0 on failure.</p>
+</dd>
+<dt><strong><a name="bio_ctrl_dgram_mtu_discover" class="item">BIO_CTRL_DGRAM_MTU_DISCOVER</a></strong></dt>
+
+<dd>
+<p>This control requests that Path MTU discovery be enabled on the underlying
+network socket.</p>
+</dd>
+<dt><strong><a name="bio_ctrl_dgram_get_fallback_mtu" class="item">BIO_CTRL_DGRAM_GET_FALLBACK_MTU</a></strong></dt>
+
+<dd>
+<p>Returns the estimated minimum size of datagram payload which should always be
+supported on the BIO. This size is determined by the minimum MTU required to be
+supported by the applicable underlying network layer. Use of datagrams of this
+size may lead to suboptimal performance, but should be routable in all
+circumstances. The value returned is the datagram payload size in bytes and does
+not include the size of layer 3 or layer 4 protocol headers.</p>
+</dd>
+<dt><strong><a name="bio_ctrl_dgram_mtu_exceeded" class="item">BIO_CTRL_DGRAM_MTU_EXCEEDED</a></strong></dt>
+
+<dd>
+<p>Returns 1 if the last attempted write to the BIO failed due to the size of the
+attempted write exceeding the applicable MTU.</p>
+</dd>
+<dt><strong><a name="bio_ctrl_dgram_set_next_timeout" class="item">BIO_CTRL_DGRAM_SET_NEXT_TIMEOUT</a></strong></dt>
+
+<dd>
+<p>Accepts a pointer to a <strong>struct timeval</strong>. If the time specified is zero,
+disables receive timeouts. Otherwise, configures the specified time interval as
+the receive timeout for the socket for the purposes of future <em>BIO_read(3)</em>
+calls.</p>
+</dd>
+<dt><strong><a name="bio_ctrl_dgram_set_peek_mode" class="item">BIO_CTRL_DGRAM_SET_PEEK_MODE</a></strong></dt>
+
+<dd>
+<p>If <strong>num</strong> is nonzero, enables peek mode; otherwise, disables peek mode. Where
+peek mode is enabled, calls to <em>BIO_read(3)</em> read datagrams from the underlying
+network socket in peek mode, meaning that a future call to <em>BIO_read(3)</em> will
+yield the same datagram until peek mode is disabled.</p>
+</dd>
+</dl>
+<p><code>BIO_new_dgram()</code> is a helper function which instantiates a <code>BIO_s_datagram()</code> and
+sets the BIO to use the socket given in <em>fd</em> by calling <code>BIO_set_fd()</code>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_values">RETURN VALUES</a></h1>
+<p><code>BIO_s_datagram()</code> returns a BIO method.</p>
+<p><code>BIO_new_dgram()</code> returns a BIO on success and NULL on failure.</p>
+<p><a href="#bio_ctrl_dgram_connect"><code>BIO_ctrl_dgram_connect()</code></a>, <a href="#bio_ctrl_set_connected"><code>BIO_ctrl_set_connected()</code></a>,
+<a href="#bio_dgram_get_peer"><code>BIO_dgram_get_peer()</code></a>, <a href="#bio_dgram_set_peer"><code>BIO_dgram_set_peer()</code></a> return 1 on success and 0 on failure.</p>
+<p><code>BIO_dgram_recv_timedout()</code> and <a href="#bio_dgram_send_timedout"><code>BIO_dgram_send_timedout()</code></a> return 0 or 1 depending
+on the circumstance; see discussion above.</p>
+<p><a href="#bio_dgram_get_mtu_overhead"><code>BIO_dgram_get_mtu_overhead()</code></a> returns a value in bytes.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>DTLSv1_listen(3)</em>, <em>bio(7)</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2022-2023 The OpenSSL Project Authors. All Rights Reserved.</p>
+<p>Licensed under the Apache License 2.0 (the &quot;License&quot;).  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+<a href="https://www.openssl.org/source/license.html">https://www.openssl.org/source/license.html</a>.</p>
+
+</body>
+
+</html>
